@@ -1,0 +1,2 @@
+1.更换语言
+baf/base/Util.js 中的 var language = "zh"; 改成更改模式，语言文件存放在baf/language/语言/

@@ -1,0 +1,61 @@
+html, body {
+  height: 100%;
+  width: 100%;
+}
+
+hr.spacer {
+    border:0;
+    background-color:#ededed;
+    height:1px;
+}
+
+/* 框架全局布局 */
+#bafDijitNavigatorRole{
+    padding: 0px;
+}
+
+#bafDijitNavigator{
+    width: 20% ;
+    overflow: auto;
+}
+
+#bafDijitWso{
+    width: 80% ;
+}
+.statusbarToolbarSeparator{
+    float: left;
+}
+
+.bafDijitStatusblock {
+    float : left;
+}
+
+.bafDijitStatusmessage{
+    float: right;;
+}
+
+#bafDijitStatus {
+    height: 1.7em;
+}
+
+.bafwsoFormContent {
+    font-size: 14px;
+}
+
+.bafwsoinnerFormContent{
+    height: 100%;
+}
+
+
+.bafLoading {
+    z-index:1;
+    padding:5px 0 5px 9px;
+    background:#c44;
+    left:0;
+    top:0;
+    width:90px;
+    color:#fff;
+    position:fixed
+}
+
+/*结果集*/
