@@ -32,7 +32,7 @@ class Uifield extends CI_Controller {
         //判断是否为POST
         if($_POST){
             //如果不存在则创建
-            if($this->uifield->find_fields_by_program_id_and_name($_POST['program_id'],$_POST['field_name'])){
+            if($this->uifield->find_field_by_program_id_and_name($_POST['program_id'],$_POST['field_name'])){
                 $data['program_id'] = $_POST['program_id'];
                 $data['field_name'] =  cftrim($_POST['field_name']);
                 $data['label'] = $_POST['label'];
@@ -52,7 +52,7 @@ class Uifield extends CI_Controller {
                 //                date_default_timezone_set("Asia/Shanghai");
 
                 if($this->uifield->create($data)){
-                    array_push($messages,message('I','DATABASE','01',[$_POST['field_name']]));
+                    array_push($messages,message('I','DATABASE','01',[$data['field_name']]));
                 }else{
                     array_push($messages,message('E','DATABASE','02'));
                 }
@@ -124,7 +124,7 @@ class Uifield extends CI_Controller {
             if($this->uifield->destroy($_POST['ui_field_id'])) {
                 //删除成功
 //                       $data = array("message_id" => 1);
-                array_push($messages,message('I','DATABASE','01',[$_POST['field_name']]));
+                array_push($messages,message('I','DATABASE','01'));
             }else{
                 //删除失败
 //                       $data = array("message_id" => 1);

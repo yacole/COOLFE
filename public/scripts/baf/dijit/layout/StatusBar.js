@@ -1,24 +1,17 @@
-/**
- * Created with JetBrains PhpStorm.
- * User: ybchenyy
- * Date: 13-4-2
- * Time: 上午8:41
- * To change this template use File | Settings | File Templates.
- */
-define(["dojo/_base/declare",
-    "dojo/request",
-    "dijit/layout/ContentPane",
-    "baf/dijit/layout/MessageBar",
-    "dijit/Toolbar",
-    "dijit/ToolbarSeparator",
-    "dijit/form/Button",
-    "baf/base/Util"
-    ],
+define(["dojo/_base/declare", "dojo/request", "dijit/layout/ContentPane",
+    "baf/dijit/layout/MessageBar", "dijit/Toolbar", "dijit/ToolbarSeparator",
+    "dijit/form/Button", "baf/base/Util" ],
     function(declare,request,ContentPane,MessageBar,Toolbar,ToolbarSeparator,Button,Util){
+        /*
+         *   摘要:
+         *       状态栏，位于框架底部，用于显示系统状态、消息、用户环境
+         */
     return declare("",[Toolbar],{
-
+        //消息栏
         messageblock : null,
+        //用户信息栏
         userinfoblock : null,
+        //服务器信息栏
         hostblock : null,
 
         constructor : function(args){
@@ -26,22 +19,16 @@ define(["dojo/_base/declare",
             this.messageblock = new MessageBar({
                 id : Util.id.messageblock
             });
-            //fix bug IE6:Expected identifier, string or number
-//            dojo.attr(this.messageblock.domNode, "class", Util.id.messageblock);
             this.messageblock.set("class",Util.id.messageblock);
 
             this.userinfoblock = new Button({
                 id : Util.id.userinfoblock
-//                class : Util.id.statusbarblock_class
             });
-//            dojo.attr(this.userinfoblock.domNode, "class", Util.id.statusbarblock_class);
             this.userinfoblock.set("class",Util.id.statusbarblock_class);
 
             this.hostblock = new Button({
                 id : Util.id.hostblock
-//                class : Util.id.statusbarblock_class
             });
-//            dojo.attr(this.hostblock.domNode, "class", Util.id.statusbarblock_class);
             this.hostblock.set("class",Util.id.statusbarblock_class);
 
         },

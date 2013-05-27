@@ -1,11 +1,8 @@
-/**
- * Created with JetBrains PhpStorm.
- * User: ybchenyy
- * Date: 13-4-12
- * Time: 下午3:59
- * 用来保持框架中的描述
- */
 define(function(){
+    /*
+     *   摘要:
+     *       用于框架中的描述，客户端描述
+     */
     return {
         welcome : "欢迎 ",
         reseach : "查找 ",

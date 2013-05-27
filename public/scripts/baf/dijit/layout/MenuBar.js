@@ -1,23 +1,9 @@
-/**
- * Created with JetBrains PhpStorm.
- * User: Administrator
- * Date: 13-3-29
- * Time: 下午9:03
- * To change this template use File | Settings | File Templates.
- */
 define([
-    "dojo/_base/declare",
-    "dijit/MenuBar",
-    "dijit/PopupMenuBarItem",
-    "dijit/Menu",
-    "dijit/MenuItem",
-    "dijit/DropDownMenu",
-    "dijit/PopupMenuItem",
-    "dijit/MenuSeparator",
-    "dojo/data/ItemFileReadStore",
-    "baf/base/Util"],
-    function(declare,MenuBar, PopupMenuBarItem, Menu, MenuItem, DropDownMenu, PopupMenuItem, MenuSeparator,ItemFileReadStore,Util){
-        return declare("baf.dijit.layout.MenuBar",[MenuBar],{
+    "dojo/_base/declare", "dijit/MenuBar", "dijit/PopupMenuBarItem", "dijit/Menu",
+    "dijit/MenuItem", "dijit/DropDownMenu", "dijit/PopupMenuItem", "dijit/MenuSeparator",
+    "dojo/data/ItemFileReadStore"],
+    function(declare,MenuBar, PopupMenuBarItem, Menu, MenuItem, DropDownMenu, PopupMenuItem, MenuSeparator,ItemFileReadStore){
+        return declare("",[MenuBar],{
 
                 build : function(program_id){
 

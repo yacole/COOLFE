@@ -58,4 +58,8 @@ class Valuelist extends CI_Controller {
         echo rs_to_json($rs);
     }
 
+    function find_by_name(){
+        echo rs_to_json($this->vl->find_by_name(get_parameter('valuelist_name')));
+    }
+
 }

@@ -24,13 +24,11 @@ function initial(program_name){
     require(['dojo/request','baf/base/Util','baf/command/Command',"baf/base/Env"],
         function(request,Util,Command,ENV){
             //验证输入有效性
-            var innerForm = ENV.currentWso().innerForm;
+            var currentWso = ENV.currentWso();
+            var innerForm = currentWso.innerForm;
             innerForm.formValidate(
-                //如果查询程序名不存在
+                //验证通过
                 function(){
-                    Util.query(".actionButtonGroup").style("display","none");
-                    Util.query("div #mygrid").style("display","none");
-                },function(){
                     Util.query(".actionButtonGroup").style("display","block");
                     Util.query("div #mygrid").style("display","block");
                     request.get(Util.url.safeurl("bc/program","find_by_name",{program_name : program_name}),{handleAs: "json"}).then(function(data){
@@ -42,7 +40,16 @@ function initial(program_name){
                         //无反馈结果
                         Command.show_dialog({content : Util.message.error_xhr_notreach});
                     });
-                },true,true);
+                },
+                //验证失败
+                function(){
+                    Util.query(".actionButtonGroup").style("display","none");
+                    Util.query("div #mygrid").style("display","none");
+                },
+                //显示错误提示
+                false,
+                //区域对象
+                currentWso.contentPane);
         });
 }
 
@@ -138,7 +145,7 @@ function postEdit(){
 
 //提交更新
 function postDelete(){
-    require(["baf/base/Util","baf/command/Command"],function(Util){
+    require(["baf/base/Util","baf/command/Command"],function(Util,Command){
         var grid = Util.dijit_byId("mygrid");
         var items = grid.selection.getSelected();
         if(items.length) {
@@ -151,7 +158,7 @@ function postDelete(){
                         if(id){
                             remoteAction({ui_field_id : id},"destroy",function(){
                                 //成功之后
-                                grid.store.deleteItem(selectedItem);
+                                Util.dijit_byId("mygrid").store.deleteItem(selectedItem);
                             });
                         }
 
@@ -174,62 +181,80 @@ function update_grid(){
 
             var dialogForm = Util.dijit_byId("dialogForm");
 
-            var data = domForm.toObject(dialogForm.id);
+            //调用自定义的验证工具：包括远程
+            dialogForm.formValidate(function(){
 
-            var grid = Util.dijit_byId("mygrid");
-            var store = grid.store;
-            var items = grid.store._arrayOfAllItems;
+                var dialogForm = Util.dijit_byId("dialogForm");
+                var data = domForm.toObject(dialogForm.id);
 
-            console.info(data);
+                var grid = Util.dijit_byId("mygrid");
+                var store = grid.store;
+                var items = grid.store._arrayOfAllItems;
 
-            //如果field_name不存在 store.newItem
-            if(data){
-                //获取helptext编辑框内容
-                data["help_text"] = Util.trim(Util.dijit_byId("myEditor").value);
+//            console.info(data);
 
-                //转换checkbox值
-                data["required_flag"] = Util.xchecked(data["required_flag"]);
-                data["hidden_flag"] = Util.xchecked(data["hidden_flag"]);
-                data["disabled_flag"] = Util.xchecked(data["disabled_flag"]);
-                data["addfield_flag"] = Util.xchecked(data["addfield_flag"]);
+                //如果field_name不存在 store.newItem
+                if(data){
+                    //获取helptext编辑框内容
+                    data["help_text"] = Util.trim(Util.dijit_byId("myEditor").value);
 
-                var hasflag = false;
-                items.forEach(function(item){
+                    //转换checkbox值
+                    data["required_flag"] = Util.xchecked(data["required_flag"]);
+                    data["hidden_flag"] = Util.xchecked(data["hidden_flag"]);
+                    data["disabled_flag"] = Util.xchecked(data["disabled_flag"]);
+                    data["addfield_flag"] = Util.xchecked(data["addfield_flag"]);
+                    if(data["validation_code"] != ""){
+                        data["validation_desc"] = Util.getDesc("validation_code",dialogForm.domNode);
+                    }else{
+                        data["validation_desc"] = "";
+                    }
+
+                    if(data["valuelist_name"] != ""){
+                        data["valuelist_desc"] = Util.getDesc("valuelist_name",dialogForm.domNode);
+                    }else{
+                        data["valuelist_desc"] = "";
+                    }
+
+                    var hasflag = false;
+                    items.forEach(function(item){
 //                        console.info(store.getAttributes(item));
-                    if(item && store.getValues(item,"field_name") == data.field_name){
-                        data["ui_field_id"] = store.getValues(item,"ui_field_id");
-                        hasflag = true;
-                        var attributes = store.getAttributes(item);
-                        attributes.forEach(function(attribute){
-                            if(data[attribute] != undefined){
-                                //                                    console.info(attribute + ":" +data[attribute]);
-                                if(data[attribute] != store.getValues(item,attribute)){
-                                    store.setValues(item,attribute,data[attribute]);
+                        if(item && store.getValues(item,"field_name") == data.field_name){
+                            data["ui_field_id"] = store.getValues(item,"ui_field_id");
+                            hasflag = true;
+                            var attributes = store.getAttributes(item);
+                            attributes.forEach(function(attribute){
+                                if(data[attribute] != undefined){
+                                    //                                    console.info(attribute + ":" +data[attribute]);
+                                    if(data[attribute] != store.getValues(item,attribute)){
+                                        store.setValues(item,attribute,data[attribute]);
+                                    }
                                 }
-                            }
+                            });
+
+                        } //if
+
+                    }); //forEach
+                    //不存在，则新增
+                    if(hasflag){
+                        //远程更新
+                        remoteAction(data,"update");
+                    } else{
+                        Util.dijit_byId("program_name").key = p_program_id;
+                        data["program_id"] = p_program_id;
+
+                        remoteAction(data,"create",function(){
+                            //成功之后新增grid条目
+                            Util.dijit_byId("mygrid").store.newItem(data);
                         });
+                    }
 
-                    } //if
+                    hide_dialog();
 
-                }); //forEach
-                //不存在，则新增
-                if(hasflag){
-                    //远程更新
-                    remoteAction(data,"update");
+                }//if(data)
 
-                } else{
-                    Util.dijit_byId("program_name").key = p_program_id;
-                    data["program_id"] = p_program_id;
+            });
 
-                    remoteAction(data,"create",function(){
-                        //成功之后新增grid条目
-                        store.newItem(data);
-                    });
-                }
 
-                hide_dialog();
-
-            }//if(data)
     });
 
 } //update_grid
@@ -315,9 +340,25 @@ function remoteAction(data,type,successFun,errorFun){
                 }
             },function(error){
                 Command.show_dialog({content : error});
-                if(successFun){
+                if(errorFun){
                     errorFun();
                 }
             });
+    });
+}
+
+//当选择了值集之后，默认值的选框则可以选择
+function defaultValue_onFocus(){
+    //动态获取验证码
+    require(["dojo/request","baf/base/Util"],function(request,Util){
+        //远程更新
+        var valuelist_name = Util.dijit_byId("valuelist_name").value;
+        request.get(Util.url.safeurl("bc/valuelist","find_by_name",{valuelist_name : valuelist_name}),{handleAs : "json"}).then(function(data){
+            if(data){
+                var df = Util.dijit_byId("default_value");
+                df.valuelist_id = data.valuelist_id;
+                df.showQbutton();
+            }
+        });
     });
 }

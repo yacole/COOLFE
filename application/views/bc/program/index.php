@@ -13,6 +13,9 @@
                 <button data-dojo-type="baf/dijit/form/Button" id="createButton" type="button" onclick="directedToAction('create');">
                     <label for="createButton"></label>
                 </button>
+                <button data-dojo-type="baf/dijit/form/Button" id="editButton" type="button" onclick="directedToAction('edit');">
+                    <label for="editButton"></label>
+                </button>
                 <button data-dojo-type="baf/dijit/form/Button" id="showButton" type="button" onclick="directedToAction('show');">
                     <label for="showButton"></label>
                 </button>
@@ -50,6 +53,13 @@
                         function(){
                             wso.openProgram_byName("BC_PROGRAM_C","_self",{program_name : program_name});
                         }
+                    );
+                    break;
+                case "edit" :
+                    innderForm.formValidate(null,
+                        function(){
+                            wso.openProgram_byName("BC_PROGRAM_U","_self",{program_name : program_name});
+                        },true
                     );
                     break;
                 case "show" :

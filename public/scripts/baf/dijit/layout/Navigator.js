@@ -1,23 +1,15 @@
-/**
- * Created with JetBrains PhpStorm.
- * User: ybchenyy
- * Date: 13-4-1
- * Time: 上午11:19
- * To change this template use File | Settings | File Templates.
- */
-define(["dojo/_base/declare",
-    "baf/base/Util",
-    "baf/command/Command",
-    "dijit/Tree",
-    "dojo/data/ItemFileReadStore",
-    "dijit/tree/ForestStoreModel",
-    "dijit/layout/AccordionContainer",
-    "dijit/layout/ContentPane",
-    "baf/base/Env"
-    ],
+define(["dojo/_base/declare", "baf/base/Util", "baf/command/Command",
+    "dijit/Tree", "dojo/data/ItemFileReadStore", "dijit/tree/ForestStoreModel",
+    "dijit/layout/AccordionContainer", "dijit/layout/ContentPane", "baf/base/Env"],
     function(declare,Util,Command,Tree, ItemFileReadStore,ForestStoreModel,AccordionContainer,ContentPane,Env){
+        /*
+         *   摘要:
+         *       导航栏，位于框架左侧，存放权限菜单以及收藏夹
+         */
         return declare([ContentPane],{
+            //权限菜单
             rolePane : null,
+            //收藏夹
             favoritePane : null,
 
             startup : function(data){

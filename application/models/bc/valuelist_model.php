@@ -50,16 +50,20 @@ class Valuelist_model extends CI_Model{
         return $rs;
     }
 
-    function  find_by_vlname($vlname,$inactive = 0){
-        $this->db->select('*');
-        $this->db->from('bc_valuelists_tl as h');
-        $this->db->join('bc_valuelist_lines_tl as l', 'h.valuelist_id = l.valuelist_id');
-        $this->db->where('l.inactive_flag = ',$inactive);
-        $this->db->where('h.vlname = ',$vlname);
+//    function  find_by_vlname($vlname,$inactive = 0){
+//        $this->db->select('*');
+//        $this->db->from('bc_valuelists_tl as h');
+//        $this->db->join('bc_valuelist_lines_tl as l', 'h.valuelist_id = l.valuelist_id');
+//        $this->db->where('l.inactive_flag = ',$inactive);
+//        $this->db->where('h.vlname = ',$vlname);
+//
+//        $query = $this->db->get();
+//
+//        return $query;
+//    }
 
-        $query = $this->db->get();
-
-        return $query;
+    function  find_by_name($name){
+        return  $this->db->get_where('bc_valuelists_tl',array('valuelist_name' => $name));
     }
 
     //根据值集名称获取id

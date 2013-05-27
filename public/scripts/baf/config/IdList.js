@@ -1,10 +1,3 @@
-/**
- * Created with JetBrains PhpStorm.
- * User: ybchenyy
- * Date: 13-4-12
- * Time: 下午4:59
- * 用于存放ID
- */
 define(function(){
 
     return {
@@ -34,6 +27,7 @@ define(function(){
         hostblock : "bafDijitStatushost",
         ToolbarSeparator_class :  "statusbarToolbarSeparator",
         messageDetailDialog_class :  "messageDetailDialog",
+        dijitDialogPaneContent_class : "dijitDialogPaneContent",
 
         //baf.wso.Form
         wso_Form : "bafwsoForm_",
@@ -58,7 +52,11 @@ define(function(){
         //message TYPE
         messageTYPE_ERROR : "E",
         messageTYPE_WARNNING : "W",
-        messageTYPE_INFO : "I"
+        messageTYPE_INFO : "I",
+
+        //FORM表单类型
+        formType_innerForm : "innerForm",
+        formType_normalForm : "normalForm"
 
     }
 });

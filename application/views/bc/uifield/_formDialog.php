@@ -35,7 +35,7 @@
         </tr>
         <tr>
             <td class="label"><label for="default_value"></label></td>
-            <td><input data-dojo-type="baf/dijit/form/TextBox" data-dojo-props="name : 'default_value'" /></td>
+            <td><input data-dojo-type="baf/dijit/form/TextBox" data-dojo-props="name : 'default_value'" onfocus="defaultValue_onFocus();"/></td>
             <td>&nbsp;</td>
         </tr>
         <tr>

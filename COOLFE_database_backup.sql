@@ -526,7 +526,8 @@ CREATE TABLE `bc_programs_tl` (
 INSERT INTO `bc_programs_tl` (`program_id`,`program_type`,`program_name`,`title`,`help_text`,`appliction_code`,`controller`,`action`,`menu_bar_id`,`system_flag`,`creation_date`,`created_by`,`last_update_date`,`last_updated_by`,`qform_flag`,`directed_to`,`home_page`) VALUES 
  (1,'01','BC_PROGRAM_H','PROGRAM CREATE',NULL,'01','BC/PROGRAM','index',NULL,0,NULL,NULL,NULL,NULL,0,NULL,NULL),
  (2,'01','BC_PROGRAM_C','AA',NULL,'01','bc/program','create',NULL,0,NULL,NULL,NULL,NULL,0,NULL,1),
- (3,'01','BC_UI_FIELD_M','BC_UI_FIELD_M',NULL,'01','bc/uifield','index',NULL,0,NULL,NULL,NULL,NULL,0,NULL,NULL);
+ (3,'01','BC_UI_FIELD_M','BC_UI_FIELD_M',NULL,'01','bc/uifield','index',NULL,0,NULL,NULL,NULL,NULL,0,NULL,NULL),
+ (4,'01','BC_PROGRAM_R','程序显示',NULL,'01','bc/program','index',NULL,0,NULL,NULL,NULL,NULL,0,NULL,NULL);
 /*!40000 ALTER TABLE `bc_programs_tl` ENABLE KEYS */;
 
 
@@ -697,7 +698,7 @@ CREATE TABLE `bc_ui_fields_tl` (
   `last_updated_by` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`ui_field_id`),
   UNIQUE KEY `BC_ui_fields_U01` (`program_id`,`field_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8 COMMENT='界面字段信息表';
+) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8 COMMENT='界面字段信息表';
 
 --
 -- Dumping data for table `bc_ui_fields_tl`
@@ -707,23 +708,19 @@ CREATE TABLE `bc_ui_fields_tl` (
 INSERT INTO `bc_ui_fields_tl` (`ui_field_id`,`program_id`,`field_name`,`field_size`,`addfield_flag`,`label`,`help_text`,`required_flag`,`disabled_flag`,`hidden_flag`,`default_value`,`valuelist_id`,`validation_id`,`creation_date`,`created_by`,`last_update_date`,`last_updated_by`) VALUES 
  (13,3,'field_name','10',0,'字段','',1,0,0,'',NULL,NULL,1367368310,1,1369297668,1),
  (14,3,'label','20',0,'描述','',0,0,0,'',NULL,NULL,1367370176,1,1369298841,1),
- (15,3,'field_size','4',0,'尺寸','尺寸用于控制字段长短 ，影响界面的展示，比如FORM中、GRID列',0,0,0,'',NULL,NULL,1367370253,1,1369298369,1),
+ (15,3,'field_size','4',0,'尺寸','尺寸用于控制字段长短 ，影响界面的展示，比如FORM中、GRID列',1,0,0,'',NULL,NULL,1367370253,1,1369378013,1),
  (16,3,'required_flag','2',0,'必输','112',0,0,0,'',NULL,NULL,1367370309,1,1369297569,1),
  (17,3,'disabled_flag','2',0,'只读','',0,0,0,'',NULL,NULL,1367370330,1,1369297542,1),
  (18,3,'hidden_flag','2',0,'隐藏','',0,0,0,'',NULL,NULL,1367370343,1,1369297685,1),
  (19,3,'addfield_flag','3',0,'弹性域',NULL,0,0,0,NULL,NULL,NULL,1367370362,1,1367376382,1),
- (20,3,'valuelist_name','10',0,'值集','',0,0,0,'',5,NULL,1367370382,1,1369283847,1),
+ (20,3,'valuelist_name','10',0,'值集','',0,0,0,'',5,NULL,1367370382,1,1369641850,1),
  (21,3,'default_value','10',0,'默认值',NULL,0,0,0,NULL,NULL,NULL,1367370402,1,1367370402,1),
- (22,3,'validation_code','10',0,'验证代码',NULL,0,0,0,NULL,4,NULL,1367370424,1,1367370424,1),
- (26,3,'save_bt','',0,'保存','',0,0,0,'',NULL,NULL,1367370840,1,1369290980,1),
- (27,3,'cancel_bt','',0,'取消',NULL,0,0,0,NULL,NULL,NULL,1367370853,1,1367370853,1),
- (28,3,'program_name','',0,'程序',NULL,0,0,0,NULL,2,1,1367370868,1,1367370868,1),
- (29,3,'new_bt','',0,'新建',NULL,0,0,0,NULL,NULL,NULL,1367372129,1,1367372129,1),
- (30,3,'delete_bt','',0,'删除',NULL,0,0,0,NULL,NULL,NULL,1367372142,1,1367372142,1),
- (31,3,'edit_bt','',0,'编辑',NULL,0,0,0,NULL,NULL,NULL,1367372160,1,1367372160,1),
- (32,3,'property','',0,'属性',NULL,0,0,0,NULL,NULL,NULL,1367373958,1,1367373958,1),
+ (22,3,'validation_code','10',0,'验证代码','',0,0,0,'',4,3,1367370424,1,1369644509,1),
  (34,1,'program_name','20',0,'程序','',1,0,0,'',2,1,1367385231,1,1369212910,1),
- (37,3,'help_text','',0,'帮助文档','',0,0,0,NULL,NULL,NULL,1367386590,1,1367386667,1);
+ (38,3,'program_name','20',0,'程序','',0,0,0,'',2,NULL,1369628409,1,1369635086,1),
+ (39,3,'new_bt','1',0,'新建','',0,0,0,'',NULL,NULL,1369628443,1,1369638409,1),
+ (40,2,'program_name','20',0,'程序','',1,0,0,'',NULL,NULL,1369628759,1,1369632846,1),
+ (41,2,'appliction_code','',0,'应用','',1,0,0,'15',1,NULL,1369628794,1,1369632916,1);
 /*!40000 ALTER TABLE `bc_ui_fields_tl` ENABLE KEYS */;
 
 
@@ -906,9 +903,9 @@ CREATE TABLE `bc_validator_tl` (
   `creation_date` int(10) unsigned DEFAULT NULL,
   `created_date` int(10) unsigned DEFAULT NULL,
   `regexp` varchar(500) DEFAULT NULL,
-  `invalidmessage` varchar(100) NOT NULL COMMENT '不通过验证',
+  `invalidmessage` varchar(100) NOT NULL COMMENT '匹配后提示',
   `sqltext` text COMMENT 'SQL语句',
-  `validmessage` varchar(100) NOT NULL COMMENT '通过验证信息',
+  `reverse_flag` tinyint(1) DEFAULT NULL COMMENT '反向标识',
   PRIMARY KEY (`validation_id`),
   UNIQUE KEY `BC_VALIDATOR_U01` (`validation_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='字段验证码信息表';
@@ -918,8 +915,10 @@ CREATE TABLE `bc_validator_tl` (
 --
 
 /*!40000 ALTER TABLE `bc_validator_tl` DISABLE KEYS */;
-INSERT INTO `bc_validator_tl` (`validation_id`,`validation_code`,`description`,`last_update_date`,`last_updated_by`,`creation_date`,`created_date`,`regexp`,`invalidmessage`,`sqltext`,`validmessage`) VALUES 
- (1,'PROGRAM_NAME','验证程序名',NULL,NULL,NULL,NULL,'^(?!_)(?!.*?_$)\\w+$','程序名已存在','SELECT * FROM bc_programs_tl b where b.program_name = \'?\'','程序名不存在');
+INSERT INTO `bc_validator_tl` (`validation_id`,`validation_code`,`description`,`last_update_date`,`last_updated_by`,`creation_date`,`created_date`,`regexp`,`invalidmessage`,`sqltext`,`reverse_flag`) VALUES 
+ (1,'PROGRAM_NAME','验证程序名',NULL,NULL,NULL,NULL,'^(?!_)(?!.*?_$)\\w+$','程序名已存在','SELECT * FROM bc_programs_tl b where b.program_name = \'?\'',0),
+ (2,'VALUELIST_NAME','值集名称',NULL,NULL,NULL,NULL,'^(?!_)(?!.*?_$)\\w+$','值集已存在','select * from bc_valuelists_tl where valuelist_name = \'?\'',0),
+ (3,'VALIDATION_CODE_R','验证码',NULL,NULL,NULL,NULL,'^(?!_)(?!.*?_$)\\w+$','验证码不存在','select * from bc_validator_tl where validation_code = \'?\'',1);
 /*!40000 ALTER TABLE `bc_validator_tl` ENABLE KEYS */;
 
 

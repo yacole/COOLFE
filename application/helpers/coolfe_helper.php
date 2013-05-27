@@ -226,10 +226,10 @@ function message($type,$class,$line,$args = []){
                     $content = substr_replace($content,$p,$index,1);
                 }
             }
-            $content = str_replace("&","",$content);
             $message['content'] = $content;
         }
 
     }
+    $message['content'] = str_replace("&","",$message['content']);
     return $message;
 }

@@ -1,20 +1,18 @@
-/**
- * Created with JetBrains PhpStorm.
- * User: ybchenyy
- * Date: 13-4-18
- * Time: 下午12:08
- * 用于存放命令的历史记录以便恢复
- */
 define(["dojo/_base/declare","dojo/_base/array","baf/config/Config"],
     function(declare,array,Config){
+        /*
+         *   摘要:
+         *       页签历史记录相关操作
+         */
         return declare("baf.command.History",null,{
-            //获取配置
+            //获取配置:历史队列最大长度
             maxindex : Config.cmdHistoryMaxindex,
 
             //关闭窗口历史
             closeWsoList : {items : []},
 
             //添加记录
+            //program_id :程序id ； description : 描述，默认为程序标题
             recordWso : function(program_id,description){
                 var cmdhistory = this;
                 var arr = cmdhistory.closeWsoList.items;

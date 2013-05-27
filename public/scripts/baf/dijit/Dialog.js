@@ -1,11 +1,8 @@
-/**
- * Created with JetBrains PhpStorm.
- * User: ybchenyy
- * Date: 13-4-10
- * Time: 下午4:58
- * 弹出消息类：一般用于页面切换间的提示
- */
 define(["dojo/_base/declare","dijit/Dialog","baf/base/Util"],function(declare,Dialog,Util){
+    /*
+     *   摘要:
+     *       弹出消息框组件
+     */
     return declare("",[Dialog],{
         constructor : function(args){
             if(args.title == undefined){

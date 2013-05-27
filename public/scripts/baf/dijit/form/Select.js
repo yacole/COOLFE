@@ -1,28 +1,24 @@
-/**
- * Created with JetBrains PhpStorm.
- * User: ybchenyy
- * Date: 13-5-1
- * Time: 下午12:45
- * To change this template use File | Settings | File Templates.
- */
-define(["dojo/_base/declare",
-    "dijit/form/Select",
-    "baf/base/Util",
-    "dojo/request"],
+define(["dojo/_base/declare", "dijit/form/Select",  "baf/base/Util",  "dojo/request"],
     function(declare,Select,Util,request){
-
+        /*
+         *   摘要:
+         *       选择下拉菜单组件
+         */
         return declare("",[Select],{
 
-            creation_date : new Date,
+            creation_date : null,
             created_by : null,
-            lastupdate_date : new Date,
-            lastupdate_by : null,
+            last_update_date : null,
+            last_updated_by : null,
 
             constructor : function(args){
 
-                if(args.id){
+                if(!args.id){
+                    args.id = Util.xId(args.name);
+                }else{
                     args.id = Util.xId(args.id);
                 }
+
             },
 
             startup : function(){

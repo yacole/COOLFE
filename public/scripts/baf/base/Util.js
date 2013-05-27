@@ -172,6 +172,21 @@ define(["baf/config/Url", "baf/language/"+language+"/Label", "baf/language/"+lan
                 }
 
             },
+            //获取描述字段的值
+            getDesc : function(field_name,scope){
+                var target,desc;
+                if(scope){
+                    target = dojo.query("span[for=" + field_name + "]",scope);
+                }else{
+                    target = this.query("span[for=" + field_name + "]");
+                }
+//                console.info(target);
+                //赋值
+                if(target.length > 0){
+                    desc = this.trim(target[0].innerHTML);
+                }
+                return desc;
+            },
 
             /*
                 字符串空格处理

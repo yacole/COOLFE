@@ -1,11 +1,8 @@
-/**
- * Created with JetBrains PhpStorm.
- * User: ybchenyy
- * Date: 13-4-9
- * Time: 上午9:45
- * 切换主题相关
- */
 define(["dojo/query"],function(query){
+    /*
+     *   摘要:
+     *       可用于切换主题（已废弃）
+     */
     return {
         change_to : function(newTheme){
             dojo.forEach(query("link"),function(link_theme){

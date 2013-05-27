@@ -47,24 +47,36 @@ class Validator extends CI_Controller {
                                         //转换SQL，验证查询
                                         $sqltext = str_replace('?',$value,$validator['sqltext']);
                                         $query = $this->db->query($sqltext)->result_array();;
-                                        if(count($query) > 0){
-                                            //如果找到结果，则不通过
-                                            $flag = false;
-                                            array_push($data['inValid'],$key);
+
+                                        //判断是否为反向验证
+                                        if($validator['reverse_flag'] == 1){
+
+                                            if(count($query) > 0){
+                                                array_push($data['valid'],$key);
+                                            }else{
+                                                array_push($data['inValid'],$key);
+                                            }
                                         }else{
-                                            //不存在则通过
-                                            $flag = true;
-                                            array_push($data['valid'],$key);
-                                        }
-                                    }
 
-                                    $data['isValid'] = $flag;
+                                            if(count($query) > 0){
+                                                //如果找到结果，则不通过
+                                                array_push($data['inValid'],$key);
+                                            }else{
+                                                //不存在则通过
+                                                array_push($data['valid'],$key);
+                                            }
+                                        } //if
 
-                                }
-                            }
+                                    }//if
+                                }//if
+                            }//if
 
-                    }
+                    }//if
+                }//foreach
+                if(count($data['inValid']) == 0){
+                    $data['isValid'] = true;
                 }
+
             }
         }
         //输出
@@ -86,5 +98,9 @@ class Validator extends CI_Controller {
 
     function find(){
         echo rs_to_json($this->validator->find($_GET['validation_id']));
+    }
+
+    function find_by_name(){
+        echo rs_to_json($this->validator->find_by_name(get_parameter('validation_code')));
     }
 }

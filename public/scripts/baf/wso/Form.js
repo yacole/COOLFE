@@ -1,31 +1,36 @@
-define(["dojo/_base/declare",
-    "dijit/layout/ContentPane",
-    "dojo/request",
-    "baf/dijit/layout/MenuBar",
-    "baf/base/Util",
-    "baf/command/Command",
-    "baf/dijit/layout/ToolBar",
-    "dojox/layout/ContentPane",
-    "baf/wso/InnerForm",
-    "dojo/dom-construct",
-    "baf/base/Env"],
-    function(declare,ContentPane,request,MenuBar,Util,Command,ToolBar,ContentPaneX,InnerForm,construct,ENV){
-        return declare("baf.wso.Form",[ContentPane],{
+define(["dojo/_base/declare", "dijit/layout/ContentPane", "dojo/request", "baf/dijit/layout/MenuBar",
+    "baf/base/Util", "baf/command/Command", "baf/dijit/layout/ToolBar", "dojox/layout/ContentPane",
+    "baf/wso/InnerForm", "dojo/dom-construct"],
+    function(declare,ContentPane,request,MenuBar,Util,Command,ToolBar,ContentPaneX,InnerForm,construct){
+        /*
+         *   摘要:
+         *       工作区对象：表单
+         */
+        return declare("",[ContentPane],{
+            //程序id
             program_id : null,
+            //创建时间戳
             timestamp : null,
+            //控制器 ，与action组合获取服务端url
             controller : null,
+            //动作
             action : null,
+            //参数
             params : null,
+            //字段列表
             fields : null,
+            //菜单栏
             menuBar : null,
+            //工具栏
             toolBar : null,
+            //表单内容面板，通过url加载
             contentPane : null,
+            //主页程序id
             home_page : null,
-            home_url : null,
-            //表单
+            //内部form用于提交数据
             innerForm : null,
+            //工作区对象：属于表单
             wsoType : Util.id.programTYPE_FORM,
-            isParse : false,
 
             constructor : function(args){
                 this.inherited(arguments);
@@ -33,7 +38,6 @@ define(["dojo/_base/declare",
 
             startup : function(){
 
-//                console.info(timestamp);
                 var form = this;
 
                 //获取菜单栏
@@ -51,7 +55,8 @@ define(["dojo/_base/declare",
 
                 //表单
                 form.innerForm = new InnerForm({
-                    id : Util.id.wso_innerForm  + form.timestamp
+                    id : Util.id.wso_innerForm  + form.timestamp,
+                    formType : "innerForm"
                 });
 
                 form.addChild(form.innerForm);
@@ -60,14 +65,12 @@ define(["dojo/_base/declare",
                 form.contentPane = new  ContentPaneX({
                     id : Util.id.wso_Content + form.timestamp,
                     href : Util.url.safeurl(form.controller,form.action,form.params),
-//                    class : Util.id.wso_Content_class,
                     title : form.title,
                     onDownloadEnd : function(){
                         //字段标签赋值
                         Util.queryTofillLabel();
                     }
                 });
-//                form.contentPane.startup();
 
                 //内容面板加载
                 construct.place(form.contentPane.domNode,form.innerForm.domNode);
@@ -78,20 +81,7 @@ define(["dojo/_base/declare",
                 this.inherited(arguments);
 
             },
-            currentInnerForm : function(){
-                var form = this;
-                var returnForm ;
-                var innerform = dojo.query('form',form.domNode);
-                if(innerform){
-                    innerform.forEach(function(e){
-                        f = dijit.byNode(e);
-                        if(!f && !f.unsubmit){
-                            returnForm = f;
-                        }
-                    })
-                }
-                return returnForm;
-            },
+            //关闭时，需要判断是否存在脏数据
             onClose : function(){
                 if(this.isDirty()){
                     return confirm(Util.message.warnning_confirm_closeWso);
@@ -99,11 +89,12 @@ define(["dojo/_base/declare",
                     return true;
                 }
             },
+            //表单内容面板动态转向
             directedTo : function(url){
-                console.info(url);
                 //当前页面跳转
                 this.contentPane.set("href",url);
             },
+            //判断是否存在脏数据
             isDirty : function(){
                 //判断是否FORM中的必输项有值
                 var wso = this;

@@ -1,13 +1,10 @@
-/**
- * Created with JetBrains PhpStorm.
- * User: ybchenyy
- * Date: 13-5-23
- * Time: 上午10:02
- * To change this template use File | Settings | File Templates.
- */
 define(["baf/base/Util","baf/base/Env"],function(Util,ENV){
-
+    /*
+     *   摘要:
+     *       处理服务端返回数据，包括处理：报错消息，数据包，运行程序等
+     */
     return {
+        //处理
         handleExport : function(response){
             if(response){
                 var messages = response.messages;
@@ -21,6 +18,8 @@ define(["baf/base/Util","baf/base/Env"],function(Util,ENV){
                 //处理其他
             }
         },
+        //处理消息列表：默认显示ERROR ，然后 WARNNING ，最后 INFO
+        //点击消息按钮可以显示详细消息
         _handleMessage : function(messages){
             var mlen = messages.length;
             //获取messageBar
@@ -51,6 +50,7 @@ define(["baf/base/Util","baf/base/Env"],function(Util,ENV){
 
             }
         },
+        //根据消息类型，在消息列表中寻找一条消息
         _singleType : function(messages,type){
             var message = null;
             messages.forEach(function(m){

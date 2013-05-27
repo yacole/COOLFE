@@ -1,25 +1,22 @@
-/**
- * Created with JetBrains PhpStorm.
- * User: ybchenyy
- * Date: 13-4-7
- * Time: 下午1:30
- * 监听在框架搭建完成后启动
- */
 define(["dojo/topic","baf/dijit/Dialog","baf/dijit/RightMenu","baf/base/Util","baf/base/Env","baf/command/Response"],
     function(topic,Dialog,RightMenu,Util,ENV,Response){
+        /*
+         *   摘要:
+         *       系统监听模块，在系统首页启动，启动的过程：
+         *       右键菜单监听 --> 环境变量启动 --> 全局监听订阅
+         */
     return {
         startup : function(){
 
-            /*
-             监听右键菜单触发事件
-             */
+            //监听右键菜单触发事件
             RightMenu.startup();
 
             //环境变量启动
             ENV.startup();
 
 
-            //状态栏-消息类
+            //显示消息：将信息显示在信息栏
+            //type : 类型E W I；classCode ：消息类 ; messageCode : 消息编号
             topic.subscribe("message", function(type,classCode,messageCode){
 
                 ENV.messageBar().showMessage(type,classCode,messageCode);
@@ -50,24 +47,20 @@ define(["dojo/topic","baf/dijit/Dialog","baf/dijit/RightMenu","baf/base/Util","b
 //
 //            });
 
-            //弹出框
+            //显示消息弹出框，args为标准的参数设定
             topic.subscribe("dialog", function(args){
 
                 new Dialog(args).show();
 
             });//topic.s
 
-            //处理服务器返回值
+            //处理服务端的反馈数据
+            //response : 反馈数据对象
             topic.subscribe("handleExport", function(args){
 
                 Response.handleExport(args);
 
             });//topic.s
-
-
-
-        },
-        shutdown : function(){
 
         }
     }

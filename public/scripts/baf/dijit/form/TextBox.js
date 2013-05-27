@@ -1,18 +1,11 @@
-/**
- * Created with JetBrains PhpStorm.
- * User: ybchenyy
- * Date: 13-4-22
- * Time: 上午9:44
- * To change this template use File | Settings | File Templates.
- */
-define(["dojo/_base/declare",
-    "dijit/form/ValidationTextBox",
-    "baf/base/Util",
-    "dijit/form/Button",
-    "dojo/request",
-    "baf/base/Env"],
+define(["dojo/_base/declare", "dijit/form/ValidationTextBox", "baf/base/Util",
+    "dijit/form/Button", "dojo/request", "baf/base/Env"],
     function(declare,ValidationTextBox,Util,Button,request,Env){
-    return declare("baf.dijit.form.TextBox",[ValidationTextBox],{
+        /*
+         *   摘要:
+         *       输入框组件
+         */
+    return declare("",[ValidationTextBox],{
         //可多选
         mselect : false,
         //提交的值
@@ -22,10 +15,11 @@ define(["dojo/_base/declare",
         label : null,
         valuelist_id : null,
 
-        creation_date : new Date,
+        creation_date : null,
         created_by : null,
-        lastupdate_date : new Date,
-        lastupdate_by : null,
+        last_update_date : null,
+        last_updated_by : null,
+
         field_id : null,
         remoteValidator : null,
 //        remoteIsValid : null,
@@ -103,17 +97,17 @@ define(["dojo/_base/declare",
             this.inherited(arguments);
 
         },
-        //聚焦时如果存在值集，显示
-        onFocus : function(){
-            var textbox = this;
+
+        showQbutton : function(){
             var vlbt = dijit.byId(Util.id.vlbutton);
             if(vlbt != undefined){
                 vlbt.destroyRecursive();
             }
 
             //如果存在值列表
-            if(textbox.valuelist_id != undefined ){
+            if(this.valuelist_id){
 //                console.info(textbox.valuelist_id);
+                var textbox = this;
                 var bt = new Button({
                     label : Util.label.reseach,
                     onClick: function(){
@@ -124,9 +118,14 @@ define(["dojo/_base/declare",
                     id : Util.id.vlbutton,
                     style : "position: fixed;"
                 });
-                bt.placeAt(textbox.domNode,"after");
+                bt.placeAt(this.domNode,"after");
 //                console.info(textbox.domNode);
             }
+        },
+
+        //聚焦时如果存在值集，显示
+        onFocus : function(){
+            this.showQbutton();
         }
 
     });

@@ -1,12 +1,11 @@
-/**
- * Created with JetBrains PhpStorm.
- * User: ybchenyy
- * Date: 13-4-11
- * Time: 上午9:15
- * 保存默认的一些URL，取数
- */
 define(function(){
-    //处理URL
+    /*
+     *   摘要:
+     *       用于封装框架中使用的URL
+     *
+     */
+    //处理URL：
+    //controller ： 控制器；action ： 动作； params ： 参数
     var url = function(controller,action,params){
         if(params == undefined){
             return "index.php/" +controller + "/" + action;
@@ -44,45 +43,51 @@ define(function(){
             }
         },
         navigator : url("main","navigator"),
+        //获取工作区数据
         workspace : function(params){
             return url("bc/program","workspace",params);
         },
+        //根据程序名查找程序
         find_program_byName : function(params){
             return url("bc/program","find_by_name",params);
         },
+        //根据程序id查找程序
         find_program_byId : function(params){
             return url("bc/program","find",params);
         },
+        //获取菜单栏数据
         menubar : function(params){
             return url("bc/program","menubar",params);
         },
-        message :function(params){
-            return url("bc/message","message_desc",params);
-        },
-        message_help :function(params){
-            return url("bc/message","message_help",params);
-        },
+        //根据程序和字段名查找字段数据
         ui_field :function(params){
             return url("bc/uifield","find_field_by_program_id_and_name",params);
         },
+        //根据程序id查找字段列表
         ui_fieldlist_byid :function(params){
             return url("bc/uifield","find_fields_by_program_id",params);
         },
+        //字段管理首页
         ui_field_manager : function(params){
             return url("bc/uifield","index",params);
         },
+        //获取值集列表（下拉菜单）
         valuelist_selectOptions : function(params){
             return url("bc/valuelist","selectOptions",params);
         },
+        //根据值集id查找值列表
         find_valuelist_byId : function(params){
             return url("bc/valuelist","find",params);
         },
+        //根据验证码id查找验证码
         find_validator_byId : function(params){
             return url("bc/validator","find",params);
         },
+        //根据消息类和消息编码查找消息
         find_message : function(params){
             return url("bc/message","find_by_class_and_code",params);
         },
+        //消息详细信息
         find_message_detail : function(params){
             return url("bc/message","show_detail",params);
         }

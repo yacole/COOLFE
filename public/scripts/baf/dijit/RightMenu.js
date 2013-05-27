@@ -1,22 +1,11 @@
-/**
- * Created with JetBrains PhpStorm.
- * User: ybchenyy
- * Date: 13-4-12
- * Time: 上午9:52
- * To change this template use File | Settings | File Templates.
- */
-define([
-    "dijit/Menu",
-    "dijit/MenuItem",
-    "dijit/CheckedMenuItem",
-    "dijit/MenuSeparator",
-    "dijit/PopupMenuItem",
-    "dojo/aspect",
-    "baf/base/Util" ,
-    "baf/base/Env",
-    "baf/command/Command"
-], function(Menu, MenuItem, CheckedMenuItem, MenuSeparator, PopupMenuItem,aspect,Util,ENV,Command){
-
+define([ "dijit/Menu", "dijit/MenuItem", "dijit/CheckedMenuItem", "dijit/MenuSeparator",
+    "dijit/PopupMenuItem", "dojo/aspect", "baf/base/Util" , "baf/base/Env",
+    "baf/command/Command"],
+    function(Menu, MenuItem, CheckedMenuItem, MenuSeparator, PopupMenuItem,aspect,Util,ENV,Command){
+    /*
+     *   摘要:
+     *       系统右键菜单管理，全局，根据不同的对象，菜单展示可自定义
+     */
     return {
 
         startup : function(){
@@ -221,6 +210,7 @@ define([
             wsotabMenu.startup();
 
         },
+
         //管理页签右键中的历史列表
         historyMenu : function(idlist){
             //获取工作区右键菜单

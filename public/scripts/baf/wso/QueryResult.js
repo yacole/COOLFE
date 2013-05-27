@@ -1,25 +1,20 @@
-/**
- * Created with JetBrains PhpStorm.
- * User: ybchenyy
- * Date: 13-5-9
- * Time: 下午3:01
- * To change this template use File | Settings | File Templates.
- */
-define(["dojo/_base/declare",
-    "dijit/Dialog",
-    "baf/base/Util",
-    "dojox/grid/DataGrid",
-    "dojo/data/ItemFileReadStore",
-    'dojo/dom-construct'],
+define(["dojo/_base/declare", "dijit/Dialog", "baf/base/Util", "dojox/grid/DataGrid",
+    "dojo/data/ItemFileReadStore", 'dojo/dom-construct'],
     function(declare,Dialog,Util,DataGrid,ItemFileReadStore,construct){
+    /*
+     *   摘要:
+     *       查询结果展示
+     */
     return declare("",[Dialog],{
+        //查询结果表格grid
         resultGrid : null,
+        //表格字段
         column : null,
+        //获取数据的url
         url : null,
-        //选择数据返回前一个界面
+        //选择数据返回的对象
         sourceObj : null,
 
-        //不能互为QFORM 暂标注
         constructor : function(args){
             if(args.title == undefined){
                 this.title = Util.label.dialog_rform_title;
@@ -29,15 +24,12 @@ define(["dojo/_base/declare",
 
             var d = this;
             d.column = [
-                { name : Util.label.column_value, field : "value",width : 10},
-                { name : Util.label.column_label, field : "label",width : 20}
+                { name : Util.label.column_value, field : "value",width : 12},
+                { name : Util.label.column_label, field : "label",width : 22}
             ];
             var store = new ItemFileReadStore({
                 url : d.url
             });
-
-            //计算grid的高
-            var gridHeight;
 
             d.resultGrid = new DataGrid({
                 store: store,
@@ -51,7 +43,7 @@ define(["dojo/_base/declare",
                 rowsPerPage : 4 ,
                 id : Util.xId(Util.id.qrGrid),
                 rowSelector: '1em',
-                style : "width : 40em",
+                style : "width : 38em",
                 onRowDblClick : function(){
                     if(d.sourceObj){
                         //获取填写对象
