@@ -1,4 +1,4 @@
-define(["dojo/_base/declare", 'dojo/_base/lang', "dijit/Dialog", "baf/base/Util",
+define(["dojo/_base/declare", 'dojo/_base/lang', "baf/dijit/Dialog", "baf/base/Util",
     'dojo/_base/Deferred', 'dojo/dom-construct', "baf/dijit/form/Button"],
     function(declare,lang,Dialog,Util,Deferred,construct,Button){
     /*

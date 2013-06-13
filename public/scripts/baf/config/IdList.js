@@ -30,14 +30,18 @@ define(function(){
         dijitDialogPaneContent_class : "dijitDialogPaneContent",
 
         //baf.wso.Form
-        wso_Form : "bafwsoForm_",
+        wso_Child : "bafwsoChild_",
         wso_MenuBar :  "bafDijitMenuBar_",
+        wso_MenuBar_class :  "bafDijitMenuBar",
         wso_ToolBar :  "bafDijitToolBar_",
+        wso_ToolBar_class :  "bafDijitToolBar",
+        wso_ToolBarForReport :  "bafDijitToolBarForReport_",
         wso_Content : "bafwsoFormContent_",
         wso_innerForm : "bafwsoForminnerForm_",
         wso_Content_class : "bafwsoFormContent",
         wso_FormContent_class : "bafwsoinnerFormContent",
         wso_innerForm : "bafwsoinnerForm_",
+        wso_GridPane : "bafwsoRptGridPane_",
 
 
         //rightMenu

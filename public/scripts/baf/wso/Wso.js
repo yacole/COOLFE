@@ -1,7 +1,7 @@
 define(["dojo/_base/declare","baf/base/Util","dijit/layout/TabContainer","baf/wso/Form",
     "dojo/request", "baf/dijit/layout/MenuBar", "baf/command/Command", "baf/wso/QueryForm",
-    "baf/wso/QueryResult"],
-    function(declare,Util,TabContainer,Form,request,MenuBar,Command,QueryForm,QueryResult){
+    "baf/wso/QueryResult","baf/wso/Report","baf/dijit/layout/ToolBar"],
+    function(declare,Util,TabContainer,Form,request,MenuBar,Command,QueryForm,QueryResult,Report,ToolBar){
         /*
          *   摘要:
          *       查询表单，用于对字段的查询，关联值列表
@@ -79,10 +79,15 @@ define(["dojo/_base/declare","baf/base/Util","dijit/layout/TabContainer","baf/ws
             },
 
             //替换当前页：先关闭，再打开
-            _replaceProgram : function(program_id,timestamp,params){
+            //checkDir是否检查脏数据
+            _replaceProgram : function(program_id,timestamp,params,checkDirty){
                 var indx = this.getIndexOfChild(this.currentChild());
                 if(indx >= 0){
-                    this.removeChild(this.currentChild());
+                    if(checkDirty){
+                        this.closeProgram(this.currentChild());
+                    }else{
+                        this.removeChild(this.currentChild());
+                    }
                     this._openProgram(program_id,timestamp,params,indx);
                 }else{
                     this._openProgram(program_id,timestamp,params);
@@ -97,42 +102,61 @@ define(["dojo/_base/declare","baf/base/Util","dijit/layout/TabContainer","baf/ws
 
                     var tabpane = this;
 
-                    //判断程序类型，不同的程序类型，创建的模板不同
-                    switch(data.program_type){
+                    //创建系统菜单和工具栏
+                    var sysMenuBar = new MenuBar({
+                        id : Util.id.wso_MenuBar + timestamp,
+                        program_id : data.program_id,
+                        timestamp : timestamp
+                    }).build();
+                    sysMenuBar.set("class",Util.id.wso_MenuBar_class);
 
-                        case Util.id.programTYPE_FORM:
-                            //设置字段信息列表成功后创建对象
-                            this.setFields(data.program_id,function(reponse){
+                    //获取工具栏
+                    var sysToolBar = new ToolBar({
+                        id : Util.id.wso_ToolBar + timestamp
+                    });
+                    sysToolBar.set("class",Util.id.wso_ToolBar_class);
 
+                    //设置字段信息列表成功后创建对象
+                    this.setFields(data.program_id,function(reponse){
+                        //共享的一些参数
+                        var wsoAtrributes = {
+                            timestamp : timestamp,
+                            program_id : data.program_id,
+                            controller : data.controller,
+                            action : data.action,
+                            params : params,
+                            home_page : data.home_page,
+                            title : data.title,
+                            closable : true,
+                            id : Util.id.wso_Child + timestamp,
+                            fields :  reponse.items,
+                            menuBar : sysMenuBar,
+                            toolBar : sysToolBar
+                        };
+                        var wso ;
+
+                        //判断程序类型，不同的程序类型，创建的模板不同
+                        switch(data.program_type){
+
+                            case Util.id.programTYPE_FORM:
                                 //创建一个FORM工作区
-                                var form = new Form({
-                                    timestamp : timestamp,
-                                    program_id : data.program_id,
-                                    controller : data.controller,
-                                    action : data.action,
-                                    params : params,
-                                    home_page : data.home_page,
-                                    id : Util.id.wso_Form + timestamp,
-                                    title : data.title,
-                                    closable : true,
-                                    fields : reponse.items
-                                });
+                                wso = new Form(wsoAtrributes);
+                                break;
+                            case Util.id.programTYPE_REPORT:
+                                //创建一个FORM工作区
+                                wso = new Report(wsoAtrributes);
+                                break;
+                            default:
+                                ;
+                        } // switch(
 
-                                tabpane.addChild(form,pos);
-                                tabpane.selectChild(form);
+                        //加入工作区并激活
+                        tabpane.addChild(wso,pos);
+                        tabpane.selectChild(wso);
+                        //初始化工具栏
+                        tabpane._setSysToolBar(wso);
+                    });
 
-                                //判断是否拥有主页
-                                var flag = true;
-                                if(form.home_page){
-                                    flag = false;
-                                }
-                                form.toolBar.homeButton.set("disabled",flag);
-
-                            });
-                            break;
-                        default:
-                            ;
-                    } // switch(
                 }else{
                     Command.show_dialog({content : Util.message.error_wsotab_openMax});
                 }
@@ -144,13 +168,7 @@ define(["dojo/_base/declare","baf/base/Util","dijit/layout/TabContainer","baf/ws
                 var wso = this;
                 request.get(Util.url.find_program_byName({program_name : program_name}),{handleAs:"json"}).then(function(program){
 //                    console.info(program);
-                    //获取当前时间戳
-                    var timestamp =  (new Date()).valueOf().toString();
-                    if(target == "_self"){
-                        wso._replaceProgram(program.program_id,timestamp,params);
-                    }else{
-                        wso._openProgram(program.program_id,timestamp,params,pos);
-                    }
+                    wso.openProgram_byId(program.program_id,target,params,pos);
                 },function(){
                     Command.show_dialog({content: Util.message.error_xhr_notreach});
                 });
@@ -158,12 +176,22 @@ define(["dojo/_base/declare","baf/base/Util","dijit/layout/TabContainer","baf/ws
 
             //根据程序名称打开一个工作区对象
             //program_id ：程序id ;target : "_self" | "_blank" ；params ： 参数；pos ： 打开位置
+            //_self :        检查脏数据的替换 ；
             openProgram_byId : function(program_id,target,params,pos){
                 var timestamp =  (new Date()).valueOf().toString();
-                if(target == "_self"){
-                    this._replaceProgram(program_id,timestamp,params);
-                }else{
-                    this._openProgram(program_id,timestamp,params,pos);
+                switch(target){
+                    case "_self" :
+                        this._replaceProgram(program_id,timestamp,params,true);
+                        break;
+                    case "_blank" :
+                        this._openProgram(program_id,timestamp,params,pos);
+                        break;
+                    case "_selfNow" :
+                        this._replaceProgram(program_id,timestamp,params,false);
+                        break;
+                    default :
+                        this._openProgram(program_id,timestamp,params,pos);
+                        break;
                 }
             },
 
@@ -183,6 +211,8 @@ define(["dojo/_base/declare","baf/base/Util","dijit/layout/TabContainer","baf/ws
                     }else{
                         this.removeChild(targetProgram);
                     }
+                }else{
+                    this.removeChild(targetProgram);
                 }
             },
 
@@ -320,7 +350,23 @@ define(["dojo/_base/declare","baf/base/Util","dijit/layout/TabContainer","baf/ws
                         targetProgram.fields = response.items;
                     });
                 }
-                targetProgram.contentPane.refresh();
+                //重新刷新对于FOMR
+                switch(targetProgram.wsoType){
+
+                    case Util.id.programTYPE_FORM:
+                        //创建一个FORM工作区
+                        targetProgram.contentPane.refresh();
+                        break;
+                    case Util.id.programTYPE_REPORT:
+                        //刷新gird
+                        if(targetProgram.gridPane.grid){
+                            targetProgram.gridPane.refresh();
+                        }
+                        break;
+                    default:
+                        ;
+                } // switch(
+
              }, //refresh
 
             //根据值列表打开查询界面
@@ -397,6 +443,14 @@ define(["dojo/_base/declare","baf/base/Util","dijit/layout/TabContainer","baf/ws
                     Command.show_dialog({content: Util.message.error_xhr_notreach});
                 });
 
+            },
+            _setSysToolBar : function(wso){
+                //判断是否拥有主页
+                var flag = true;
+                if(wso.home_page){
+                    flag = false;
+                }
+                wso.toolBar.homeButton.set("disabled",flag);
             }
         });
     });

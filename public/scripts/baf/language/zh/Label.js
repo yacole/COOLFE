@@ -11,9 +11,12 @@ define(function(){
         dialog_rform_title : "查询结果",
         button_confirm : "确认",
         button_cancel : "取消",
+        button_saveAs : "另存为",
 
         column_value : "值",
         column_label : "描述",
+
+        ALL : "全部",
 
 
         //全局区
@@ -39,7 +42,22 @@ define(function(){
         rightmenu_tab_closeother : "关闭其他标签页",
         rightmenu_tab_closeleft : "关闭左侧标签页",
         rightmenu_tab_closeright : "关闭右侧标签页",
-        rightmenu_tab_rollback : "重新打开关闭的标签页"
+        rightmenu_tab_rollback : "重新打开关闭的标签页",
+
+        //grid右键菜单相关
+        grid_rowMenu_showDetail : "显示详细信息",
+        grid_menu_exportToExcel : "导出为EXCEL",
+        grid_headerMenu_hidden : "隐藏",
+        grid_headerMenu_addcolumn : "显示更多",
+        grid_headerMenu_fixhight : "调整至最佳宽度",
+        grid_headerMenu_freeze : "冻结至列",
+        grid_headerMenu_ascOrder : "按升序排列",
+        grid_headerMenu_descOrder : "按降序排列",
+        grid_headerMenu_setFilter : "设置过滤器",
+        grid_saveLayout_isRecover : "是否覆盖当前布局？",
+        grid_layout_select : "选择布局",
+        grid_layout_save : "保存布局",
+        grid_layout_manager : "管理布局"
 
     }
 });

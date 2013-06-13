@@ -13,18 +13,21 @@ define(["dojo/_base/declare", "dojo/request", "dijit/Toolbar",
             queryButton : null,
             //首页按钮
             homeButton : null,
+            //关闭当前页按钮
+            closeButton : null,
+            //退出系统按钮
+            logoutButton : null,
 
             constructor : function(args){
             },
             startup : function(){
-                this.set("class",Util.id.wso_Content_class);
 
                 this.homeButton = new Button({
                     label : "H",
                     onClick : function(){
                         var wso = Env.wso();
                         var currentWso = Env.currentWso();
-                        wso.openProgram_byId(currentWso.home_page,"_self");
+                        wso.openProgram_byId(currentWso.home_page,"_selfNow");
                     }
                 });
                 this.addChild(this.homeButton);
@@ -51,6 +54,16 @@ define(["dojo/_base/declare", "dojo/request", "dijit/Toolbar",
                     }
                 });
                 this.addChild(this.saveButton);
+
+                this.closeButton = new Button({
+                    label : "关闭",
+                    onClick : function(){
+                        var wso = Env.wso();
+                        var currentWso = Env.currentWso();
+                        wso.closeProgram(currentWso);
+                    }
+                });
+                this.addChild(this.closeButton);
 
             }
 

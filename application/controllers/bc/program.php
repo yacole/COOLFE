@@ -14,6 +14,7 @@ class Program extends CI_Controller {
         $this->load->model('bc/valuelist_model','vl');
         $this->load->model('bc/program_model','program');
         $this->load->model('bc/uifield_model','uifield');
+        $this->load->model('bc/grid_layout_model','grid');
     }
 
     //程序入口
@@ -98,6 +99,26 @@ class Program extends CI_Controller {
     //执行
     function excute(){
 
+    }
+
+    //报表测试
+   function rpt_program_list(){
+       $rs = $this->program->find_all();
+       echo rs_to_itemStore($rs,"program_name","program_name");
+   }
+
+    //获取报表布局
+    function rpt_find_layout(){
+        $rs = $this->grid->find(get_parameter('layout_id'));
+        echo rs_to_itemStore($rs);
+    }
+
+    function rpt_default_layout(){
+       echo rs_to_itemStore($this->grid->find_default(get_parameter('program_id')));
+    }
+
+    function rpt_layouts(){
+        echo rs_to_itemStore($this->grid->find_by_program_id(get_parameter('program_id')));
     }
 
     /*

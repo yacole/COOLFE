@@ -95,7 +95,8 @@ class Main extends CI_Controller {
                 ]
                 },
                 {"Menu_id": 4,"Description": "屏幕字段修改","F_TYPE":"program","program_id":3},
-                {"Menu_id": 24,"Description": "程序管理","F_TYPE":"program","program_id":1}
+                {"Menu_id": 24,"Description": "程序管理","F_TYPE":"program","program_id":1},
+                {"Menu_id": 25,"Description": "程序清单报表","F_TYPE":"report","program_id":5}
             ]
         }';
 

@@ -39,16 +39,16 @@ define(["baf/config/Url", "baf/language/"+language+"/Label", "baf/language/"+lan
                 }
             },
             //获取当前工作区中聚焦对象
-            currenWso : function(){
+            currentWso : function(){
               return dijit.byId(this.id.WorkspacePane).currentChild();
             },
             //生成当前时间戳的ID
             xId : function(id){
-                return id + this.currenWso().timestamp;
+                return id + this.currentWso().timestamp;
             },
             //替代dojo.query,默认范围为当前工作区对象内
             query : function(args){
-                var targetDomNode = this.currenWso().domNode;
+                var targetDomNode = this.currentWso().domNode;
                 return dojo.query(args,targetDomNode);
             },
             //替代dom.byId，默认查找当前工作区
@@ -68,6 +68,13 @@ define(["baf/config/Url", "baf/language/"+language+"/Label", "baf/language/"+lan
             now : function(){
                 return Math.round(new Date().getTime()/1000);
             },
+            hasChildren : function(data){
+                if(data && data.items && data.items.length > 0){
+                    return true;
+                }else{
+                    return false;
+                }
+            },
 
             /*
                 当前页签的字段操作
@@ -77,7 +84,7 @@ define(["baf/config/Url", "baf/language/"+language+"/Label", "baf/language/"+lan
             field : function(field_name,fields){
                 //当字段列表未被定义时，默认为当前工作区的字段列表
                 if(!fields){
-                    fields = this.currenWso().fields;
+                    fields = this.currentWso().fields;
                 }
                 var vfield = null;
                 if(fields){
@@ -153,7 +160,7 @@ define(["baf/config/Url", "baf/language/"+language+"/Label", "baf/language/"+lan
             //scope ： 范围 ； fields ： 字段列表
             queryTofillLabel : function(scope,fields){
                 if(!fields){
-                    fields = this.currenWso().fields;
+                    fields = this.currentWso().fields;
                 }
                 var nodelist;
                 if(scope){

@@ -17,6 +17,10 @@ class Program_model extends CI_Model{
 //        return $this->db->get('bc_programs_tl');
     }
 
+    function find_all(){
+        return $this->db->get('bc_programs_tl');
+    }
+
     function  find_by_name($program_name){
         return $this->db->get_where('bc_programs_tl',array('program_name' => $program_name));
     }

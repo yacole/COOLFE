@@ -1,4 +1,4 @@
-define(["dojo/_base/declare", "dijit/Dialog", "baf/base/Util", "dojox/grid/DataGrid",
+define(["dojo/_base/declare", "baf/dijit/Dialog", "baf/base/Util", "dojox/grid/DataGrid",
     "dojo/data/ItemFileReadStore", 'dojo/dom-construct'],
     function(declare,Dialog,Util,DataGrid,ItemFileReadStore,construct){
     /*
@@ -30,6 +30,8 @@ define(["dojo/_base/declare", "dijit/Dialog", "baf/base/Util", "dojox/grid/DataG
             var store = new ItemFileReadStore({
                 url : d.url
             });
+
+//            console.info(store);
 
             d.resultGrid = new DataGrid({
                 store: store,

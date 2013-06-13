@@ -14,6 +14,9 @@ define([],function(){
         autoReflashFieldList : true,
         //消息栏显示最大长度，超出则被截断
         message_max_length : 20
+
+        //Grid相关配置
+
     };
 });
 

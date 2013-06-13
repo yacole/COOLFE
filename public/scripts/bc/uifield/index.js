@@ -27,7 +27,7 @@ function initial(program_name){
             var currentWso = ENV.currentWso();
             var innerForm = currentWso.innerForm;
             innerForm.formValidate(
-                //验证通过
+                //存在则显示
                 function(){
                     Util.query(".actionButtonGroup").style("display","block");
                     Util.query("div #mygrid").style("display","block");
@@ -41,14 +41,11 @@ function initial(program_name){
                         Command.show_dialog({content : Util.message.error_xhr_notreach});
                     });
                 },
-                //验证失败
                 function(){
                     Util.query(".actionButtonGroup").style("display","none");
                     Util.query("div #mygrid").style("display","none");
                 },
-                //显示错误提示
                 false,
-                //区域对象
                 currentWso.contentPane);
         });
 }
@@ -56,7 +53,7 @@ function initial(program_name){
 function render_grid(program_name){
     require(['baf/base/Util',
         'dojo/data/ItemFileWriteStore',
-        'dojox/grid/DataGrid',
+        'baf/dijit/grid/DataGrid',
         "dojo/dom-construct"],
         function(Util,ItemFileWriteStore,DataGrid,domConstruct){
             var grid;
@@ -65,6 +62,7 @@ function render_grid(program_name){
                 url : Util.url.safeurl("bc/uifield","find_fields_by_program_name",{program_name : program_name})
             });
 
+//            console.info(store);
             var fieldArray = ["field_name","label","field_size","required_flag","hidden_flag","hidden_flag",
                                 "disabled_flag","valuelist_name","default_value","addfield_flag","validation_code"];
 

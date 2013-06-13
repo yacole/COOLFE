@@ -37,35 +37,22 @@ define(["dojo/_base/declare", "dijit/layout/ContentPane", "dojo/request", "baf/d
             },
 
             startup : function(){
-
-                var form = this;
-
-                //获取菜单栏
-                form.menuBar = new MenuBar({
-                    id : Util.id.wso_MenuBar + form.timestamp
-                }).build(form.program_id);
-                form.addChild(form.menuBar);
-
-                //获取工具栏
-                form.toolBar = new ToolBar({
-                    id : Util.id.wso_ToolBar + form.timestamp,
-                    style : ""
-                });
-                form.addChild(form.toolBar);
+                //加载系统菜单栏和工具栏
+                this.addChild(this.menuBar);
+                this.addChild(this.toolBar);
 
                 //表单
-                form.innerForm = new InnerForm({
-                    id : Util.id.wso_innerForm  + form.timestamp,
-                    formType : "innerForm"
+                this.innerForm = new InnerForm({
+                    id : Util.id.wso_innerForm  + this.timestamp,
+                    formType : Util.id.formType_innerForm
                 });
-
-                form.addChild(form.innerForm);
+                this.addChild(this.innerForm);
 
                 //内容包括在此面板中
-                form.contentPane = new  ContentPaneX({
-                    id : Util.id.wso_Content + form.timestamp,
-                    href : Util.url.safeurl(form.controller,form.action,form.params),
-                    title : form.title,
+                this.contentPane = new  ContentPaneX({
+                    id : Util.id.wso_Content + this.timestamp,
+                    href : Util.url.safeurl(this.controller,this.action,this.params),
+                    title : this.title,
                     onDownloadEnd : function(){
                         //字段标签赋值
                         Util.queryTofillLabel();
@@ -73,10 +60,10 @@ define(["dojo/_base/declare", "dijit/layout/ContentPane", "dojo/request", "baf/d
                 });
 
                 //内容面板加载
-                construct.place(form.contentPane.domNode,form.innerForm.domNode);
+                construct.place(this.contentPane.domNode,this.innerForm.domNode);
                 //fix bug IE:Expected identifier, string or number
-                form.set("class",Util.id.wso_Content_class);
-                form.innerForm.set("class",Util.id.wso_FormContent_class);
+                this.set("class",Util.id.wso_Content_class);
+                this.innerForm.set("class",Util.id.wso_FormContent_class);
 
                 this.inherited(arguments);
 

@@ -4,8 +4,10 @@ define([
     "dojo/data/ItemFileReadStore"],
     function(declare,MenuBar, PopupMenuBarItem, Menu, MenuItem, DropDownMenu, PopupMenuItem, MenuSeparator,ItemFileReadStore){
         return declare("",[MenuBar],{
+                program_id : null,
+                timestamp : null,
 
-                build : function(program_id){
+                build : function(){
 
                     var pMenuBar = this;
 

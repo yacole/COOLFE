@@ -1,5 +1,6 @@
 <!-- CSS渲染 -->
 <style>
+
     .label{
         text-align: left;
         width: 80px;

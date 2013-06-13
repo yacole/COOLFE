@@ -122,7 +122,7 @@ define([ "dijit/Menu", "dijit/MenuItem", "dijit/CheckedMenuItem", "dijit/MenuSep
                 var target_id = dijit.getEnclosingWidget(e.target).id;
 
                 //可通过ID字符串的截取，获取CHILD的ID
-                var timestamp = target_id.replace(Util.id.wstablist+"_"+Util.id.wso_Form,"" );
+                var timestamp = target_id.replace(Util.id.wstablist+"_"+Util.id.wso_Child,"" );
 
                 var wso = dijit.byId(Util.id.WorkspacePane);
 

@@ -46,6 +46,9 @@ define(["dojo/topic","baf/command/History","baf/config/IdList","baf/dijit/RightM
         //系统整个框架区域对象
         appContainer : function(){
             return dijit.byId(IdList.appContainer);
+        },
+        reportGrid : function(){
+            return this.currentWso().gridPane;
         }
 
     }

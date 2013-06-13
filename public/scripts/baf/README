@@ -1,2 +1,24 @@
 1.更换语言
 baf/base/Util.js 中的 var language = "zh"; 改成更改模式，语言文件存放在baf/language/语言/
+
+
+dijit工具包：
+1.         form        表单相关
+2.     grid             表格
+3.       layout     布局
+4.     其他 ：         富文本编辑器、右键菜单、消息框等
+
+
+wso工作区对象：表单，报表，批处理，接口
+
+
+reporter：BAF框架中用于创建报表的报表工具
+
+
+language：支持框架中的默认语言包
+
+base：基础工具包，环境包
+
+command：全局监听、动作
+
+config ：配置

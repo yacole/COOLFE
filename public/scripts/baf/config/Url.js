@@ -90,6 +90,18 @@ define(function(){
         //消息详细信息
         find_message_detail : function(params){
             return url("bc/message","show_detail",params);
+        },
+        find_default_layout_for_rpt : function(params){
+            return url("bc/program","rpt_default_layout",params);
+        },
+        find_layout_for_rpt : function(params){
+            return url("bc/program","rpt_find_layout",params);
+        },
+        find_layouts_for_rpt : function(params){
+            return url("bc/program","rpt_layouts",params);
+        },
+        saveLayoutTooltipDialog : function(){
+            return url("bc/grid_layout","index");
         }
     }
  });
