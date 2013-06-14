@@ -40,16 +40,8 @@ define(["dojo/_base/declare", "baf/dijit/form/Form", "baf/base/Util", "baf/base/
 
                 this.formValidate(function(){
                     //如果已经通过验证，则直接提交表单
-                    request.post(form.action,{
-                        data : params,
-                        timeout : 2000
-                    }).then(function(response){
+                    Util.post(form.action,params);
 
-                    },function(error){
-
-                    });
-                },function(){
-                    console.info("未通过验证");
                 });
 
                 return false;

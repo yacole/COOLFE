@@ -202,13 +202,9 @@ define(["dojo/_base/declare","baf/base/Util","dijit/layout/TabContainer","baf/ws
 
             //关闭单个程序，关闭之前判断是否存在脏数据
             closeProgram : function(targetProgram){
-                if(targetProgram.wsoType == Util.id.programTYPE_FORM){
-                    //判断是否有脏数据
-                    if(targetProgram.isDirty()){
-                        if (confirm(Util.message.warnning_confirm_closeWso)){
-                            this.removeChild(targetProgram);
-                        }
-                    }else{
+                //判断是否有脏数据
+                if(targetProgram.isDirty()){
+                    if (confirm(Util.message.warnning_confirm_closeWso)){
                         this.removeChild(targetProgram);
                     }
                 }else{

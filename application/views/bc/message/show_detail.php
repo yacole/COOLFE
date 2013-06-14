@@ -1,6 +1,5 @@
 <style>
     .messageDetailDialog{
-        height: 40em;
         width: 40em;
     }
     h2{

@@ -54,6 +54,9 @@ define(["dojo/_base/declare", "dijit/layout/ContentPane", "dojo/request", "baf/d
 
                 this.inherited(arguments);
 
+            },
+            isDirty : function(){
+                return false;
             }
         });
     });

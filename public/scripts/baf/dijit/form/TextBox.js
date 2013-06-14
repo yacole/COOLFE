@@ -26,7 +26,7 @@ define(["dojo/_base/declare", "dijit/form/ValidationTextBox", "baf/base/Util",
 
         constructor : function(args){
             //默认属性
-            this.trim = true;
+            args.trim = true;
 //            this.uppercase = true;
 
             if(!args.id){

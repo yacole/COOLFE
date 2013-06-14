@@ -53,7 +53,7 @@
             function(ready,main,Command,Listener){
 
             //实例布局
-            var appContainer = new main({username : '<?= $username ?>',host : '<?= $host ?>'});
+            var appContainer = new main({data : {username : '<?= $username ?>',host : '<?= $host ?>'} });
 
             ready(function(){
                 //展示各面板

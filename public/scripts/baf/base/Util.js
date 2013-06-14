@@ -2,8 +2,8 @@ var language = "zh"; //全局变量：用于控制语言包,默认为"zh"
 
 define(["baf/config/Url", "baf/language/"+language+"/Label", "baf/language/"+language+"/Message",
     "baf/config/Idlist", "baf/config/Config", "dojo/dom-construct", "dijit/Dialog",
-    "dijit/form/Button"],
-    function(url,label,message,id,config,domConstruct,Dialog,Button){
+    "dijit/form/Button","dojo/request","baf/command/Command"],
+    function(url,label,message,id,config,domConstruct,Dialog,Button,request,Command){
         /*
          *   摘要:
          *       主要是存放一些公用的函数和工具，创建各种工具的快捷通道，比如，url,label,message,id,config等，
@@ -74,6 +74,24 @@ define(["baf/config/Url", "baf/language/"+language+"/Label", "baf/language/"+lan
                 }else{
                     return false;
                 }
+            },
+            //远程提交post
+            post : function(url,data,successFunc,failureFunc){
+              request.post(url,{
+                  data : data,
+                  timeout : config.remote_timeout,
+                  handleAs : "json"
+              }).then(function(response){
+                  Command.handleExport(response);
+                  if(successFunc){
+                      successFunc();
+                  }
+              },function(){
+                  Command.show_dialog({content : error});
+                  if(failureFunc){
+                      failureFunc();
+                  }
+              });
             },
 
             /*

@@ -13,8 +13,9 @@ define(["dojo/_base/declare", "dojo/request", "dijit/layout/ContentPane",
         userinfoblock : null,
         //服务器信息栏
         hostblock : null,
+        data : null,
 
-        constructor : function(args){
+        startup : function(data){
 
             this.messageblock = new MessageBar({
                 id : Util.id.messageblock
@@ -31,11 +32,8 @@ define(["dojo/_base/declare", "dojo/request", "dijit/layout/ContentPane",
             });
             this.hostblock.set("class",Util.id.statusbarblock_class);
 
-        },
-        startup : function(data){
-
-            this.userinfoblock.set("label" , data.username);
-            this.hostblock.set("label" , data.host);
+            this.userinfoblock.set("label" , this.data.username);
+            this.hostblock.set("label" , this.data.host);
 
             this.addChild(this.userinfoblock);
 

@@ -22,6 +22,27 @@ CREATE DATABASE IF NOT EXISTS coolfe;
 USE coolfe;
 
 --
+-- Temporary table structure for view `bc_grid_layouts_v`
+--
+DROP TABLE IF EXISTS `bc_grid_layouts_v`;
+DROP VIEW IF EXISTS `bc_grid_layouts_v`;
+CREATE TABLE `bc_grid_layouts_v` (
+  `layout_id` int(10) unsigned,
+  `program_id` int(10) unsigned,
+  `layout_name` varchar(45),
+  `description` varchar(100),
+  `creation_date` int(10) unsigned,
+  `created_by` int(10) unsigned,
+  `last_update_date` int(10) unsigned,
+  `last_updated_by` int(10) unsigned,
+  `default_flag` tinyint(1),
+  `field` varchar(45),
+  `label` varchar(45),
+  `pos` int(10) unsigned,
+  `size` int(10) unsigned
+);
+
+--
 -- Temporary table structure for view `bc_uifields_v`
 --
 DROP TABLE IF EXISTS `bc_uifields_v`;
@@ -153,6 +174,75 @@ CREATE TABLE `bc_authobj_class_tl` (
 
 /*!40000 ALTER TABLE `bc_authobj_class_tl` DISABLE KEYS */;
 /*!40000 ALTER TABLE `bc_authobj_class_tl` ENABLE KEYS */;
+
+
+--
+-- Definition of table `bc_glayout_columns_tl`
+--
+
+DROP TABLE IF EXISTS `bc_glayout_columns_tl`;
+CREATE TABLE `bc_glayout_columns_tl` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `layout_id` int(10) unsigned NOT NULL COMMENT '布局ID',
+  `field` varchar(45) NOT NULL COMMENT '字段名',
+  `label` varchar(45) NOT NULL COMMENT '标题',
+  `pos` int(10) unsigned NOT NULL COMMENT '位置',
+  `creation_date` int(10) unsigned DEFAULT NULL,
+  `created_by` int(10) unsigned DEFAULT NULL,
+  `last_update_date` int(10) unsigned DEFAULT NULL,
+  `last_updated_by` int(10) unsigned DEFAULT NULL,
+  `size` int(10) unsigned NOT NULL COMMENT '长度',
+  PRIMARY KEY (`id`),
+  KEY `bc_glayout_columns_n01` (`layout_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8 COMMENT='布局列信息表';
+
+--
+-- Dumping data for table `bc_glayout_columns_tl`
+--
+
+/*!40000 ALTER TABLE `bc_glayout_columns_tl` DISABLE KEYS */;
+INSERT INTO `bc_glayout_columns_tl` (`id`,`layout_id`,`field`,`label`,`pos`,`creation_date`,`created_by`,`last_update_date`,`last_updated_by`,`size`) VALUES 
+ (13,1,'program_name','pp',0,1371184913,1,1371184913,1,10),
+ (14,1,'program_name','pp',1,1371184913,1,1371184913,1,10),
+ (15,1,'program_name','pp',2,1371184913,1,1371184913,1,10),
+ (19,2,'program_name','pp',0,1371190696,1,1371190696,1,10),
+ (20,2,'program_name','pp',1,1371190696,1,1371190696,1,10),
+ (21,2,'program_name','pp',2,1371190696,1,1371190696,1,10),
+ (22,3,'program_name','pp',0,1371193968,1,1371193968,1,10),
+ (23,3,'program_name','pp',1,1371193968,1,1371193968,1,10),
+ (24,3,'program_name','pp',2,1371193968,1,1371193968,1,10);
+/*!40000 ALTER TABLE `bc_glayout_columns_tl` ENABLE KEYS */;
+
+
+--
+-- Definition of table `bc_grid_layouts_tl`
+--
+
+DROP TABLE IF EXISTS `bc_grid_layouts_tl`;
+CREATE TABLE `bc_grid_layouts_tl` (
+  `layout_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `program_id` int(10) unsigned NOT NULL,
+  `layout_name` varchar(45) NOT NULL COMMENT '布局名称',
+  `description` varchar(100) NOT NULL COMMENT '说明',
+  `creation_date` int(10) unsigned DEFAULT NULL,
+  `created_by` int(10) unsigned NOT NULL COMMENT '创建人',
+  `last_update_date` int(10) unsigned DEFAULT NULL,
+  `last_updated_by` int(10) unsigned DEFAULT NULL,
+  `default_flag` tinyint(1) DEFAULT NULL COMMENT '默认标识',
+  `layout_type` varchar(45) NOT NULL COMMENT '全局或个人',
+  PRIMARY KEY (`layout_id`) USING BTREE,
+  UNIQUE KEY `bc_grid_layouts_U01` (`program_id`,`layout_name`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='报表布局信息表';
+
+--
+-- Dumping data for table `bc_grid_layouts_tl`
+--
+
+/*!40000 ALTER TABLE `bc_grid_layouts_tl` DISABLE KEYS */;
+INSERT INTO `bc_grid_layouts_tl` (`layout_id`,`program_id`,`layout_name`,`description`,`creation_date`,`created_by`,`last_update_date`,`last_updated_by`,`default_flag`,`layout_type`) VALUES 
+ (1,5,'layout001','layout3',NULL,0,1371184913,1,1,'01'),
+ (3,5,'layout002','layout3',1371193968,1,1371193968,1,0,'01');
+/*!40000 ALTER TABLE `bc_grid_layouts_tl` ENABLE KEYS */;
 
 
 --
@@ -527,7 +617,8 @@ INSERT INTO `bc_programs_tl` (`program_id`,`program_type`,`program_name`,`title`
  (1,'01','BC_PROGRAM_H','PROGRAM CREATE',NULL,'01','BC/PROGRAM','index',NULL,0,NULL,NULL,NULL,NULL,0,NULL,NULL),
  (2,'01','BC_PROGRAM_C','AA',NULL,'01','bc/program','create',NULL,0,NULL,NULL,NULL,NULL,0,NULL,1),
  (3,'01','BC_UI_FIELD_M','BC_UI_FIELD_M',NULL,'01','bc/uifield','index',NULL,0,NULL,NULL,NULL,NULL,0,NULL,NULL),
- (4,'01','BC_PROGRAM_R','程序显示',NULL,'01','bc/program','index',NULL,0,NULL,NULL,NULL,NULL,0,NULL,NULL);
+ (4,'01','BC_PROGRAM_R','程序显示',NULL,'01','bc/program','index',NULL,0,NULL,NULL,NULL,NULL,0,NULL,NULL),
+ (5,'02','RPT_PROGRAM_LIST','程序清单报表',NULL,'01','bc/program','rpt_program_list',NULL,0,NULL,NULL,NULL,NULL,0,NULL,NULL);
 /*!40000 ALTER TABLE `bc_programs_tl` ENABLE KEYS */;
 
 
@@ -698,7 +789,7 @@ CREATE TABLE `bc_ui_fields_tl` (
   `last_updated_by` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`ui_field_id`),
   UNIQUE KEY `BC_ui_fields_U01` (`program_id`,`field_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8 COMMENT='界面字段信息表';
+) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8 COMMENT='界面字段信息表';
 
 --
 -- Dumping data for table `bc_ui_fields_tl`
@@ -707,7 +798,7 @@ CREATE TABLE `bc_ui_fields_tl` (
 /*!40000 ALTER TABLE `bc_ui_fields_tl` DISABLE KEYS */;
 INSERT INTO `bc_ui_fields_tl` (`ui_field_id`,`program_id`,`field_name`,`field_size`,`addfield_flag`,`label`,`help_text`,`required_flag`,`disabled_flag`,`hidden_flag`,`default_value`,`valuelist_id`,`validation_id`,`creation_date`,`created_by`,`last_update_date`,`last_updated_by`) VALUES 
  (13,3,'field_name','10',0,'字段','',1,0,0,'',NULL,NULL,1367368310,1,1369297668,1),
- (14,3,'label','20',0,'描述','',0,0,0,'',NULL,NULL,1367370176,1,1369298841,1),
+ (14,3,'label','20',0,'描述','',0,0,0,'',NULL,NULL,1367370176,1,1369896857,1),
  (15,3,'field_size','4',0,'尺寸','尺寸用于控制字段长短 ，影响界面的展示，比如FORM中、GRID列',1,0,0,'',NULL,NULL,1367370253,1,1369378013,1),
  (16,3,'required_flag','2',0,'必输','112',0,0,0,'',NULL,NULL,1367370309,1,1369297569,1),
  (17,3,'disabled_flag','2',0,'只读','',0,0,0,'',NULL,NULL,1367370330,1,1369297542,1),
@@ -717,10 +808,14 @@ INSERT INTO `bc_ui_fields_tl` (`ui_field_id`,`program_id`,`field_name`,`field_si
  (21,3,'default_value','10',0,'默认值',NULL,0,0,0,NULL,NULL,NULL,1367370402,1,1367370402,1),
  (22,3,'validation_code','10',0,'验证代码','',0,0,0,'',4,3,1367370424,1,1369644509,1),
  (34,1,'program_name','20',0,'程序','',1,0,0,'',2,1,1367385231,1,1369212910,1),
- (38,3,'program_name','20',0,'程序','',0,0,0,'',2,NULL,1369628409,1,1369635086,1),
- (39,3,'new_bt','1',0,'新建','',0,0,0,'',NULL,NULL,1369628443,1,1369638409,1),
+ (38,3,'program_name','20',0,'程序','',0,0,0,'',2,NULL,1369628409,1,1369903491,1),
+ (39,3,'new_bt','10',0,'新建','',0,0,0,'',NULL,NULL,1369628443,1,1369809481,1),
  (40,2,'program_name','20',0,'程序','',1,0,0,'',NULL,NULL,1369628759,1,1369632846,1),
- (41,2,'appliction_code','',0,'应用','',1,0,0,'15',1,NULL,1369628794,1,1369632916,1);
+ (41,2,'appliction_code','',0,'应用','',1,0,0,'15',1,NULL,1369628794,1,1369632916,1),
+ (42,5,'program_name','20',0,'程序名','',0,0,0,'',NULL,NULL,1370309951,1,1370311595,1),
+ (43,5,'layout_type','10',0,'布局类型','',0,0,0,'',6,NULL,1370416097,1,1370416097,1),
+ (44,5,'layout_name','10',0,'布局','',1,0,0,'',NULL,NULL,1370503706,1,1370503769,1),
+ (45,5,'description','20',0,'说明','',1,0,0,'',NULL,NULL,1370503739,1,1371194348,1);
 /*!40000 ALTER TABLE `bc_ui_fields_tl` ENABLE KEYS */;
 
 
@@ -941,7 +1036,7 @@ CREATE TABLE `bc_valuelist_lines_tl` (
   PRIMARY KEY (`line_id`) USING BTREE,
   UNIQUE KEY `BC_VALUELIST_LINES _N01` (`valuelist_id`,`segment`) USING BTREE,
   CONSTRAINT `FK_BC_VALUELIST_LINES_TL_1` FOREIGN KEY (`VALUELIST_ID`) REFERENCES `bc_valuelists_tl` (`VALUELIST_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8 COMMENT='值列表行表';
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8 COMMENT='值列表行表';
 
 --
 -- Dumping data for table `bc_valuelist_lines_tl`
@@ -967,7 +1062,9 @@ INSERT INTO `bc_valuelist_lines_tl` (`line_id`,`valuelist_id`,`segment`,`descrip
  (16,1,'12','需求计划管理模块',0,NULL,NULL,NULL,NULL,''),
  (17,1,'13','供应商平台',0,NULL,NULL,NULL,NULL,''),
  (18,1,'14','经销商平台',0,NULL,NULL,NULL,NULL,''),
- (20,1,'15','标准',0,NULL,NULL,NULL,NULL,'');
+ (20,1,'15','标准',0,NULL,NULL,NULL,NULL,''),
+ (21,6,'01','全局',0,NULL,NULL,NULL,NULL,''),
+ (22,6,'02','私人',0,NULL,NULL,NULL,NULL,'');
 /*!40000 ALTER TABLE `bc_valuelist_lines_tl` ENABLE KEYS */;
 
 
@@ -996,7 +1093,7 @@ CREATE TABLE `bc_valuelists_tl` (
   PRIMARY KEY (`valuelist_id`) USING BTREE,
   UNIQUE KEY `BC_VALUELIST_N02` (`valuelist_name`) USING BTREE,
   KEY `BC_VALUELIST_N01` (`valuelist_name`,`description`,`source_view`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='值集表';
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='值集表';
 
 --
 -- Dumping data for table `bc_valuelists_tl`
@@ -1008,9 +1105,18 @@ INSERT INTO `bc_valuelists_tl` (`valuelist_id`,`valuelist_name`,`description`,`f
  (2,'BC_PROGRAM','程序清单',1,'title','program_name','bc_programs_tl',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
  (3,'BC_PROGRAM_TYPE','program types',0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
  (4,'BC_VALIDATOR','验证码',1,'description','validation_code','bc_validator_tl',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
- (5,'BC_VALUELIST','值集',1,'description','valuelist_name','bc_valuelists_tl',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+ (5,'BC_VALUELIST','值集',1,'description','valuelist_name','bc_valuelists_tl',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+ (6,'BC_GRID_LAYOUT_TYPE','布局类型',0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `bc_valuelists_tl` ENABLE KEYS */;
 
+
+--
+-- Definition of view `bc_grid_layouts_v`
+--
+
+DROP TABLE IF EXISTS `bc_grid_layouts_v`;
+DROP VIEW IF EXISTS `bc_grid_layouts_v`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `bc_grid_layouts_v` AS select `h`.`layout_id` AS `layout_id`,`h`.`program_id` AS `program_id`,`h`.`layout_name` AS `layout_name`,`h`.`description` AS `description`,`h`.`creation_date` AS `creation_date`,`h`.`created_by` AS `created_by`,`h`.`last_update_date` AS `last_update_date`,`h`.`last_updated_by` AS `last_updated_by`,`h`.`default_flag` AS `default_flag`,`l`.`field` AS `field`,`l`.`label` AS `label`,`l`.`pos` AS `pos`,`l`.`size` AS `size` from (`bc_grid_layouts_tl` `h` join `bc_glayout_columns_tl` `l`) where (`h`.`layout_id` = `l`.`layout_id`);
 
 --
 -- Definition of view `bc_uifields_v`

@@ -151,7 +151,7 @@ function postDelete(){
                 //排除弹性域
                 if(selectedItem !== null && grid.store.getValues(selectedItem,"addfield_flag") != 1){
 
-                    if(confirm("确定要删除？")){
+                    if(confirm(Util.message.info_sureDelete)){
                         var id = grid.store.getValues(selectedItem,"ui_field_id");
                         if(id){
                             remoteAction({ui_field_id : id},"destroy",function(){
@@ -325,23 +325,8 @@ function fillValue(formDialog,item){
 
 //远程作业
 function remoteAction(data,type,successFun,errorFun){
-    require(["dojo/request","baf/base/Util","baf/command/Command"],function(request,Util,Command){
-        //远程更新
-        request.post(Util.url.safeurl("bc/uifield",type),{
-            data : data,
-            timeout : 2000,
-            handleAs : "json"
-        }).then(function(response){
-                Command.handleExport(response);
-                if(successFun){
-                    successFun();
-                }
-            },function(error){
-                Command.show_dialog({content : error});
-                if(errorFun){
-                    errorFun();
-                }
-            });
+    require(["baf/base/Util"],function(Util){
+        Util.post(Util.url.safeurl("bc/uifield",type),data,successFun,errorFun);
     });
 }
 

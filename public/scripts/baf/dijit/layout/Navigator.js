@@ -1,7 +1,7 @@
-define(["dojo/_base/declare", "baf/base/Util", "baf/command/Command",
-    "dijit/Tree", "dojo/data/ItemFileReadStore", "dijit/tree/ForestStoreModel",
-    "dijit/layout/AccordionContainer", "dijit/layout/ContentPane", "baf/base/Env"],
-    function(declare,Util,Command,Tree, ItemFileReadStore,ForestStoreModel,AccordionContainer,ContentPane,Env){
+define(["dojo/_base/declare", "baf/base/Util", "dijit/Tree",
+    "dojo/data/ItemFileReadStore", "dijit/tree/ForestStoreModel",
+    "dijit/layout/ContentPane", "baf/base/Env","dijit/form/TextBox"],
+    function(declare,Util,Tree, ItemFileReadStore,ForestStoreModel,ContentPane,Env,TextBox){
         /*
          *   摘要:
          *       导航栏，位于框架左侧，存放权限菜单以及收藏夹
@@ -11,13 +11,22 @@ define(["dojo/_base/declare", "baf/base/Util", "baf/command/Command",
             rolePane : null,
             //收藏夹
             favoritePane : null,
+            //万能查询框
+            searchPane : null,
+            //用于显示在菜单root
+            username : null,
 
-            startup : function(data){
-
-                var navigator = this;
+            startup : function(){
 
                 //设置用户角色菜单
-                navigator.rolePane = new ContentPane({
+                this.searchPane = new ContentPane({
+                    id : Util.id.searchPane
+                });
+                var tb = new TextBox({});
+                this.searchPane.addChild(tb);
+
+                //设置用户角色菜单
+                this.rolePane = new ContentPane({
                     title : Util.label.tabtitle_usermenu,
                     id : Util.id.rolePane
                 });
@@ -32,7 +41,7 @@ define(["dojo/_base/declare", "baf/base/Util", "baf/command/Command",
                     store: treeStore,
                     root : true,
                     rootId : '',
-                    rootLabel : Util.label.welcome + data.username,
+                    rootLabel : Util.label.welcome + this.username,
                     childrenAttrs : [ "children" ]
                 });
 
@@ -51,9 +60,10 @@ define(["dojo/_base/declare", "baf/base/Util", "baf/command/Command",
                     }
                 });
 
-                navigator.rolePane.addChild(oktree);
+                this.rolePane.addChild(oktree);
+                this.addChild(this.searchPane);
 
-                navigator.addChild(navigator.rolePane);
+                this.addChild(this.rolePane);
 
                 //设置收藏夹
 //                navigator.favoritePane = new ContentPane({

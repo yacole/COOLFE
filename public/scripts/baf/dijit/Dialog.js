@@ -6,11 +6,13 @@ define(["dojo/_base/declare","dijit/Dialog","baf/base/Util","dojo/dom-geometry"]
      */
     return declare("",[Dialog],{
         constructor : function(args){
-            if(args.title == undefined){
-                this.title = Util.label.dialog_default_title;
-            }
-            if(args.id){
-                args.id = Util.xId(args.id);
+            if(args){
+                if(args.title == undefined){
+                    this.title = Util.label.dialog_default_title;
+                }
+                if(args.id){
+                    args.id = Util.xId(args.id);
+                }
             }
         },
         postCreate : function(){

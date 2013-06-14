@@ -15,35 +15,41 @@ define(["dojo/_base/declare", "dojo/request", "dijit/Toolbar",
                 var layoutMenu = new DropDownMenu({style: "display: none;"});
 
                 layoutMenu.addChild(new MenuItem({
-                    label : "选择布局",
+                    label : Util.label.grid_layout_select,
                     onClick : function(){
-                        Env.reportGrid().showLayoutList();
+                        Env.reportGrid().showLayoutList("select");
                     }
                 }));
                 layoutMenu.addChild(new MenuItem({
-                    label : "更改布局"
-                }));
-                layoutMenu.addChild(new MenuItem({
-                    label : "保存布局",
+                    label : Util.label.grid_layout_edit,
                     onClick : function(){
-                        Env.reportGrid().showLayoutList(true);
+                        Env.reportGrid().showSetup("structure");
                     }
                 }));
                 layoutMenu.addChild(new MenuItem({
-                    label : "管理布局"
+                    label : Util.label.grid_layout_save,
+                    onClick : function(){
+                        Env.reportGrid().showLayoutList("save");
+                    }
+                }));
+                layoutMenu.addChild(new MenuItem({
+                    label : Util.label.grid_layout_manage,
+                    onClick : function(){
+                        Env.reportGrid().showLayoutList("manage");
+                    }
                 }));
 
                 layoutMenu.addChild(new MenuSeparator());
 
                 layoutMenu.addChild(new MenuItem({
-                    label : "全部清空",
+                    label : Util.label.grid_layout_clear,
                     onClick : function(){
                         Env.reportGrid().clearLayout();
                     }
                 }));
 
                 this.layoutButton = new DropDownButton({
-                    label : "布局",
+                    label : Util.label.grid_layout,
                     dropDown: layoutMenu
                 });
 

@@ -54,10 +54,12 @@ define(function(){
         grid_headerMenu_ascOrder : "按升序排列",
         grid_headerMenu_descOrder : "按降序排列",
         grid_headerMenu_setFilter : "设置过滤器",
-        grid_saveLayout_isRecover : "是否覆盖当前布局？",
+        grid_layout : "布局",
         grid_layout_select : "选择布局",
+        grid_layout_edit : "更改布局",
         grid_layout_save : "保存布局",
-        grid_layout_manager : "管理布局"
+        grid_layout_manage : "管理布局",
+        grid_layout_clear : "全部清空"
 
     }
 });

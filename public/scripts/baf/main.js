@@ -15,34 +15,40 @@ define(["dojo/_base/declare",
     function(declare,BorderContainer, ContentPane,Wso,StatusBar,Navigator,Util){
         return  declare("baf.main",[BorderContainer],{
 
-            constructor: function(data){
+            TopPane : null,
+            NavigatorPane : null,
+            WorkspacePane : null,
+            StatusPane : null,
+            data : null,
 
-                data.id = Util.id.appContainer;
+            constructor: function(args){
+                args.id = Util.id.appContainer;
+//                args.design = "headline";
+            },
+            //替换父类方法
+            startup : function(){
 
-                //填充视窗
-                this.style = "width:100%;height:100%";
-                this.design = "headline";
-                //初始化各个面板
-//                this.MenuPane = new ContentPane({
-//                    id : "MenuPane",
-//                    region : "top",
-//                    style : "height:2em"
-//                });
+                 //初始化各个面板
+                this.TopPane = new ContentPane({
+                    id : Util.id.TopPane,
+                    region : "top"
+                });
 
                 //导航栏
                 this.NavigatorPane = new Navigator({
                     id : Util.id.NavigatorPane,
                     region : "left",
-                    splitter : true
+                    splitter : true,
+                    username : this.data.username
                 });
-                this.NavigatorPane.startup(data);
+                this.NavigatorPane.startup();
 
                 //工作区
                 this.WorkspacePane = new Wso({
                     id : Util.id.WorkspacePane,
                     region : "center",
                     allowNested : true,
-                    tabPosition : "bottom"
+                    tabPosition : Util.config.wsoTabPosition
                 });
                 this.WorkspacePane.startup();
 
@@ -56,20 +62,15 @@ define(["dojo/_base/declare",
                 //状态栏
                 this.StatusPane = new StatusBar({
                     id : Util.id.StatusPane,
-                    region : "bottom"
+                    region : "bottom",
+                    data : this.data
                 });
-                this.StatusPane.startup(data);
-
-
-
-            },
-            //替换父类方法
-            startup : function(){
+                this.StatusPane.startup();
 
                 //销毁加载信息并显示全部内容
                 dojo._destroyElement(dojo.byId(Util.id.loading));
                 dojo.place(this.domNode,dojo.body(),"first");
-//                this.addChild(this.MenuPane);
+                this.addChild(this.TopPane);
                 this.addChild(this.StatusPane);
                 this.addChild(this.NavigatorPane);
                 this.addChild(this.WorkspacePane);

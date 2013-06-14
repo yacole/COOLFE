@@ -1,9 +1,9 @@
 define(["dojo/_base/declare","dojox/layout/ContentPane","baf/base/Util","dojo/request",
     "dojox/grid/enhanced/plugins/exporter/CSVWriter","dojox/grid/enhanced/plugins/Selector","dojox/grid/enhanced/plugins/Menu",
     "baf/dijit/grid/MenusObject", "baf/reporter/viewer/_toolBar","baf/reporter/viewer/_layoutDialog",
-    "dojo/data/ItemFileReadStore","baf/dijit/grid/DataGrid"],
+    "dojo/data/ItemFileReadStore","baf/dijit/grid/DataGrid","baf/reporter/viewer/_setupDialog"],
     function (declare,ContentPane,Util,request,gridCSVWriter,gridSelector,gridMenu,
-              MenusObject,ToolBarForReport,layoutDialog,ItemFileReadStore,DataGrid){
+              MenusObject,ToolBarForReport,layoutDialog,ItemFileReadStore,DataGrid,setupDialog){
         /*
          *   摘要:
          *                    报表查看器
@@ -140,6 +140,14 @@ define(["dojo/_base/declare","dojox/layout/ContentPane","baf/base/Util","dojo/re
             },
             showLayoutList : function(isNew){
                 layoutDialog.show(isNew);
+            },
+            showSetup : function(type){
+                var sDialog = new setupDialog({
+                    title : Util.label.grid_layout_edit,
+                    style : "width:500px;"
+                });
+                sDialog.show();
+                sDialog.selectTab(type);
             }
 
         });

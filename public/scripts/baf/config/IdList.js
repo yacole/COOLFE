@@ -6,6 +6,7 @@ define(function(){
         NavigatorPane : "bafDijitNavigator",
         WorkspacePane : "bafDijitWso",
         StatusPane  : "bafDijitStatus",
+        TopPane  : "bafDijitTopPane",
         loading : "bafLoading",
         vlbutton : "valuelistbt",
         confirmDialog : "confirmDialog",
@@ -16,6 +17,7 @@ define(function(){
 
         //baf.dijit.layout.Navigator
         rolePane : "bafDijitNavigatorRole",
+        searchPane : "bafDijitNavigatorSearch",
         rolePane_tree : "bafDijitNavigatorRoleTree",
         wstablist : "bafDijitWso_tablist",  //根据WorkspacePane的ID
         favoritePane : "bafDijitNavigatorFavorite",

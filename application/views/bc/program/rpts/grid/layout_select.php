@@ -15,36 +15,37 @@
         <hr class="spacer"/>
 
 
-            <table>
-                <tr>
-                    <td class="label"><label for="layout_name"></label></td>
-                    <td><input data-dojo-type="baf/dijit/form/TextBox" data-dojo-props="name : 'layout_name'" /></td>
-                </tr>
-                <tr>
-                    <td class="label"><label for="description"></label></td>
-                    <td><input data-dojo-type="baf/dijit/form/TextBox" data-dojo-props="name : 'description'" /></td>
-                </tr>
+        <table>
+            <tr>
+                <td class="label"><label for="layout_name"></label></td>
+                <td><input data-dojo-type="baf/dijit/form/TextBox" data-dojo-props="name : 'layout_name'" /></td>
+            </tr>
+            <tr>
+                <td class="label"><label for="description"></label></td>
+                <td><input data-dojo-type="baf/dijit/form/TextBox" data-dojo-props="name : 'description'" /></td>
+            </tr>
 
-                <tr>
-                    <td class="label"></td>
-                    <td>
-                        <input data-dojo-type="baf/dijit/form/CheckBox" data-dojo-props="name : 'default_flag'" />
-                        <label for="default_flag"></label>
-                    </td>
-                </tr>
+            <tr>
+                <td class="label"></td>
+                <td>
+                    <input data-dojo-type="baf/dijit/form/CheckBox" data-dojo-props="name : 'default_flag'" />
+                    <label for="default_flag"></label>
+                </td>
+            </tr>
 
-                <tr>
-                    <td class="label"></td>
-                    <td>
-                        <button data-dojo-type="dijit/form/Button" type="button" onclick="update_grid();" name="saveButton">
-                            <label for="saveButton"></label>
-                        </button>
+        </table>
+        <button data-dojo-type="baf/dijit/form/Button" type="button"  name="saveButton">
+            <label for="saveButton"></label>
+        </button>
+    </div>
 
-                        <button data-dojo-type="dijit/form/Button" type="button" onclick="hide_dialog();" name="cancelButton">
-                            <label for="cancelButton"></label>
-                        </button>
-                    </td>
-                </tr>
-            </table>
+    <div id="isManage" style="display:none">
+        <hr class="spacer"/>
+        <button data-dojo-type="baf/dijit/form/Button" type="button"  name="deleteButton">
+            <label for="deleteButton"></label>
+        </button>
+        <button data-dojo-type="baf/dijit/form/Button" type="button"  name="defaultButton">
+            <label for="defaultButton"></label>
+        </button>
     </div>
 </form>
