@@ -1,13 +1,13 @@
 define(["dojo/_base/declare","dijit/Menu", "dijit/MenuItem", "dijit/MenuSeparator",
-    "baf/base/Util","dojo/io/iframe"],
-    function (declare,Menu,MenuItem,MenuSeparator,Util,iframe){
+    "baf/base/Util","baf/base/Env"],
+    function (declare,Menu,MenuItem,MenuSeparator,Util,Env){
     /*
      *   摘要:
      *      表格组件默认右键菜单
      *   */
     return declare("",null,{
 
-        forGrid : null,
+        srcGrid : null,
         headerMenu: null,
         rowMenu: null,
         cellMenu: null,
@@ -25,19 +25,32 @@ define(["dojo/_base/declare","dijit/Menu", "dijit/MenuItem", "dijit/MenuSeparato
         },
         //选择标题右键菜单
         _headerMenu : function(){
-            var obj = this;
+            var o = this;
+            var gridPane = Env.reportGrid();
+
             var headerMenu = new Menu();
             headerMenu.addChild(new MenuItem({
-                label : Util.label.grid_headerMenu_hidden
+                label : Util.label.grid_headerMenu_hidden,
+                onClick : function(){
+                    if(o.headerMenu.target){
+                        o.srcGrid.hiddenCell(o.headerMenu.target.cellIndex);
+                    }
+                }
             }));
             headerMenu.addChild(new MenuItem({
-                label : Util.label.grid_headerMenu_addcolumn
+                label : Util.label.grid_headerMenu_addcolumn,
+                onClick : function(){
+                    gridPane.showSetup();
+                }
             }));
             headerMenu.addChild(new MenuItem({
-                label : Util.label.grid_headerMenu_fixhight
+                label : Util.label.grid_headerMenu_fixWidth
             }));
             headerMenu.addChild(new MenuItem({
-                label : Util.label.grid_headerMenu_freeze
+                label : Util.label.grid_headerMenu_freeze,
+                onClick : function(){
+                    o.srcGrid.freezeAtCell(o.headerMenu.target.cellIndex);
+                }
             }));
             headerMenu.addChild(new MenuSeparator());
             headerMenu.addChild(new MenuItem({
@@ -87,16 +100,6 @@ define(["dojo/_base/declare","dijit/Menu", "dijit/MenuItem", "dijit/MenuSeparato
             selectedRegionMenu.addChild(new MenuItem({
                 label : "gogo",
                 onClick : function(){
-                    if(obj.forGrid){
-//                        if(obj.forGrid.exporter){
-//                            // Export the whole grid to CSV format, with separator of ":".
-//                            obj.forGrid.exportSelected("csv", {writerArgs: {separator:","}}, function(str){
-//                                console.info(str);
-//                            });
-//                        }
-                        console.info(obj.forGrid);
-                    }
-
                 }
             }));
 //            selectedRegionMenu.startup();
@@ -104,35 +107,29 @@ define(["dojo/_base/declare","dijit/Menu", "dijit/MenuItem", "dijit/MenuSeparato
         },
         //选择块右键菜单
         _cellMenu : function(){
-            var obj = this;
+            var gridPane = Env.reportGrid();
             var cellMenu = new Menu();
             cellMenu.addChild(new MenuItem({
                 label : Util.label.grid_menu_exportToExcel,
                 onClick : function(){
                     //操作对象是否被赋值
-                    if(obj.forGrid){
-                        if(obj.forGrid.exporter){
-                            // Export the whole grid to CSV format, with separator of ":".
-                            obj.forGrid.exportGrid("csv", {writerArgs: {separator:","}}, function(str){
-                                // do something interesting with str
-                                var form = document.createElement('form');
-                                dojo.attr(form, 'method', 'POST');
-                                document.body.appendChild(form);
-                                iframe.send({
-                                    url: "index.php/bc/base/exportCsv",
-                                    form: form,
-                                    method: "POST",
-                                    content: {exp: str},
-                                    timeout: 15000
-                                });
-                                document.body.removeChild(form);
-                            });
-                        }
-                    }
+                    gridPane.grid.exportToExcel();
                 }
             }));
 //            cellMenu.startup();
             return cellMenu;
+        },
+        setSrcGrid : function(grid){
+            if(grid){
+                this.srcGrid = grid;
+            }else{
+                this.srcGrid = Env.reportGrid().grid;
+            }
+            var o = this;
+            //onCellContextMenu onRowContextMenu onHeaderCellContextMenu onSelectedRegionContextMenu
+            dojo.connect(grid, 'onHeaderCellContextMenu', function(e){
+                o.headerMenu.target = e;
+            });
         }
     });
 });

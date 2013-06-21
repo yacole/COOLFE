@@ -2,6 +2,8 @@ define([],function(){
     return {
         //语言
         language : "zh",
+        //框架根目录
+//        bafBaseUrl : "/public/scripts/baf/",
         //工作区标签位置
         wsoTabPosition : "bottom",
 

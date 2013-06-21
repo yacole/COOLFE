@@ -22,28 +22,19 @@ class Grid_layout extends CI_Controller {
         $messages = [];
         //判断是否为POST
         if($_POST){
-            $header['program_id'] = $_POST['program_id'];
-            $header['layout_name'] = cftrim($_POST['layout_name']);
-            $header['description'] = cftrim($_POST['description']);
-            $header['default_flag'] = $_POST['default_flag'];
-            $header['layout_type'] = cftrim($_POST['layout_type']);
+            $data['program_id'] = $_POST['program_id'];
+            $data['layout_name'] = cftrim($_POST['layout_name']);
+            $data['description'] = cftrim($_POST['description']);
+            $data['default_flag'] = $_POST['default_flag'];
+            $data['layout_type'] = cftrim($_POST['layout_type']);
             //返回ARRAY
-            $structure = json_decode($_POST['structure'],true);
-            $lines = [];
-            $i = 0;
-            foreach($structure as $e){
-                $line['pos'] = $i;
-                $line['field'] = $e['field'];
-                $line['label'] = $e['name'];
-                $line['size'] = $e['width'];
-                $i = $i + 1;
-                array_push($lines,$line);
-            }
+//            $structure = json_decode($_POST['structure'],true);
+            $data['structure'] = cftrim($_POST['structure']);
             //判断是否存在，存在则更新头部，删除行，并插入行
-            $row = firstRow($this->layout->find_by_program_id_and_layout_name($header['program_id'],$header['layout_name']));
+            $row = firstRow($this->layout->find_by_program_id_and_layout_name($data['program_id'],$data['layout_name']));
             if($row){
-                $header['layout_id'] = $row['layout_id'];
-                if($this->layout->update($header,$lines)){
+                $data['layout_id'] = $row['layout_id'];
+                if($this->layout->update($data)){
                     array_push($messages,message('I','DATABASE','01'));
                 }else{
                     array_push($messages,message('E','DATABASE','02'));
@@ -52,7 +43,7 @@ class Grid_layout extends CI_Controller {
             }else{
                 //不存在则新建
                 //存在则更新
-                if($this->layout->create($header,$lines)){
+                if($this->layout->create($data)){
                     array_push($messages,message('I','DATABASE','01'));
                 }else{
                     array_push($messages,message('E','DATABASE','02'));

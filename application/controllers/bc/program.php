@@ -110,11 +110,11 @@ class Program extends CI_Controller {
     //获取报表布局
     function rpt_find_layout(){
         $rs = $this->grid->find(get_parameter('layout_id'));
-        echo rs_to_itemStore($rs);
+        echo rs_to_json($rs);
     }
 
     function rpt_default_layout(){
-       echo rs_to_itemStore($this->grid->find_default(get_parameter('program_id')));
+       echo rs_to_json($this->grid->find_default(get_parameter('program_id'),_sess('uid')));
     }
 
     function rpt_layouts(){

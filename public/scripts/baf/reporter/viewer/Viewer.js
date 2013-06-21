@@ -1,9 +1,10 @@
 define(["dojo/_base/declare","dojox/layout/ContentPane","baf/base/Util","dojo/request",
     "dojox/grid/enhanced/plugins/exporter/CSVWriter","dojox/grid/enhanced/plugins/Selector","dojox/grid/enhanced/plugins/Menu",
     "baf/dijit/grid/MenusObject", "baf/reporter/viewer/_toolBar","baf/reporter/viewer/_layoutDialog",
-    "dojo/data/ItemFileReadStore","baf/dijit/grid/DataGrid","baf/reporter/viewer/_setupDialog"],
+    "dojo/data/ItemFileReadStore","baf/dijit/grid/DataGrid","baf/reporter/viewer/_setupDialog",
+    "dojox/grid/enhanced/plugins/DnD","dojo/json"],
     function (declare,ContentPane,Util,request,gridCSVWriter,gridSelector,gridMenu,
-              MenusObject,ToolBarForReport,layoutDialog,ItemFileReadStore,DataGrid,setupDialog){
+              MenusObject,ToolBarForReport,layoutDialog,ItemFileReadStore,DataGrid,setupDialog,DnD,JSON){
         /*
          *   摘要:
          *                    报表查看器
@@ -40,6 +41,7 @@ define(["dojo/_base/declare","dojox/layout/ContentPane","baf/base/Util","dojo/re
                 var column = [];
                 if(data.items.length > 0){
                     var line = data.items[0];
+                    var i = 0;
                     for(var key in line){
                         column.push({ name : Util.fieldLabel(key), field : key,width : Util.fieldSize(key)});
                     }
@@ -68,12 +70,8 @@ define(["dojo/_base/declare","dojox/layout/ContentPane","baf/base/Util","dojo/re
                             data : data
                         });
 
-                        if(Util.hasChildren(layout)){
-                            o.layout = layout.items[0].layout_id;
-
-                            layout.items.forEach(function(field){
-                                column.push({ name :field.label, field : field.field,width : field.size});
-                            });
+                        if(layout){
+                            column = o._constructStructure(layout.structure);
                         }else{
                             //按原始顺序
                             column = o._constructColumn(data);
@@ -88,18 +86,46 @@ define(["dojo/_base/declare","dojox/layout/ContentPane","baf/base/Util","dojo/re
                             escapeHTMLInData: false,
                             //也可自定义设置高度，如果不设置高度将无法正常显示
                             autoHeight : true,
-                            autoWidth : true,
+                            //如果设置此参数，冻结动作将无效
+//                            autoWidth : true,
                             //不能排序
                             canSort :  function(){
                                 return false;
                             },
+                            //可选择文字
+//                            selectable : true,
 //                        width : "100px",
 //                        hight : "100px",
-                            plugins : {menus : menusObject,exporter: true,selector: {row : "single",col : "single",cell : "disabled"}}
+                            plugins : {
+                                menus : menusObject,
+                                exporter: true,
+                                selector: {row : "single",col : "single",cell : "disabled"},
+                                dnd: {
+                                    dndConfig: {
+                                        //行不允许移动
+                                        row : {
+                                            within : false,
+                                            in : false,
+                                            out : false
+                                        },
+                                        cell : {
+                                            within : false,
+                                            in : false,
+                                            out : false
+                                        },
+                                        col : {
+                                            within : true,
+                                            in : false,
+                                            out : false
+                                        }
+                                    }
+                                }
+                             }
 //                    rowSelector: '20px'
                         });
-
-                        menusObject.forGrid = o.grid;
+                        //设置源数据
+                        menusObject.setSrcGrid(o.grid);
+                        o.toolBar.srcGrid = o.grid;
 
                         o.addChild(o.grid);
 
@@ -128,26 +154,23 @@ define(["dojo/_base/declare","dojox/layout/ContentPane","baf/base/Util","dojo/re
             selectLayout : function(layout_id){
                 var o = this;
                 request.get(Util.url.find_layout_for_rpt({layout_id : layout_id}),{handleAs : "json"}).then(function(data){
-                    if(Util.hasChildren(data)){
-                        o.layout = layout_id;
-                        var structure = [];
-                        data.items.forEach(function(field){
-                            structure.push({ name :field.label, field : field.field,width : field.size});
-                        });
-                        o.grid.setStructure(structure);
-                    }
+                    o.layout = layout_id;
+                    o.grid.setStructure(o._constructStructure(data.structure));
                 });
+            },
+            _constructStructure : function(s){
+                var string = "{\"structure\":"+s+"}";
+                return  JSON.parse(string).structure;
             },
             showLayoutList : function(isNew){
                 layoutDialog.show(isNew);
             },
             showSetup : function(type){
                 var sDialog = new setupDialog({
-                    title : Util.label.grid_layout_edit,
-                    style : "width:500px;"
+                    title : Util.label.grid_layout_edit
                 });
-                sDialog.show();
-                sDialog.selectTab(type);
+               sDialog.show();
+//                sDialog.selectTab(type);
             }
 
         });

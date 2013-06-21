@@ -13,60 +13,59 @@ class Grid_layout_model extends CI_Model{
         return $this->db->get_where('bc_grid_layouts_tl',array('program_id' => $program_id,'layout_name' => $layout_name));
     }
 
-    function find_default($program_id){
-        $this->db->from('bc_grid_layouts_v');
-        $this->db->where(array('program_id' => $program_id,'default_flag' => 1));
-        $this->db->order_by('pos');
-        return $this->db->get();
+    function find_default($program_id,$uid){
+        //获取私有默认布局
+        $this->db->from('bc_grid_layouts_tl');
+        $this->db->where(array('program_id' => $program_id,'default_flag' => 1,'layout_type' => '02','created_by' => $uid));
+        $rs = $this->db->get();
+        if(is_null(firstRow($rs))){
+            //获取全局
+            $this->db->from('bc_grid_layouts_tl');
+            $this->db->where(array('program_id' => $program_id,'default_flag' => 1,'layout_type' => '01'));
+            $rs = $this->db->get();
+        }
+        return $rs;
     }
 
     function find($layout_id){
-        return $this->db->get_where('bc_grid_layouts_v',array('layout_id' => $layout_id));
+        return $this->db->get_where('bc_grid_layouts_tl',array('layout_id' => $layout_id));
     }
 
     //新建
-    function create($header,$lines){
+    function create($data){
         $return = false;
-        $header = set_creation_date($header);
+        $data = set_creation_date($data);
         //判断是否为默认，先去除其他默认，后插入
-        if($header['default_flag'] == 1){
-            if($this->clear_default($header['program_id'],$header['layout_type'])){
-                if($this->db->insert('bc_grid_layouts_tl',$header)){
-                    for($i = 0;$i < count($lines);$i++){
-                        $lines[$i] = set_creation_date($lines[$i]);
-                        $lines[$i]['layout_id'] = $this->db->insert_id();
-                    }
-                    if($this->db->insert_batch('bc_glayout_columns_tl',$lines)){
-                        $return = true;
-                    }
+        if($data['default_flag'] == 1){
+            if($this->clear_default($data['program_id'],$data['layout_type'])){
+                if($this->db->insert('bc_grid_layouts_tl',$data)){
+                    $return = true;
                 }
+            }
+        }else{
+            if($this->db->insert('bc_grid_layouts_tl',$data)){
+                $return = true;
             }
         }
         return $return;
     }
 
-    function update($header,$lines){
+    function update($data){
         $return = false;
-        $header = set_last_update($header);
+        $data = set_last_update($data);
         //判断是否为默认，先去除其他默认，后插入
-        if($header['default_flag'] == 1){
-            if($this->clear_default($header['program_id'],$header['layout_type'])){
-                $this->db->where('layout_id',$header['layout_id']);
+        if($data['default_flag'] == 1){
+            if($this->clear_default($data['program_id'],$data['layout_type'])){
+                $this->db->where('layout_id',$data['layout_id']);
                 //先更新头
-                if($this->db->update('bc_grid_layouts_tl',$header)){
-                    //删除行
-                    if($this->db->delete('bc_glayout_columns_tl', array('layout_id' => $header['layout_id']))){
-                        for($i = 0;$i < count($lines);$i++){
-                            $lines[$i] = set_creation_date($lines[$i]);
-                            $lines[$i]['layout_id'] = $header['layout_id'];
-                        }
-                        //插入行
-                        if($this->db->insert_batch('bc_glayout_columns_tl',$lines)){
-                            $return = true;
-                        }
-                    }
-
+                if($this->db->update('bc_grid_layouts_tl',$data)){
+                    $return = true;
                 }
+            }
+        }else{
+            $this->db->where('layout_id',$data['layout_id']);
+            if($this->db->update('bc_grid_layouts_tl',$data)){
+                $return = true;
             }
         }
         return $return;

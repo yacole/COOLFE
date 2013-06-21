@@ -86,12 +86,23 @@ define(["baf/config/Url", "baf/language/"+language+"/Label", "baf/language/"+lan
                   if(successFunc){
                       successFunc();
                   }
-              },function(){
+              },function(error){
                   Command.show_dialog({content : error});
                   if(failureFunc){
                       failureFunc();
                   }
               });
+            },
+            //输出报错到控制台
+            postEcho : function(url,data){
+                request.post(url,{
+                    data : data,
+                    timeout : config.remote_timeout
+                }).then(function(response){
+                        Command.show_dialog(response);
+                },function(error){
+                    Command.show_dialog({content : error});
+                });
             },
 
             /*

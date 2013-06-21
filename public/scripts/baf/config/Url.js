@@ -1,4 +1,4 @@
-define(function(){
+define(["baf/config/Config"],function(Config){
     /*
      *   摘要:
      *       用于封装框架中使用的URL
@@ -23,6 +23,7 @@ define(function(){
             return "index.php/" +controller + "/" + action + paramstr;
         }
     };
+
     return {
         safeurl : url,
         withParameters : function(uri,params){
@@ -41,6 +42,10 @@ define(function(){
                 }
                 return "index.php/"+ uri + paramstr;
             }
+        },
+        //框架内部模版
+        localUrl : function(uri){
+           return dojo.config.bafBaseUrl +  uri;
         },
         navigator : url("main","navigator"),
         //获取工作区数据

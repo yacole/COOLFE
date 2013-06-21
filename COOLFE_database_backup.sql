@@ -139,6 +139,7 @@ CREATE TABLE `bc_auth_objects_tl` (
   `created_by` int(10) unsigned DEFAULT NULL,
   `last_update_date` int(10) unsigned DEFAULT NULL,
   `last_updated_by` int(10) unsigned DEFAULT NULL,
+  `structure` text NOT NULL,
   PRIMARY KEY (`authobj_id`),
   UNIQUE KEY `BC_AUTH_OBJECTS_U01` (`authobj_name`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='权限对象表';
@@ -194,23 +195,13 @@ CREATE TABLE `bc_glayout_columns_tl` (
   `size` int(10) unsigned NOT NULL COMMENT '长度',
   PRIMARY KEY (`id`),
   KEY `bc_glayout_columns_n01` (`layout_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8 COMMENT='布局列信息表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='布局列信息表';
 
 --
 -- Dumping data for table `bc_glayout_columns_tl`
 --
 
 /*!40000 ALTER TABLE `bc_glayout_columns_tl` DISABLE KEYS */;
-INSERT INTO `bc_glayout_columns_tl` (`id`,`layout_id`,`field`,`label`,`pos`,`creation_date`,`created_by`,`last_update_date`,`last_updated_by`,`size`) VALUES 
- (13,1,'program_name','pp',0,1371184913,1,1371184913,1,10),
- (14,1,'program_name','pp',1,1371184913,1,1371184913,1,10),
- (15,1,'program_name','pp',2,1371184913,1,1371184913,1,10),
- (19,2,'program_name','pp',0,1371190696,1,1371190696,1,10),
- (20,2,'program_name','pp',1,1371190696,1,1371190696,1,10),
- (21,2,'program_name','pp',2,1371190696,1,1371190696,1,10),
- (22,3,'program_name','pp',0,1371193968,1,1371193968,1,10),
- (23,3,'program_name','pp',1,1371193968,1,1371193968,1,10),
- (24,3,'program_name','pp',2,1371193968,1,1371193968,1,10);
 /*!40000 ALTER TABLE `bc_glayout_columns_tl` ENABLE KEYS */;
 
 
@@ -230,18 +221,20 @@ CREATE TABLE `bc_grid_layouts_tl` (
   `last_updated_by` int(10) unsigned DEFAULT NULL,
   `default_flag` tinyint(1) DEFAULT NULL COMMENT '默认标识',
   `layout_type` varchar(45) NOT NULL COMMENT '全局或个人',
+  `structure` text NOT NULL,
   PRIMARY KEY (`layout_id`) USING BTREE,
   UNIQUE KEY `bc_grid_layouts_U01` (`program_id`,`layout_name`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='报表布局信息表';
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='报表布局信息表';
 
 --
 -- Dumping data for table `bc_grid_layouts_tl`
 --
 
 /*!40000 ALTER TABLE `bc_grid_layouts_tl` DISABLE KEYS */;
-INSERT INTO `bc_grid_layouts_tl` (`layout_id`,`program_id`,`layout_name`,`description`,`creation_date`,`created_by`,`last_update_date`,`last_updated_by`,`default_flag`,`layout_type`) VALUES 
- (1,5,'layout001','layout3',NULL,0,1371184913,1,1,'01'),
- (3,5,'layout002','layout3',1371193968,1,1371193968,1,0,'01');
+INSERT INTO `bc_grid_layouts_tl` (`layout_id`,`program_id`,`layout_name`,`description`,`creation_date`,`created_by`,`last_update_date`,`last_updated_by`,`default_flag`,`layout_type`,`structure`) VALUES 
+ (2,5,'my','陈杨阳专属',1371794462,1,1371797834,1,0,'02','[{\"name\":\"program_id\",\"field\":\"program_id\",\"width\":8},{\"name\":\"program_type\",\"field\":\"program_type\",\"width\":8},{\"name\":\"程序名\",\"field\":\"program_name\",\"width\":\"20\"},{\"name\":\"title\",\"field\":\"title\",\"width\":8},{\"name\":\"help_text\",\"field\":\"help_text\",\"width\":8},{\"name\":\"appliction_code\",\"field\":\"appliction_code\",\"width\":8},{\"name\":\"controller\",\"field\":\"controller\",\"width\":8},{\"name\":\"action\",\"field\":\"action\",\"width\":8},{\"name\":\"menu_bar_id\",\"field\":\"menu_bar_id\",\"width\":8},{\"name\":\"system_flag\",\"field\":\"system_flag\",\"width\":8},{\"name\":\"creation_date\",\"field\":\"creation_date\",\"width\":8},{\"name\":\"created_by\",\"field\":\"created_by\",\"width\":8},{\"name\":\"last_update_date\",\"field\":\"last_update_date\",\"width\":8},{\"name\":\"last_updated_by\",\"field\":\"last_updated_by\",\"width\":8},{\"name\":\"qform_flag\",\"field\":\"qform_flag\",\"width\":8},{\"name\":\"directed_to\",\"field\":\"directed_to\",\"width\":8},{\"name\":\"home_page\",\"field\":\"home_page\",\"width\":8}]'),
+ (3,5,'my2','陈杨阳专属',1371796598,1,1371804844,1,1,'02','[{\"cells\":[[{\"width\":\"8\",\"field\":\"program_type\",\"name\":\"program_type\"},{\"width\":\"20\",\"field\":\"program_name\",\"name\":\"程序名\"},{\"width\":\"8\",\"field\":\"appliction_code\",\"name\":\"appliction_code\"}]],\"noscroll\":false},{\"cells\":[[{\"width\":\"8\",\"field\":\"action\",\"name\":\"action\"},{\"width\":\"8\",\"field\":\"menu_bar_id\",\"name\":\"menu_bar_id\"},{\"width\":\"8\",\"field\":\"system_flag\",\"name\":\"system_flag\"},{\"width\":\"8\",\"field\":\"created_by\",\"name\":\"created_by\"},{\"width\":\"8\",\"field\":\"last_update_date\",\"name\":\"last_update_date\"},{\"width\":\"8\",\"field\":\"last_updated_by\",\"name\":\"last_updated_by\"},{\"width\":\"8\",\"field\":\"qform_flag\",\"name\":\"qform_flag\"},{\"width\":\"8\",\"field\":\"directed_to\",\"name\":\"directed_to\"},{\"width\":\"8\",\"field\":\"home_page\",\"name\":\"home_page\"}]]}]'),
+ (4,5,'all','全局',1371804944,1,1371804944,1,1,'01','[{\"cells\":[[{\"width\":\"20\",\"field\":\"program_name\",\"name\":\"程序名\"},{\"width\":\"8\",\"field\":\"appliction_code\",\"name\":\"appliction_code\"}]],\"noscroll\":false},{\"cells\":[[{\"width\":\"8\",\"field\":\"action\",\"name\":\"action\"},{\"width\":\"8\",\"field\":\"menu_bar_id\",\"name\":\"menu_bar_id\"},{\"width\":\"8\",\"field\":\"system_flag\",\"name\":\"system_flag\"},{\"width\":\"8\",\"field\":\"created_by\",\"name\":\"created_by\"},{\"width\":\"8\",\"field\":\"last_update_date\",\"name\":\"last_update_date\"},{\"width\":\"8\",\"field\":\"last_updated_by\",\"name\":\"last_updated_by\"},{\"width\":\"8\",\"field\":\"qform_flag\",\"name\":\"qform_flag\"},{\"width\":\"8\",\"field\":\"directed_to\",\"name\":\"directed_to\"},{\"width\":\"8\",\"field\":\"home_page\",\"name\":\"home_page\"}]]}]');
 /*!40000 ALTER TABLE `bc_grid_layouts_tl` ENABLE KEYS */;
 
 

@@ -38,7 +38,8 @@
             ],
             parseOnLoad: true,
             baseUrl : "/dojo1.9.0/dojo/",
-            async : true
+            async : true,
+            bafBaseUrl : "/public/scripts/baf/"
         };
 
     </script>
@@ -58,11 +59,6 @@
             ready(function(){
                 //展示各面板
                 appContainer.startup();
-                //告诉容器重新计算布局
-                window.onresize = function(){
-                    appContainer.startup();
-                }
-
                 //监听启动
                 Listener.startup();
 

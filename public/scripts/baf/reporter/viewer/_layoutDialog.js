@@ -1,14 +1,15 @@
 define(["baf/dijit/Dialog","baf/base/Util","baf/base/Env","dojo/request",
         "baf/dijit/grid/DataGrid","dojo/data/ItemFileReadStore","dojo/json",
-        "dojo/dom-form","baf/command/Command"],
-    function(Dialog,Util,Env,request,DataGrid,ItemFileReadStore,JSON,domForm,Command){
+        "dojo/dom-form"],
+    function(Dialog,Util,Env,request,DataGrid,ItemFileReadStore,JSON,domForm){
     return {
         //展示布局选择和保持界面
         show : function(type){
             var layoutDialog = this;
             var o = Env.reportGrid();
             var selectDialog = new Dialog({
-                href : Util.url.saveLayoutTooltipDialog(),
+//                href : Util.url.saveLayoutTooltipDialog(),
+                href : Util.url.localUrl("reporter/viewer/_layout.html"),
                 onDownloadEnd : function(){
                     //填充label
                     Util.queryTofillLabel(this.domNode);
@@ -17,7 +18,6 @@ define(["baf/dijit/Dialog","baf/base/Util","baf/base/Env","dojo/request",
 
                     request.get(Util.url.find_layouts_for_rpt({program_id : o.program_id}),{handleAs : "json"}).then(function(data){
 
-                        if(Util.hasChildren(data)){
                             //插入选择列表
                             var store = new ItemFileReadStore({
                                 data : data
@@ -101,27 +101,40 @@ define(["baf/dijit/Dialog","baf/base/Util","baf/base/Env","dojo/request",
                                     dojo.connect(Util.dijit_byId("saveButton"),"onClick",function(){
                                         var dialogForm = Util.dijit_byId("dialogForm");
                                         var postObj = domForm.toObject(dialogForm.id);
+                                        //form验证通过则提交
+                                        dialogForm.formValidate(function(){
+                                            //获取数据，post到服务器
+                                            postObj.program_id = o.program_id;
+                                            postObj.default_flag = Util.xchecked(postObj.default_flag);
 
-                                        //获取数据，post到服务器
-                                        postObj.program_id = o.program_id;
-                                        postObj.default_flag = Util.xchecked(postObj.default_flag);
-                                        postObj.structure = JSON.stringify(o.grid.structure);
+//                                        console.info(o.grid.structure);
 
-                                        //判断是否覆盖当前布局
-                                        if(o.layout){
-                                            store.fetch({
-                                                query : {layout_id : o.layout},
-                                                onComplete : function(items){
-                                                    if(items.length > 0){
-                                                        if(confirm(Util.message.info_saveLayout_isRecover)){
-                                                            Util.post("index.php/bc/grid_layout/save",postObj,function(){
-                                                                selectDialog.hide();
-                                                            });
+                                            //刷新一下structure
+//                                        var s = o.grid.buildStructureFromLayout();
+                                            postObj.structure = JSON.stringify(o.grid._currentStructure());
+
+                                            //判断是否覆盖当前布局
+                                            if(o.layout){
+                                                store.fetch({
+                                                    query : {layout_id : o.layout},
+                                                    onComplete : function(items){
+                                                        if(items.length > 0){
+                                                            if(confirm(Util.message.info_saveLayout_isRecover)){
+                                                                Util.post("index.php/bc/grid_layout/save",postObj,function(){
+                                                                    selectDialog.hide();
+                                                                });
+                                                            }
                                                         }
                                                     }
-                                                }
-                                            });//fetch
-                                        }//if
+                                                });//fetch
+                                            }else{
+                                                //全新新建
+                                                Util.post("index.php/bc/grid_layout/save",postObj,function(){
+                                                    selectDialog.hide();
+                                                });
+                                            }
+                                        });
+
                                     });
                                     break;
                                 case "select" :
@@ -170,7 +183,6 @@ define(["baf/dijit/Dialog","baf/base/Util","baf/base/Env","dojo/request",
                                     break;
                             }//switch
 
-                        }
                     });
                 }
             });

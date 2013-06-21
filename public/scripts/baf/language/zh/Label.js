@@ -49,7 +49,7 @@ define(function(){
         grid_menu_exportToExcel : "导出为EXCEL",
         grid_headerMenu_hidden : "隐藏",
         grid_headerMenu_addcolumn : "显示更多",
-        grid_headerMenu_fixhight : "调整至最佳宽度",
+        grid_headerMenu_fixWidth : "调整至最佳宽度",
         grid_headerMenu_freeze : "冻结至列",
         grid_headerMenu_ascOrder : "按升序排列",
         grid_headerMenu_descOrder : "按降序排列",

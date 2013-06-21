@@ -33,6 +33,7 @@ define(["dojo/_base/declare",
                     id : Util.id.TopPane,
                     region : "top"
                 });
+                this.TopPane.startup();
 
                 //导航栏
                 this.NavigatorPane = new Navigator({
