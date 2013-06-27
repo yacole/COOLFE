@@ -15,6 +15,9 @@ define([],function(){
         tabMaxOpen : 6,
         //GRID字段默认宽度
         gridColumnWidth : 8,
+        max_gridColumnWidth : 20,
+        //字符串长度对应列长度比例
+        wordLengthToColumnWidth : 0.7,
         //自动刷新字段列表（当刷新界面时）
         autoReflashFieldList : true,
         //消息栏显示最大长度，超出则被截断

@@ -1,10 +1,13 @@
 define(["dojo/_base/declare","dojox/layout/ContentPane","baf/base/Util","dojo/request",
     "dojox/grid/enhanced/plugins/exporter/CSVWriter","dojox/grid/enhanced/plugins/Selector","dojox/grid/enhanced/plugins/Menu",
-    "baf/dijit/grid/MenusObject", "baf/reporter/viewer/_toolBar","baf/reporter/viewer/_layoutDialog",
-    "dojo/data/ItemFileReadStore","baf/dijit/grid/DataGrid","baf/reporter/viewer/_setupDialog",
-    "dojox/grid/enhanced/plugins/DnD","dojo/json"],
+    "baf/dijit/grid/MenusObject", "baf/reporter/viewer/_toolBar","baf/reporter/viewer/layout/_layoutDialog",
+    "dojo/data/ItemFileWriteStore","baf/dijit/grid/DataGrid","baf/reporter/viewer/setup/_setupDialog",
+    "dojox/grid/enhanced/plugins/DnD","dojo/json","dojox/grid/enhanced/plugins/Pagination",
+    "dojox/grid/enhanced/plugins/NestedSorting","baf/reporter/viewer/_detailDialog","baf/reporter/viewer/_config",
+    "baf/reporter/viewer/setup/_util","baf/dijit/Dialog"],
     function (declare,ContentPane,Util,request,gridCSVWriter,gridSelector,gridMenu,
-              MenusObject,ToolBarForReport,layoutDialog,ItemFileReadStore,DataGrid,setupDialog,DnD,JSON){
+              MenusObject,ToolBarForReport,layoutDialog,ItemFileWriteStore,DataGrid,setupDialog,
+              DnD,JSON,Pagination,NestedSorting,detailDialog,Config,u,Dialog){
         /*
          *   摘要:
          *                    报表查看器
@@ -18,11 +21,9 @@ define(["dojo/_base/declare","dojox/layout/ContentPane","baf/base/Util","dojo/re
             //针对grid的工具栏
             toolBar : null,
             layout : null,
+            //配置
+            config : Config,
 
-
-            constructor : function(args){
-                this.inherited(arguments);
-            },
             startup : function(){
                 var o = this;
                 this.toolBar = new ToolBarForReport({
@@ -31,24 +32,13 @@ define(["dojo/_base/declare","dojox/layout/ContentPane","baf/base/Util","dojo/re
                     program_id : o.program_id
                 });
                 this.addChild(this.toolBar);
+
                 //加载布局
                 this._loadDefaultLayout();
 
                 this.inherited(arguments);
             },
-            //构建列
-            _constructColumn : function(data){
-                var column = [];
-                if(data.items.length > 0){
-                    var line = data.items[0];
-                    var i = 0;
-                    for(var key in line){
-                        column.push({ name : Util.fieldLabel(key), field : key,width : Util.fieldSize(key)});
-                    }
-                }
-                return column;
-            },
-            //刷新
+            //刷新，重新获取数据
             refresh : function(){
                 var store = new ItemFileReadStore({
                     url : this.dataUrl
@@ -65,88 +55,58 @@ define(["dojo/_base/declare","dojox/layout/ContentPane","baf/base/Util","dojo/re
                     request.get(Util.url.find_default_layout_for_rpt({program_id : o.program_id}),{handleAs : "json"}).then(function(layout){
 //                        console.info(layout);
                         var column = [];
-
-                        var store = new ItemFileReadStore({
+                        var store = new ItemFileWriteStore({
                             data : data
                         });
 
                         if(layout){
+                            //默认布局
                             column = o._constructStructure(layout.structure);
                         }else{
-                            //按原始顺序
-                            column = o._constructColumn(data);
+                            if(o.config && o.config.grid && o.config.column){
+                                column = o.config.column;
+                            }else{
+                                //按原始顺序
+                                column = u._constructColumn(data);
+                            }
                         }
 //                        console.info(column);
-                        var menusObject = new MenusObject();
+                        //配置右键菜单
+                        var menusObject = null;
+                        if(o.config && o.config.grid && o.config.grid.plugins && o.config.grid.plugins.menus){
+                            menusObject = o.config.grid.plugins.menus;
+                        }else{
+                            menusObject = new MenusObject();
+                            menusObject.startup();
+                        }
 
-                        o.grid = new DataGrid({
-                            store: store,
-                            structure :column,
-                            //直接显示含HTML标签字段
-                            escapeHTMLInData: false,
-                            //也可自定义设置高度，如果不设置高度将无法正常显示
-                            autoHeight : true,
-                            //如果设置此参数，冻结动作将无效
-//                            autoWidth : true,
-                            //不能排序
-                            canSort :  function(){
-                                return false;
-                            },
-                            //可选择文字
-//                            selectable : true,
-//                        width : "100px",
-//                        hight : "100px",
-                            plugins : {
-                                menus : menusObject,
-                                exporter: true,
-                                selector: {row : "single",col : "single",cell : "disabled"},
-                                dnd: {
-                                    dndConfig: {
-                                        //行不允许移动
-                                        row : {
-                                            within : false,
-                                            in : false,
-                                            out : false
-                                        },
-                                        cell : {
-                                            within : false,
-                                            in : false,
-                                            out : false
-                                        },
-                                        col : {
-                                            within : true,
-                                            in : false,
-                                            out : false
-                                        }
-                                    }
-                                }
-                             }
-//                    rowSelector: '20px'
-                        });
+                        //gird配置获取
+                        var gridConfig = new Object;
+                        if(o.config && o.config.grid){
+                            gridConfig = o.config.grid;
+                        }
+                        gridConfig.store = store;
+                        gridConfig.plugins.menus = menusObject;
+                        gridConfig.structure = column;
+
+                        o.grid = new DataGrid(gridConfig);
+
                         //设置源数据
-                        menusObject.setSrcGrid(o.grid);
-                        o.toolBar.srcGrid = o.grid;
-
+                        if(menusObject.isDefault){
+                            menusObject.setSrcGrid(o.grid,o);
+                        }
+                        o.toolBar.setSrcGrid(o.grid,o);
                         o.addChild(o.grid);
 
                     });
                 });
-
-            },
-            saveLayout : function(){
-                if(this.layout){
-                    //update
-                }else{
-                    //create
-                }
-                console.info(dojo.toJson(this.grid.structure));
             },
             //清除样式恢复到初始状态
             clearLayout : function(){
                 var o = this;
                 request.get(o.dataUrl,{handleAs : "json"}).then(function(data){
                     o.layout = null;
-                    o.grid.setStructure(o._constructColumn(data));
+                    o.grid.setStructure(u._constructColumn(data));
                 });
 
             },
@@ -158,19 +118,39 @@ define(["dojo/_base/declare","dojox/layout/ContentPane","baf/base/Util","dojo/re
                     o.grid.setStructure(o._constructStructure(data.structure));
                 });
             },
+            //从服务端获取的结构字符串转换成结构
             _constructStructure : function(s){
                 var string = "{\"structure\":"+s+"}";
                 return  JSON.parse(string).structure;
             },
+            //打开布局窗口
             showLayoutList : function(isNew){
                 layoutDialog.show(isNew);
             },
+            //打开管理窗口
             showSetup : function(type){
                 var sDialog = new setupDialog({
                     title : Util.label.grid_layout_edit
                 });
                sDialog.show();
-//                sDialog.selectTab(type);
+               sDialog.selectTab(type);
+            },
+            //显示行项目明细
+            showDetail : function(row){
+                var dDialog = new detailDialog({
+                    title : "明细"
+                });
+                dDialog.build(row,this.grid);
+                dDialog.show();
+            },
+            showSummary : function(sumCellIndex){
+                var sumValue = sumCellIndex.toString();
+                var sumDialog = new Dialog({
+                    title : "汇总值",
+                    content : sumValue,
+                    style : "width:10em"
+                });
+                sumDialog.show();
             }
 
         });

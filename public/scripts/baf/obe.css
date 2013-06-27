@@ -82,4 +82,11 @@ hr.spacer {
     width: 50%;
 }
 
-/*结果集*/
+/*图表工具栏图标*/
+.gridToolBarExport{
+    background-image : url("/public/images/grid/export.jpg");
+    background-repeat: no-repeat;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+}

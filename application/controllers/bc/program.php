@@ -103,8 +103,8 @@ class Program extends CI_Controller {
 
     //报表测试
    function rpt_program_list(){
-       $rs = $this->program->find_all();
-       echo rs_to_itemStore($rs,"program_name","program_name");
+       $rs = $this->uifield->find_all();
+       echo rs_to_itemStore($rs,"ui_field_id","label");
    }
 
     //获取报表布局

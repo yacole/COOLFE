@@ -89,6 +89,7 @@ define(["dojo/_base/declare","baf/base/Util","dijit/layout/TabContainer","baf/ws
                         this.removeChild(this.currentChild());
                     }
                     this._openProgram(program_id,timestamp,params,indx);
+
                 }else{
                     this._openProgram(program_id,timestamp,params);
                 }
@@ -346,22 +347,7 @@ define(["dojo/_base/declare","baf/base/Util","dijit/layout/TabContainer","baf/ws
                         targetProgram.fields = response.items;
                     });
                 }
-                //重新刷新对于FOMR
-                switch(targetProgram.wsoType){
-
-                    case Util.id.programTYPE_FORM:
-                        //创建一个FORM工作区
-                        targetProgram.contentPane.refresh();
-                        break;
-                    case Util.id.programTYPE_REPORT:
-                        //刷新gird
-                        if(targetProgram.gridPane.grid){
-                            targetProgram.gridPane.refresh();
-                        }
-                        break;
-                    default:
-                        ;
-                } // switch(
+                targetProgram.refresh();
 
              }, //refresh
 

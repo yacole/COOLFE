@@ -1,6 +1,6 @@
 define(["dojo/_base/declare","dijit/Menu", "dijit/MenuItem", "dijit/MenuSeparator",
-    "baf/base/Util","baf/base/Env"],
-    function (declare,Menu,MenuItem,MenuSeparator,Util,Env){
+    "baf/base/Util","baf/base/Env","baf/reporter/viewer/_config"],
+    function (declare,Menu,MenuItem,MenuSeparator,Util,Env,Config){
     /*
      *   摘要:
      *      表格组件默认右键菜单
@@ -8,12 +8,15 @@ define(["dojo/_base/declare","dijit/Menu", "dijit/MenuItem", "dijit/MenuSeparato
     return declare("",null,{
 
         srcGrid : null,
+        viewer : null,
         headerMenu: null,
         rowMenu: null,
         cellMenu: null,
         selectedRegionMenu: null,
+        isDefault : true,
+        config : Config.gridMenu,
 
-        constructor : function(){
+        startup : function(){
             this.headerMenu = this._headerMenu();
 //            this.rowMenu = this._rowMenu();
             this.cellMenu = this._cellMenu();
@@ -26,8 +29,6 @@ define(["dojo/_base/declare","dijit/Menu", "dijit/MenuItem", "dijit/MenuSeparato
         //选择标题右键菜单
         _headerMenu : function(){
             var o = this;
-            var gridPane = Env.reportGrid();
-
             var headerMenu = new Menu();
             headerMenu.addChild(new MenuItem({
                 label : Util.label.grid_headerMenu_hidden,
@@ -40,11 +41,14 @@ define(["dojo/_base/declare","dijit/Menu", "dijit/MenuItem", "dijit/MenuSeparato
             headerMenu.addChild(new MenuItem({
                 label : Util.label.grid_headerMenu_addcolumn,
                 onClick : function(){
-                    gridPane.showSetup();
+                    o.viewer.showSetup();
                 }
             }));
             headerMenu.addChild(new MenuItem({
-                label : Util.label.grid_headerMenu_fixWidth
+                label : Util.label.grid_headerMenu_fixWidth,
+                onClick : function(){
+                    o.srcGrid.fixWidth();
+                }
             }));
             headerMenu.addChild(new MenuItem({
                 label : Util.label.grid_headerMenu_freeze,
@@ -54,10 +58,20 @@ define(["dojo/_base/declare","dijit/Menu", "dijit/MenuItem", "dijit/MenuSeparato
             }));
             headerMenu.addChild(new MenuSeparator());
             headerMenu.addChild(new MenuItem({
-                label : Util.label.grid_headerMenu_ascOrder
+                label : Util.label.grid_headerMenu_ascOrder,
+                onClick : function(){
+                    var cell = o.srcGrid.getCell(o.headerMenu.target.cellIndex);
+                    o.srcGrid.setSortIndex([{attribute: cell.field,descending: false}]);
+                },
+                disabled : o._boolean(o.config.sortAsc)
             }));
             headerMenu.addChild(new MenuItem({
-                label : Util.label.grid_headerMenu_descOrder
+                label : Util.label.grid_headerMenu_descOrder,
+                onClick : function(){
+                    var cell = o.srcGrid.getCell(o.headerMenu.target.cellIndex);
+                    o.srcGrid.setSortIndex([{attribute: cell.field,descending: true}]);
+                },
+                disabled : o._boolean(o.config.sortDesc)
             }));
             headerMenu.addChild(new MenuItem({
                 label : Util.label.grid_headerMenu_setFilter
@@ -107,29 +121,42 @@ define(["dojo/_base/declare","dijit/Menu", "dijit/MenuItem", "dijit/MenuSeparato
         },
         //选择块右键菜单
         _cellMenu : function(){
-            var gridPane = Env.reportGrid();
             var cellMenu = new Menu();
             cellMenu.addChild(new MenuItem({
                 label : Util.label.grid_menu_exportToExcel,
                 onClick : function(){
                     //操作对象是否被赋值
-                    gridPane.grid.exportToExcel();
+                    o.srcGrid.exportToExcel();
                 }
             }));
 //            cellMenu.startup();
             return cellMenu;
         },
-        setSrcGrid : function(grid){
+        setSrcGrid : function(grid,viewer){
             if(grid){
                 this.srcGrid = grid;
             }else{
                 this.srcGrid = Env.reportGrid().grid;
             }
+            if(viewer){
+                this.viewer = viewer;
+            }else{
+                this.viewer = Env.reportGrid();
+            }
+
             var o = this;
             //onCellContextMenu onRowContextMenu onHeaderCellContextMenu onSelectedRegionContextMenu
-            dojo.connect(grid, 'onHeaderCellContextMenu', function(e){
+            dojo.connect(this.srcGrid, 'onHeaderCellContextMenu', function(e){
                 o.headerMenu.target = e;
             });
+        },
+        //根据配置返回disabled状态
+        _boolean : function(s){
+            if(s == false){
+                return true;
+            }else{
+                return false;
+            }
         }
     });
 });

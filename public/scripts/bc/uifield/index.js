@@ -187,7 +187,7 @@ function update_grid(){
 
                 var grid = Util.dijit_byId("mygrid");
                 var store = grid.store;
-                var items = grid.store._arrayOfAllItems;
+                var items = grid.getALLItems();
 
 //            console.info(data);
 

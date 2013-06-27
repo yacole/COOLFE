@@ -1,8 +1,9 @@
 define(["dojo/_base/declare", "dojo/request", "dijit/Toolbar",
     "dijit/MenuSeparator", "dijit/form/Button", "baf/base/Util",
     "baf/base/Env","dijit/form/DropDownButton", "dijit/DropDownMenu", "dijit/MenuItem",
-    "dijit/ToolbarSeparator"],
-    function(declare,request,Toolbar,MenuSeparator,Button,Util,Env,DropDownButton,DropDownMenu,MenuItem,ToolbarSeparator){
+    "dijit/ToolbarSeparator","baf/reporter/viewer/_config","dijit/TooltipDialog"],
+    function(declare,request,Toolbar,MenuSeparator,Button,Util,Env,DropDownButton,
+             DropDownMenu,MenuItem,ToolbarSeparator,Config,TooltipDialog){
         /*
          *   摘要:
          *       工具栏：存放各类自定义的工具按钮组件
@@ -13,33 +14,51 @@ define(["dojo/_base/declare", "dojo/request", "dijit/Toolbar",
             layoutButton : null,
             exportButton : null,
             selectTextButton : null,
+            sortAscButton : null,
+            sortDescButton : null,
+            detailButton : null,
+            printButton : null,
+            searchButton : null,
+            filterButton : null,
+            sumButton : null,
+            subSumButton : null,
+            srcGrid : null,
+            viewer : null,
+            config : Config.toolBar,
+            target : null,
 
             startup : function(){
-                var layoutMenu = new DropDownMenu({style: "display: none;"});
+                var o = this;
+                var layoutMenu = new DropDownMenu({
+                    style: "display: none;"
+                });
 
                 layoutMenu.addChild(new MenuItem({
                     label : Util.label.grid_layout_select,
                     onClick : function(){
-                        Env.reportGrid().showLayoutList("select");
-                    }
+                        o.viewer.showLayoutList("select");
+                    },
+                    disabled : o._boolean(o.config.layout)
                 }));
                 layoutMenu.addChild(new MenuItem({
                     label : Util.label.grid_layout_edit,
                     onClick : function(){
-                        Env.reportGrid().showSetup();
+                        o.viewer.showSetup();
                     }
                 }));
                 layoutMenu.addChild(new MenuItem({
                     label : Util.label.grid_layout_save,
                     onClick : function(){
-                        Env.reportGrid().showLayoutList("save");
-                    }
+                        o.viewer.showLayoutList("save");
+                    },
+                    disabled : o._boolean(o.config.layout)
                 }));
                 layoutMenu.addChild(new MenuItem({
                     label : Util.label.grid_layout_manage,
                     onClick : function(){
-                        Env.reportGrid().showLayoutList("manage");
-                    }
+                        o.viewer.showLayoutList("manage");
+                    },
+                    disabled : o._boolean(o.config.layout)
                 }));
 
                 layoutMenu.addChild(new MenuSeparator());
@@ -47,7 +66,7 @@ define(["dojo/_base/declare", "dojo/request", "dijit/Toolbar",
                 layoutMenu.addChild(new MenuItem({
                     label : Util.label.grid_layout_clear,
                     onClick : function(){
-                        Env.reportGrid().clearLayout();
+                        o.viewer.clearLayout();
                     }
                 }));
 
@@ -57,36 +76,157 @@ define(["dojo/_base/declare", "dojo/request", "dijit/Toolbar",
                 });
 
                 this.addChild(this.layoutButton);
-                this.addChild(new ToolbarSeparator({}));
 
                 this.exportButton = new Button({
-                    label : "导出",
                     onClick : function(){
-                        Env.reportGrid().grid.exportToExcel();
-                    }
+                        o.srcGrid.exportToExcel();
+                    },
+                    disabled : o._boolean(o.config.export),
+                    iconClass : "gridToolBarExport"
                 });
                 this.addChild(this.exportButton);
+
+                this.printButton = new Button({
+                    label : "打印",
+                    disabled : o._boolean(o.config.print)
+                });
+                this.addChild(this.printButton);
+
+                this.addChild(new ToolbarSeparator({}));
+
+
+                this.sortAscButton  = new Button({
+                    label : "升序",
+                    onClick : function(){
+                        //判断是否行被选中
+                        if(o.srcGrid.isSelectColumn() && o.target){
+                            o.srcGrid.setSortIndex([{attribute: o.srcGrid.getCell(o.target.cellIndex).field,descending: false}]);
+                            o.srcGrid.refresh();
+                        }else{
+                            o.viewer.showSetup("sort");
+                        }
+                    },
+                    disabled : o._boolean(o.config.sortAsc)
+                });
+                this.addChild(this.sortAscButton);
+
+                this.sortDescButton = new Button({
+                    label : "降序",
+                    onClick : function(){
+                        if(o.srcGrid.isSelectColumn() && o.target){
+                            o.srcGrid.setSortIndex([{attribute: o.srcGrid.getCell(o.target.cellIndex).field,descending: true}]);
+                            o.srcGrid.refresh();
+                        }else{
+                            o.viewer.showSetup("sort");
+                        }
+                    },
+                    disabled : o._boolean(o.config.sortDesc)
+                });
+                this.addChild(this.sortDescButton);
+
+                this.searchButton = new Button({
+                    label : "查找",
+                    disabled : o._boolean(o.config.search)
+                });
+                this.addChild(this.searchButton);
+
+                this.filterButton = new Button({
+                    label : "过滤",
+                    disabled : o._boolean(o.config.filter)
+                });
+                this.addChild(this.filterButton);
+
+
+                this.addChild(new ToolbarSeparator({}));
+
+                this.detailButton = new Button({
+                    label : "明细",
+                    onClick : function(){
+                        var rows = o.srcGrid.selection.getSelected();
+                        if(rows.length > 0){
+                            o.viewer.showDetail(rows[0]);
+                        }
+                    },
+                    disabled : o._boolean(o.config.detail)
+                });
+                this.addChild(this.detailButton);
 
                 this.selectTextButton = new Button({
                     label : "文本",
                     onClick : function(){
-                        var gridPane = Env.reportGrid();
-                        gridPane.grid.set("selectable",true);
-                        gridPane.refresh();
-                    }
+                        o.srcGrid.set("selectable",true);
+                        o.srcGrid.refresh();
+                    },
+                    disabled : o._boolean(o.config.text)
                 });
                 this.addChild(this.selectTextButton);
+
+                this.addChild(new ToolbarSeparator({}));
+
+                var myDialog = new TooltipDialog({
+                    content:"gogo"
+                });
+
+                this.sumButton = new Button({
+                    label : "汇总",
+                    disabled : o._boolean(o.config.sum),
+                    onClick : function(){
+                        if(o.srcGrid.isSelectColumn() && o.target){
+                            o.subSumButton.set("disabled",false);
+//                            o.viewer.showSummary(o.target.cellIndex);
+                        }
+                    },
+                    dropDown: myDialog
+                });
+                this.addChild(this.sumButton);
+
+                this.subSumButton = new Button({
+                    label : "小计",
+                    disabled : true,
+                    onClick : function(){
+                        //判断是否选中的时列，而且非汇总列
+                        if(o.srcGrid.isSelectColumn()){
+
+                        }
+                    }
+                });
+                this.addChild(this.subSumButton);
+
+                this.addChild(new ToolbarSeparator({}));
 
                 var t =   new Button({
                     label : "test",
                     onClick : function(){
-                        var grid = Env.reportGrid().grid;
-                        console.info(grid.layout);
-                        console.info(grid);
-                        console.info(grid.structure);
+                        console.info(o.srcGrid);
+                        console.info(o.srcGrid.getSortProps());
                     }
                 });
                 this.addChild(t);
+            },
+            setSrcGrid : function(grid,viewer){
+                if(grid){
+                    this.srcGrid = grid;
+                }else{
+                    this.srcGrid = Env.reportGrid().grid;
+                }
+                if(viewer){
+                    this.viewer = viewer;
+                }else{
+                    this.viewer = Env.reportGrid();
+                }
+                var o = this;
+                //onCellContextMenu onRowContextMenu onHeaderCellContextMenu onSelectedRegionContextMenu
+                dojo.connect(grid, 'onHeaderCellClick', function(e){
+                    o.target = e;
+                });
+            },
+            //配置转换
+            _boolean : function(s){
+                if(s == false){
+                    return true;
+                }else{
+                    return false;
+                }
             }
 
         });

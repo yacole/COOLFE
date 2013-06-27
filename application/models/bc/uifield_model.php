@@ -9,6 +9,10 @@ class Uifield_model extends CI_Model{
         return $this->db->get_where('bc_ui_fields_tl',array('ui_field_id' => $id));
     }
 
+    function find_all(){
+        return $this->db->get('bc_uifields_v');
+    }
+
     //根据程序名称查找UI字段列表
     function  find_fields_by_program_name($program_name){
         //获取program_id

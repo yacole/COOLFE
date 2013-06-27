@@ -101,6 +101,10 @@ define(["dojo/_base/declare", "dijit/layout/ContentPane", "dojo/request", "baf/d
                 }
                 return isDirty;
 
+            },
+            //刷新
+            refresh : function(){
+                this.contentPane.refresh();
             }
         });
     });

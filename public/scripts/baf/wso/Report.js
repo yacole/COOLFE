@@ -57,6 +57,12 @@ define(["dojo/_base/declare", "dijit/layout/ContentPane", "dojo/request", "baf/d
             },
             isDirty : function(){
                 return false;
+            },
+            //根据程序id刷新对象
+            refresh : function(){
+                if(this.gridPane.grid){
+                    this.gridPane.refresh();
+                }
             }
         });
     });
