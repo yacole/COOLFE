@@ -26,21 +26,6 @@ USE coolfe;
 --
 DROP TABLE IF EXISTS `bc_grid_layouts_v`;
 DROP VIEW IF EXISTS `bc_grid_layouts_v`;
-CREATE TABLE `bc_grid_layouts_v` (
-  `layout_id` int(10) unsigned,
-  `program_id` int(10) unsigned,
-  `layout_name` varchar(45),
-  `description` varchar(100),
-  `creation_date` int(10) unsigned,
-  `created_by` int(10) unsigned,
-  `last_update_date` int(10) unsigned,
-  `last_updated_by` int(10) unsigned,
-  `default_flag` tinyint(1),
-  `field` varchar(45),
-  `label` varchar(45),
-  `pos` int(10) unsigned,
-  `size` int(10) unsigned
-);
 
 --
 -- Temporary table structure for view `bc_uifields_v`
@@ -178,34 +163,6 @@ CREATE TABLE `bc_authobj_class_tl` (
 
 
 --
--- Definition of table `bc_glayout_columns_tl`
---
-
-DROP TABLE IF EXISTS `bc_glayout_columns_tl`;
-CREATE TABLE `bc_glayout_columns_tl` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `layout_id` int(10) unsigned NOT NULL COMMENT '布局ID',
-  `field` varchar(45) NOT NULL COMMENT '字段名',
-  `label` varchar(45) NOT NULL COMMENT '标题',
-  `pos` int(10) unsigned NOT NULL COMMENT '位置',
-  `creation_date` int(10) unsigned DEFAULT NULL,
-  `created_by` int(10) unsigned DEFAULT NULL,
-  `last_update_date` int(10) unsigned DEFAULT NULL,
-  `last_updated_by` int(10) unsigned DEFAULT NULL,
-  `size` int(10) unsigned NOT NULL COMMENT '长度',
-  PRIMARY KEY (`id`),
-  KEY `bc_glayout_columns_n01` (`layout_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='布局列信息表';
-
---
--- Dumping data for table `bc_glayout_columns_tl`
---
-
-/*!40000 ALTER TABLE `bc_glayout_columns_tl` DISABLE KEYS */;
-/*!40000 ALTER TABLE `bc_glayout_columns_tl` ENABLE KEYS */;
-
-
---
 -- Definition of table `bc_grid_layouts_tl`
 --
 
@@ -224,17 +181,13 @@ CREATE TABLE `bc_grid_layouts_tl` (
   `structure` text NOT NULL,
   PRIMARY KEY (`layout_id`) USING BTREE,
   UNIQUE KEY `bc_grid_layouts_U01` (`program_id`,`layout_name`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='报表布局信息表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='报表布局信息表';
 
 --
 -- Dumping data for table `bc_grid_layouts_tl`
 --
 
 /*!40000 ALTER TABLE `bc_grid_layouts_tl` DISABLE KEYS */;
-INSERT INTO `bc_grid_layouts_tl` (`layout_id`,`program_id`,`layout_name`,`description`,`creation_date`,`created_by`,`last_update_date`,`last_updated_by`,`default_flag`,`layout_type`,`structure`) VALUES 
- (2,5,'my','陈杨阳专属',1371794462,1,1371797834,1,0,'02','[{\"name\":\"program_id\",\"field\":\"program_id\",\"width\":8},{\"name\":\"program_type\",\"field\":\"program_type\",\"width\":8},{\"name\":\"程序名\",\"field\":\"program_name\",\"width\":\"20\"},{\"name\":\"title\",\"field\":\"title\",\"width\":8},{\"name\":\"help_text\",\"field\":\"help_text\",\"width\":8},{\"name\":\"appliction_code\",\"field\":\"appliction_code\",\"width\":8},{\"name\":\"controller\",\"field\":\"controller\",\"width\":8},{\"name\":\"action\",\"field\":\"action\",\"width\":8},{\"name\":\"menu_bar_id\",\"field\":\"menu_bar_id\",\"width\":8},{\"name\":\"system_flag\",\"field\":\"system_flag\",\"width\":8},{\"name\":\"creation_date\",\"field\":\"creation_date\",\"width\":8},{\"name\":\"created_by\",\"field\":\"created_by\",\"width\":8},{\"name\":\"last_update_date\",\"field\":\"last_update_date\",\"width\":8},{\"name\":\"last_updated_by\",\"field\":\"last_updated_by\",\"width\":8},{\"name\":\"qform_flag\",\"field\":\"qform_flag\",\"width\":8},{\"name\":\"directed_to\",\"field\":\"directed_to\",\"width\":8},{\"name\":\"home_page\",\"field\":\"home_page\",\"width\":8}]'),
- (3,5,'my2','陈杨阳专属',1371796598,1,1371804844,1,1,'02','[{\"cells\":[[{\"width\":\"8\",\"field\":\"program_type\",\"name\":\"program_type\"},{\"width\":\"20\",\"field\":\"program_name\",\"name\":\"程序名\"},{\"width\":\"8\",\"field\":\"appliction_code\",\"name\":\"appliction_code\"}]],\"noscroll\":false},{\"cells\":[[{\"width\":\"8\",\"field\":\"action\",\"name\":\"action\"},{\"width\":\"8\",\"field\":\"menu_bar_id\",\"name\":\"menu_bar_id\"},{\"width\":\"8\",\"field\":\"system_flag\",\"name\":\"system_flag\"},{\"width\":\"8\",\"field\":\"created_by\",\"name\":\"created_by\"},{\"width\":\"8\",\"field\":\"last_update_date\",\"name\":\"last_update_date\"},{\"width\":\"8\",\"field\":\"last_updated_by\",\"name\":\"last_updated_by\"},{\"width\":\"8\",\"field\":\"qform_flag\",\"name\":\"qform_flag\"},{\"width\":\"8\",\"field\":\"directed_to\",\"name\":\"directed_to\"},{\"width\":\"8\",\"field\":\"home_page\",\"name\":\"home_page\"}]]}]'),
- (4,5,'all','全局',1371804944,1,1371804944,1,1,'01','[{\"cells\":[[{\"width\":\"20\",\"field\":\"program_name\",\"name\":\"程序名\"},{\"width\":\"8\",\"field\":\"appliction_code\",\"name\":\"appliction_code\"}]],\"noscroll\":false},{\"cells\":[[{\"width\":\"8\",\"field\":\"action\",\"name\":\"action\"},{\"width\":\"8\",\"field\":\"menu_bar_id\",\"name\":\"menu_bar_id\"},{\"width\":\"8\",\"field\":\"system_flag\",\"name\":\"system_flag\"},{\"width\":\"8\",\"field\":\"created_by\",\"name\":\"created_by\"},{\"width\":\"8\",\"field\":\"last_update_date\",\"name\":\"last_update_date\"},{\"width\":\"8\",\"field\":\"last_updated_by\",\"name\":\"last_updated_by\"},{\"width\":\"8\",\"field\":\"qform_flag\",\"name\":\"qform_flag\"},{\"width\":\"8\",\"field\":\"directed_to\",\"name\":\"directed_to\"},{\"width\":\"8\",\"field\":\"home_page\",\"name\":\"home_page\"}]]}]');
 /*!40000 ALTER TABLE `bc_grid_layouts_tl` ENABLE KEYS */;
 
 
@@ -616,6 +569,34 @@ INSERT INTO `bc_programs_tl` (`program_id`,`program_type`,`program_name`,`title`
 
 
 --
+-- Definition of table `bc_report_parameters`
+--
+
+DROP TABLE IF EXISTS `bc_report_parameters`;
+CREATE TABLE `bc_report_parameters` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `program_id` int(10) unsigned NOT NULL COMMENT '程序ID',
+  `field` varchar(45) NOT NULL COMMENT '字段名',
+  `action` varchar(45) NOT NULL COMMENT '判断类型',
+  `default_value` varchar(2000) NOT NULL COMMENT '默认值',
+  `creation_date` int(10) unsigned DEFAULT NULL,
+  `created_by` int(10) unsigned DEFAULT NULL,
+  `last_updated_by` int(10) unsigned DEFAULT NULL,
+  `last_update_date` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `bc_report_parameters_n01` (`program_id`),
+  KEY `bc_report_parameters_u01` (`program_id`,`field`,`action`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='报表参数列表';
+
+--
+-- Dumping data for table `bc_report_parameters`
+--
+
+/*!40000 ALTER TABLE `bc_report_parameters` DISABLE KEYS */;
+/*!40000 ALTER TABLE `bc_report_parameters` ENABLE KEYS */;
+
+
+--
 -- Definition of table `bc_role_menus_tl`
 --
 
@@ -806,7 +787,7 @@ INSERT INTO `bc_ui_fields_tl` (`ui_field_id`,`program_id`,`field_name`,`field_si
  (40,2,'program_name','20',0,'程序','',1,0,0,'',NULL,NULL,1369628759,1,1369632846,1),
  (41,2,'appliction_code','',0,'应用','',1,0,0,'15',1,NULL,1369628794,1,1369632916,1),
  (42,5,'program_name','20',0,'程序名','',0,0,0,'',NULL,NULL,1370309951,1,1370311595,1),
- (43,5,'layout_type','10',0,'布局类型','',0,0,0,'',6,NULL,1370416097,1,1370416097,1),
+ (43,5,'layout_type','10',0,'布局类型','',0,0,0,'',6,NULL,1370416097,1,1372140614,1),
  (44,5,'layout_name','10',0,'布局','',1,0,0,'',NULL,NULL,1370503706,1,1370503769,1),
  (45,5,'description','20',0,'说明','',1,0,0,'',NULL,NULL,1370503739,1,1371194348,1);
 /*!40000 ALTER TABLE `bc_ui_fields_tl` ENABLE KEYS */;

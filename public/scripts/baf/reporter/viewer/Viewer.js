@@ -4,10 +4,10 @@ define(["dojo/_base/declare","dojox/layout/ContentPane","baf/base/Util","dojo/re
     "dojo/data/ItemFileWriteStore","baf/dijit/grid/DataGrid","baf/reporter/viewer/setup/_setupDialog",
     "dojox/grid/enhanced/plugins/DnD","dojo/json","dojox/grid/enhanced/plugins/Pagination",
     "dojox/grid/enhanced/plugins/NestedSorting","baf/reporter/viewer/_detailDialog","baf/reporter/viewer/_config",
-    "baf/reporter/viewer/setup/_util","baf/dijit/Dialog"],
+    "baf/reporter/viewer/setup/_util","baf/reporter/viewer/filter/Filter","dojox/grid/enhanced/plugins/IndirectSelection"],
     function (declare,ContentPane,Util,request,gridCSVWriter,gridSelector,gridMenu,
               MenusObject,ToolBarForReport,layoutDialog,ItemFileWriteStore,DataGrid,setupDialog,
-              DnD,JSON,Pagination,NestedSorting,detailDialog,Config,u,Dialog){
+              DnD,JSON,Pagination,NestedSorting,detailDialog,Config,u,Filter,IndirectSelection){
         /*
          *   摘要:
          *                    报表查看器
@@ -23,13 +23,13 @@ define(["dojo/_base/declare","dojox/layout/ContentPane","baf/base/Util","dojo/re
             layout : null,
             //配置
             config : Config,
+            filter : null,
 
             startup : function(){
-                var o = this;
                 this.toolBar = new ToolBarForReport({
                     id : Util.id.wso_ToolBarForReport + this.timestamp,
                     style : "",
-                    program_id : o.program_id
+                    program_id : this.program_id
                 });
                 this.addChild(this.toolBar);
 
@@ -40,7 +40,7 @@ define(["dojo/_base/declare","dojox/layout/ContentPane","baf/base/Util","dojo/re
             },
             //刷新，重新获取数据
             refresh : function(){
-                var store = new ItemFileReadStore({
+                var store = new ItemFileWriteStore({
                     url : this.dataUrl
                 });
                 this.grid.refresh(store);
@@ -98,6 +98,9 @@ define(["dojo/_base/declare","dojox/layout/ContentPane","baf/base/Util","dojo/re
                         o.toolBar.setSrcGrid(o.grid,o);
                         o.addChild(o.grid);
 
+                        //设置过滤器
+                        o.filter = new Filter();
+                        o.filter.srcGrid = o.grid;
                     });
                 });
             },
@@ -142,15 +145,6 @@ define(["dojo/_base/declare","dojox/layout/ContentPane","baf/base/Util","dojo/re
                 });
                 dDialog.build(row,this.grid);
                 dDialog.show();
-            },
-            showSummary : function(sumCellIndex){
-                var sumValue = sumCellIndex.toString();
-                var sumDialog = new Dialog({
-                    title : "汇总值",
-                    content : sumValue,
-                    style : "width:10em"
-                });
-                sumDialog.show();
             }
 
         });

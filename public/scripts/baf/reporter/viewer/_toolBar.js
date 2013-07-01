@@ -130,9 +130,35 @@ define(["dojo/_base/declare", "dojo/request", "dijit/Toolbar",
                 });
                 this.addChild(this.searchButton);
 
-                this.filterButton = new Button({
-                    label : "过滤",
+
+                var filterMenu = new DropDownMenu({
+                    style: "display: none;"
+                });
+
+                filterMenu.addChild(new MenuItem({
+                    label : "设置过滤器",
+                    onClick : function(){
+                        if(o.srcGrid.isSelectColumn() && o.target){
+                            o.viewer.filter.show(o.target.cellIndex);
+                        }else{
+                            o.viewer.showSetup("filter");
+                        }
+                    },
                     disabled : o._boolean(o.config.filter)
+                }));
+
+                filterMenu.addChild(new MenuItem({
+                    label : "清除过滤器",
+                    onClick : function(){
+                        o.viewer.filter.clear();
+                    },
+                    disabled : o._boolean(o.config.filter)
+                }));
+
+                this.filterButton = new DropDownButton({
+                    label : "过滤",
+                    disabled : o._boolean(o.config.filter),
+                    dropDown: filterMenu
                 });
                 this.addChild(this.filterButton);
 
@@ -164,33 +190,40 @@ define(["dojo/_base/declare", "dojo/request", "dijit/Toolbar",
                 this.addChild(new ToolbarSeparator({}));
 
                 var myDialog = new TooltipDialog({
-                    content:"gogo"
+                    style : "width:10em",
+                    onHide : function(){
+                        this.set("content","");
+                    }
                 });
 
-                this.sumButton = new Button({
+                this.sumButton = new DropDownButton({
                     label : "汇总",
                     disabled : o._boolean(o.config.sum),
                     onClick : function(){
+                        var sum = 0;
                         if(o.srcGrid.isSelectColumn() && o.target){
-                            o.subSumButton.set("disabled",false);
+//                            o.subSumButton.set("disabled",false);
 //                            o.viewer.showSummary(o.target.cellIndex);
+                            sum = o.srcGrid.summaryColumn(o.target.cellIndex);
                         }
+                        var content = "汇总值： "+sum.toString();
+                        myDialog.set("content",content);
                     },
                     dropDown: myDialog
                 });
                 this.addChild(this.sumButton);
 
-                this.subSumButton = new Button({
-                    label : "小计",
-                    disabled : true,
-                    onClick : function(){
-                        //判断是否选中的时列，而且非汇总列
-                        if(o.srcGrid.isSelectColumn()){
-
-                        }
-                    }
-                });
-                this.addChild(this.subSumButton);
+//                this.subSumButton = new Button({
+//                    label : "小计",
+//                    disabled : true,
+//                    onClick : function(){
+//                        //判断是否选中的时列，而且非汇总列
+//                        if(o.srcGrid.isSelectColumn()){
+//
+//                        }
+//                    }
+//                });
+//                this.addChild(this.subSumButton);
 
                 this.addChild(new ToolbarSeparator({}));
 

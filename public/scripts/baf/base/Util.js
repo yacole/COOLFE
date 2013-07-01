@@ -257,10 +257,26 @@ define(["baf/config/Url", "baf/language/"+language+"/Label", "baf/language/"+lan
                 //alert(totalLength);
                 return totalLength;
             },
+            //数组排除重复项
+            unique : function (array) {
+                var ret = [], done = {};
+                try {
+                    for (var i = 0, length = array.length; i < length; i++) {
+                        var tmp = array[i];
+                        if (!done[tmp]) {
+                            done[tmp] = true;
+                            ret.push(tmp);
+                        }
+                    }
+                } catch (e) {
+                    ret = array;
+                }
+                return ret;
+            },
 
-            /*
-               实用工具
-             */
+        /*
+           实用工具
+         */
             //效果同js原先的confirm
             //content ：弹出框内容 ； callback ： 确认后要执行的内容
             confirm : function(content,callback){

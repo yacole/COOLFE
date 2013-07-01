@@ -261,6 +261,43 @@ function (declare,Util,EnhancedGrid,iframe){
             }else{
                 return true;
             }
+        },
+        //列汇总
+        summaryColumn : function(CellIndex){
+            //考虑过滤后的结果
+            var items = this.getALLItems();
+            var field = this.getCell(CellIndex).field.toString();
+            var rs = 0;
+            if(items.length>0){
+                //判断是否为数字
+                if(!isNaN(Number(items[0][field]))){
+                    items.forEach(function(item){
+                        rs = rs + Number(item[field]);
+                    });
+                }
+            }
+            //重新处理
+            if(isNaN(rs)){
+                rs = 0;
+            }
+            return rs;
+        },
+        //获取单列数据
+        columnData : function(cellIndex){
+            var data = {items:[]};
+            var items = this.getALLItems();
+            var tmp = [];
+            var attr = this.getCell(cellIndex).field.toString();
+            if(items.length > 0){
+                items.forEach(function(item){
+                    tmp.push(item[attr].toString());
+                });
+                //排除重复性
+                Util.unique(tmp).forEach(function(item){
+                    data.items.push({value : item});
+                });
+            }
+            return data;
         }
     });
 });

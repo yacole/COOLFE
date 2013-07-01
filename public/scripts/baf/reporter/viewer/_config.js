@@ -5,6 +5,8 @@ define([],function(){
             escapeHTMLInData: false,
             //也可自定义设置高度，如果不设置高度将无法正常显示
             autoHeight : true,
+            //此属性设置为true,可以拖拽标题栏，更换列顺序
+//            columnReordering : true,
             //默认排序
 //                            sortFields: [{attribute: 'col4', descending: false},{attribute: 'col7', descending: true}],
             //如果设置此参数，冻结动作将无效
@@ -34,8 +36,8 @@ define([],function(){
                 },
                 //分页
                 pagination: {
-    //                                    pageSizes: ["10","25", "50", "100", "All"],
-    //                                    defaultPageSize : 2,
+                    pageSizes: ["1000","2500", "5000", "All"],
+                    defaultPageSize : 1000,
                     description: true,
                     sizeSwitch: true,
                     pageStepper: true,
@@ -47,6 +49,8 @@ define([],function(){
                 },
                 //排序
                 nestedSorting: true
+                //勾选框
+//                indirectSelection:  {headerSelector:true}
             }
 //                    rowSelector: '20px',
         },
@@ -76,7 +80,9 @@ define([],function(){
             //头部菜单：升序
             sortAsc : true,
             //头部菜单：降序
-            sortDesc : true
+            sortDesc : true,
+           //过滤器
+            filter : true
         }
     }
 });

@@ -1,13 +1,16 @@
 define(["dojo/_base/declare", "dijit/form/ValidationTextBox", "baf/base/Util",
-    "dijit/form/Button", "dojo/request", "baf/base/Env"],
-    function(declare,ValidationTextBox,Util,Button,request,Env){
+    "dijit/form/Button", "dojo/request", "baf/base/Env","baf/wso/QueryResult"],
+    function(declare,ValidationTextBox,Util,Button,request,Env,QueryResult){
         /*
          *   摘要:
          *       输入框组件
          */
     return declare("",[ValidationTextBox],{
         //可多选
-        mselect : false,
+        mulitSelect : false,
+        canSelect : false,
+        //筛选数据
+        selectData : null,
         //提交的值
         key : null,
         //输入框外部显示值
@@ -49,6 +52,7 @@ define(["dojo/_base/declare", "dijit/form/ValidationTextBox", "baf/base/Util",
 //                console.info(Util.url.find_validator_by_uifield_id({field_id : textbox.field_id}));
                 //设置属性
                 if(entry.validation_id){
+                    this.canSelect = true;
                     request.get(Util.url.find_validator_byId({validation_id : entry.validation_id}),{handleAs : "json"}).then(function(data){
 
                         if(data){
@@ -105,15 +109,27 @@ define(["dojo/_base/declare", "dijit/form/ValidationTextBox", "baf/base/Util",
             }
 
             //如果存在值列表
-            if(this.valuelist_id){
+            if(this.canSelect){
 //                console.info(textbox.valuelist_id);
                 var textbox = this;
                 var bt = new Button({
                     label : Util.label.reseach,
                     onClick: function(){
-                        //打开查询界面，如果不存在查询界面，则为默认
-                        var wso = Env.wso();
-                        wso.openQForm(textbox);
+                        if(textbox.valuelist_id){
+                            //打开查询界面，如果不存在查询界面，则为默认
+                            var wso = Env.wso();
+                            wso.openQForm(textbox);
+                        }else{
+                            //如果原先设定拥有数据
+                            if(textbox.selectData){
+                                var qr = new QueryResult({
+                                    data : textbox.selectData,
+                                    column : [{name : Util.fieldLabel(textbox.name),field : "value",width : 20}],
+                                    sourceObj : textbox
+                                });
+                                qr.show();
+                            }
+                        }
                     },
                     id : Util.id.vlbutton,
                     style : "position: fixed;"

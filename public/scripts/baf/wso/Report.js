@@ -40,7 +40,7 @@ define(["dojo/_base/declare", "dijit/layout/ContentPane", "dojo/request", "baf/d
             startup : function(){
 
                 //加载系统菜单栏和工具栏
-                this.addChild(this.menuBar);
+//                this.addChild(this.menuBar);
                 this.addChild(this.toolBar);
 
                 //内容包括在此面板中

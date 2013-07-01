@@ -1,6 +1,6 @@
-define(["dojo/_base/declare", "baf/dijit/Dialog", "baf/base/Util", "dojox/grid/DataGrid",
-    "dojo/data/ItemFileReadStore", 'dojo/dom-construct'],
-    function(declare,Dialog,Util,DataGrid,ItemFileReadStore,construct){
+define(["dojo/_base/declare", "baf/dijit/Dialog", "baf/base/Util", "baf/dijit/grid/DataGrid",
+    "dojo/data/ItemFileReadStore", "dojo/dom-construct","dojox/grid/enhanced/plugins/IndirectSelection"],
+    function(declare,Dialog,Util,DataGrid,ItemFileReadStore,construct,IndirectSelection){
     /*
      *   摘要:
      *       查询结果展示
@@ -10,6 +10,8 @@ define(["dojo/_base/declare", "baf/dijit/Dialog", "baf/base/Util", "dojox/grid/D
         resultGrid : null,
         //表格字段
         column : null,
+        //数据
+        data : null,
         //获取数据的url
         url : null,
         //选择数据返回的对象
@@ -23,30 +25,41 @@ define(["dojo/_base/declare", "baf/dijit/Dialog", "baf/base/Util", "dojox/grid/D
         postCreate : function(){
 
             var d = this;
-            d.column = [
-                { name : Util.label.column_value, field : "value",width : 12},
-                { name : Util.label.column_label, field : "label",width : 22}
-            ];
-            var store = new ItemFileReadStore({
-                url : d.url
-            });
+            //默认结构
+            if(!this.column){
+                this.column = [
+                    { name : Util.label.column_value, field : "value",width : 12},
+                    { name : Util.label.column_label, field : "label",width : 22}
+                ];
+            }
+            //设置存储
+            var store = null;
+            if(this.url){
+                store = new ItemFileReadStore({
+                    url : this.url
+                });
+            }else{
+                store = new ItemFileReadStore({
+                    data : this.data
+                });
+            }
 
-//            console.info(store);
-
-            d.resultGrid = new DataGrid({
-                store: store,
-                structure : d.column,
-                //直接显示含HTML标签字段
-                escapeHTMLInData: false,
-                //也可自定义设置高度，如果不设置高度将无法正常显示
-                autoHeight : true,
-//                height : "20em",
-//                autoWidth : true,
-                rowsPerPage : 4 ,
-                id : Util.xId(Util.id.qrGrid),
-                rowSelector: '1em',
-                style : "width : 38em",
-                onRowDblClick : function(){
+            //gird属性配置
+            var gridConfig = new Object();
+            gridConfig.store = store;
+            gridConfig.structure = this.column;
+            gridConfig.id = Util.xId(Util.id.qrGrid);
+            gridConfig.height = "20em";
+            gridConfig.autoWidth = true;
+            //判断是否为多选
+            if(this.sourceObj.mulitSelect){
+                gridConfig.plugins = {indirectSelection:  {headerSelector:true}};
+                this.resultGrid = new DataGrid(gridConfig,construct.create('div'));
+            }else{
+                gridConfig.selectionMode = "single";
+                this.resultGrid = new DataGrid(gridConfig,construct.create('div'));
+                //双击事件
+                dojo.connect(this.resultGrid,"onRowDblClick",function(){
                     if(d.sourceObj){
                         //获取填写对象
                         var obj = d.sourceObj;
@@ -68,16 +81,12 @@ define(["dojo/_base/declare", "baf/dijit/Dialog", "baf/base/Util", "dojox/grid/D
                     }
                     //销毁
                     d.destroyRecursive();
-                }
-            },construct.create('div'));
-//            d.resultGrid.startup();
-            d.resultGrid.set("class",Util.id.qrGrid_class);
-            d.set("content",d.resultGrid.domNode);
+                });
+            }
+//            this.resultGrid.set("class",Util.id.qrGrid_class);
+            this.addChild(d.resultGrid);
 
-            this.inherited('postCreate', arguments);
-        },
-        show : function(){
-            this.inherited( arguments);
+            this.inherited(arguments);
         }
     });
 });

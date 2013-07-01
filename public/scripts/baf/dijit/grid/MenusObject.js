@@ -74,7 +74,10 @@ define(["dojo/_base/declare","dijit/Menu", "dijit/MenuItem", "dijit/MenuSeparato
                 disabled : o._boolean(o.config.sortDesc)
             }));
             headerMenu.addChild(new MenuItem({
-                label : Util.label.grid_headerMenu_setFilter
+                label : Util.label.grid_headerMenu_setFilter,
+                onClick : function(){
+                    o.viewer.filter.show(o.headerMenu.target.cellIndex);
+                }
             }));
 //            headerMenu.startup();
             return headerMenu;
