@@ -67,7 +67,7 @@ define(["dojo/_base/declare","dojox/layout/ContentPane","baf/base/Util","dojo/re
                                 column = o.config.column;
                             }else{
                                 //按原始顺序
-                                column = u._constructColumn(data);
+                                column = u.constructColumn(data.items);
                             }
                         }
 //                        console.info(column);
@@ -89,6 +89,18 @@ define(["dojo/_base/declare","dojox/layout/ContentPane","baf/base/Util","dojo/re
                         gridConfig.plugins.menus = menusObject;
                         gridConfig.structure = column;
 
+                        //排序配置
+                        if(o.config && o.config.tool.sort){
+                            gridConfig.plugins.nestedSorting = true;
+                        }else{
+                            gridConfig.canSort = function(){return false};
+                        }
+
+                        //导出配置
+                        if(o.config && o.config.tool.export){
+                            gridConfig.plugins.exporter = true;
+                        }
+
                         o.grid = new DataGrid(gridConfig);
 
                         //设置源数据
@@ -99,8 +111,11 @@ define(["dojo/_base/declare","dojox/layout/ContentPane","baf/base/Util","dojo/re
                         o.addChild(o.grid);
 
                         //设置过滤器
-                        o.filter = new Filter();
-                        o.filter.srcGrid = o.grid;
+                        o.filter = new Filter({
+                            srcGrid : o.grid,
+                            allItems : o.grid.getALLItems()
+                        });
+
                     });
                 });
             },
@@ -109,7 +124,7 @@ define(["dojo/_base/declare","dojox/layout/ContentPane","baf/base/Util","dojo/re
                 var o = this;
                 request.get(o.dataUrl,{handleAs : "json"}).then(function(data){
                     o.layout = null;
-                    o.grid.setStructure(u._constructColumn(data));
+                    o.grid.setStructure(u.constructColumn(data.items));
                 });
 
             },
@@ -127,8 +142,8 @@ define(["dojo/_base/declare","dojox/layout/ContentPane","baf/base/Util","dojo/re
                 return  JSON.parse(string).structure;
             },
             //打开布局窗口
-            showLayoutList : function(isNew){
-                layoutDialog.show(isNew);
+            showLayoutList : function(type){
+                layoutDialog.show(type);
             },
             //打开管理窗口
             showSetup : function(type){
@@ -141,7 +156,7 @@ define(["dojo/_base/declare","dojox/layout/ContentPane","baf/base/Util","dojo/re
             //显示行项目明细
             showDetail : function(row){
                 var dDialog = new detailDialog({
-                    title : "明细"
+                    title : Util.label.grid_detail
                 });
                 dDialog.build(row,this.grid);
                 dDialog.show();

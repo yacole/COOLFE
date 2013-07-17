@@ -62,7 +62,10 @@ define(function(){
 
         //FORM表单类型
         formType_innerForm : "innerForm",
-        formType_normalForm : "normalForm"
+        formType_normalForm : "normalForm",
+
+        //报表工具
+        rpt_setupDialog : "bafReporterViewerSetupDialog"
 
     }
 });

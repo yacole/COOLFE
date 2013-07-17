@@ -23,9 +23,10 @@ define([],function(){
         //消息栏显示最大长度，超出则被截断
         message_max_length : 20,
         //远程提交请求超时时间,单位毫秒
-        remote_timeout : 2000
+        remote_timeout : 2000,
 
-        //Grid相关配置
+        //返回结果时，说明字段阶段处理
+        rs_label_max_length : 50
 
     };
 });

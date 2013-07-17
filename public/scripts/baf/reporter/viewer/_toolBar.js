@@ -24,7 +24,7 @@ define(["dojo/_base/declare", "dojo/request", "dijit/Toolbar",
             subSumButton : null,
             srcGrid : null,
             viewer : null,
-            config : Config.toolBar,
+            config : Config.tool,
             target : null,
 
             startup : function(){
@@ -78,16 +78,18 @@ define(["dojo/_base/declare", "dojo/request", "dijit/Toolbar",
                 this.addChild(this.layoutButton);
 
                 this.exportButton = new Button({
+                    label : Util.label.grid_export,
                     onClick : function(){
                         o.srcGrid.exportToExcel();
                     },
-                    disabled : o._boolean(o.config.export),
-                    iconClass : "gridToolBarExport"
+                    disabled : o._boolean(o.config.export)
+//                    ,
+//                    iconClass : "gridToolBarExport"
                 });
                 this.addChild(this.exportButton);
 
                 this.printButton = new Button({
-                    label : "打印",
+                    label : Util.label.grid_print,
                     disabled : o._boolean(o.config.print)
                 });
                 this.addChild(this.printButton);
@@ -96,7 +98,7 @@ define(["dojo/_base/declare", "dojo/request", "dijit/Toolbar",
 
 
                 this.sortAscButton  = new Button({
-                    label : "升序",
+                    label : Util.label.grid_sortAsc,
                     onClick : function(){
                         //判断是否行被选中
                         if(o.srcGrid.isSelectColumn() && o.target){
@@ -106,12 +108,12 @@ define(["dojo/_base/declare", "dojo/request", "dijit/Toolbar",
                             o.viewer.showSetup("sort");
                         }
                     },
-                    disabled : o._boolean(o.config.sortAsc)
+                    disabled : o._boolean(o.config.sort)
                 });
                 this.addChild(this.sortAscButton);
 
                 this.sortDescButton = new Button({
-                    label : "降序",
+                    label : Util.label.grid_sortDesc,
                     onClick : function(){
                         if(o.srcGrid.isSelectColumn() && o.target){
                             o.srcGrid.setSortIndex([{attribute: o.srcGrid.getCell(o.target.cellIndex).field,descending: true}]);
@@ -120,12 +122,12 @@ define(["dojo/_base/declare", "dojo/request", "dijit/Toolbar",
                             o.viewer.showSetup("sort");
                         }
                     },
-                    disabled : o._boolean(o.config.sortDesc)
+                    disabled : o._boolean(o.config.sort)
                 });
                 this.addChild(this.sortDescButton);
 
                 this.searchButton = new Button({
-                    label : "查找",
+                    label : Util.label.grid_search,
                     disabled : o._boolean(o.config.search)
                 });
                 this.addChild(this.searchButton);
@@ -136,7 +138,7 @@ define(["dojo/_base/declare", "dojo/request", "dijit/Toolbar",
                 });
 
                 filterMenu.addChild(new MenuItem({
-                    label : "设置过滤器",
+                    label : Util.label.grid_headerMenu_setFilter,
                     onClick : function(){
                         if(o.srcGrid.isSelectColumn() && o.target){
                             o.viewer.filter.show(o.target.cellIndex);
@@ -148,7 +150,7 @@ define(["dojo/_base/declare", "dojo/request", "dijit/Toolbar",
                 }));
 
                 filterMenu.addChild(new MenuItem({
-                    label : "清除过滤器",
+                    label : Util.label.grid_headerMenu_clearFilter,
                     onClick : function(){
                         o.viewer.filter.clear();
                     },
@@ -156,7 +158,7 @@ define(["dojo/_base/declare", "dojo/request", "dijit/Toolbar",
                 }));
 
                 this.filterButton = new DropDownButton({
-                    label : "过滤",
+                    label : Util.label.grid_filter,
                     disabled : o._boolean(o.config.filter),
                     dropDown: filterMenu
                 });
@@ -166,7 +168,7 @@ define(["dojo/_base/declare", "dojo/request", "dijit/Toolbar",
                 this.addChild(new ToolbarSeparator({}));
 
                 this.detailButton = new Button({
-                    label : "明细",
+                    label : Util.label.grid_detail,
                     onClick : function(){
                         var rows = o.srcGrid.selection.getSelected();
                         if(rows.length > 0){
@@ -178,7 +180,7 @@ define(["dojo/_base/declare", "dojo/request", "dijit/Toolbar",
                 this.addChild(this.detailButton);
 
                 this.selectTextButton = new Button({
-                    label : "文本",
+                    label :  Util.label.grid_text,
                     onClick : function(){
                         o.srcGrid.set("selectable",true);
                         o.srcGrid.refresh();
@@ -197,7 +199,7 @@ define(["dojo/_base/declare", "dojo/request", "dijit/Toolbar",
                 });
 
                 this.sumButton = new DropDownButton({
-                    label : "汇总",
+                    label : Util.label.grid_summary,
                     disabled : o._boolean(o.config.sum),
                     onClick : function(){
                         var sum = 0;
@@ -206,7 +208,7 @@ define(["dojo/_base/declare", "dojo/request", "dijit/Toolbar",
 //                            o.viewer.showSummary(o.target.cellIndex);
                             sum = o.srcGrid.summaryColumn(o.target.cellIndex);
                         }
-                        var content = "汇总值： "+sum.toString();
+                        var content = Util.message.grid_summary_is + sum.toString();
                         myDialog.set("content",content);
                     },
                     dropDown: myDialog
@@ -251,6 +253,9 @@ define(["dojo/_base/declare", "dojo/request", "dijit/Toolbar",
                 //onCellContextMenu onRowContextMenu onHeaderCellContextMenu onSelectedRegionContextMenu
                 dojo.connect(grid, 'onHeaderCellClick', function(e){
                     o.target = e;
+                });
+                dojo.connect(grid, 'onSelected', function(){
+                    o.target = null;
                 });
             },
             //配置转换

@@ -15,13 +15,16 @@ define(["dojo/_base/declare","baf/dijit/Dialog","baf/base/Util","baf/base/Env",
                     var s = this.srcGrid.store;
                     var attrs =  s.getAttributes(row);
                     var column = [
-                        {name : "字段",field : "field",width : 10},
-                        {name : "内容",field : "content",width : 15}
+                        {name : Util.label.grid_field,field : "field",width : 10},
+                        {name : Util.label.grid_field_content,field : "content",width : 15}
                     ]
                     var data = {items:[]};
                     if(attrs.length > 0){
                         attrs.forEach(function(attribute){
-                            data.items.push({field : Util.fieldLabel(attribute),content : s.getValue(row,attribute)});
+                            //修复_S等元素出现
+                            if(attribute.indexOf("_") != 0){
+                                data.items.push({field : Util.fieldLabel(attribute),content : s.getValue(row,attribute)});
+                            }
                         });
                     }
                     var store = new ItemFileReadStore({

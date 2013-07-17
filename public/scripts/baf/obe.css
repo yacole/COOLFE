@@ -90,3 +90,9 @@ hr.spacer {
     height: 20px;
     text-align: center;
 }
+
+/*报表工具*/
+.bafReporterViewerSetupDialog{
+    width:45em;
+    height:30em
+}

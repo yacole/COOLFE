@@ -142,6 +142,13 @@ define(["dojo/_base/declare", "dijit/form/ValidationTextBox", "baf/base/Util",
         //聚焦时如果存在值集，显示
         onFocus : function(){
             this.showQbutton();
+        },
+        destroyRecursive : function(){
+            var vlbt = dijit.byId(Util.id.vlbutton);
+            if(vlbt){
+                vlbt.destroyRecursive();
+            }
+            this.inherited(arguments);
         }
 
     });

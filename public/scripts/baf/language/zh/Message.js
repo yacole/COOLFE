@@ -9,6 +9,7 @@ define(function(){
         warnning_confirm_closeWso : "部分输入数据未保存，是否确定退出？",
         error_wsotab_openMax : "会话已达到最大值！请关闭其他会话，再尝试打开！",
         info_saveLayout_isRecover : "是否覆盖当前布局？",
-        info_sureDelete : "是否确定删除？"
+        info_sureDelete : "是否确定删除？",
+        grid_summary_is : "汇总值："
     }
 });

@@ -1,6 +1,7 @@
 define(["dojo/_base/declare", "baf/dijit/Dialog", "baf/base/Util", "baf/dijit/grid/DataGrid",
-    "dojo/data/ItemFileReadStore", "dojo/dom-construct","dojox/grid/enhanced/plugins/IndirectSelection"],
-    function(declare,Dialog,Util,DataGrid,ItemFileReadStore,construct,IndirectSelection){
+    "dojo/data/ItemFileReadStore", "dojo/dom-construct","dojox/grid/enhanced/plugins/IndirectSelection",
+    "baf/dijit/form/Button"],
+    function(declare,Dialog,Util,DataGrid,ItemFileReadStore,construct,IndirectSelection,Button){
     /*
      *   摘要:
      *       查询结果展示
@@ -61,19 +62,18 @@ define(["dojo/_base/declare", "baf/dijit/Dialog", "baf/base/Util", "baf/dijit/gr
                 //双击事件
                 dojo.connect(this.resultGrid,"onRowDblClick",function(){
                     if(d.sourceObj){
-                        //获取填写对象
-                        var obj = d.sourceObj;
                         //获取双击目标
                         var items = this.selection.getSelected();
-                        if(items.length) {
+                        if(items.length > 0) {
                             var selectedItem = items[0];
-                            if(selectedItem !== null){
-                                obj.set("value",selectedItem.value);
-                                obj.set("key",selectedItem.key);
-                                //填充说明栏，如果存在
-                                var qrs = dojo.query("span[for="+obj.name+"]", obj.getParent().domNode);
-                                if(qrs.length > 0){
-                                    qrs[0].innerHTML = selectedItem.label;
+                            if(selectedItem){
+                                d.sourceObj.set("value",selectedItem.value.toString());
+                                if(selectedItem.label){
+                                    //充说明栏，如果存在
+                                    var qrs = dojo.query("span[for="+d.sourceObj.name+"]", d.sourceObj.getParent().domNode);
+                                    if(qrs.length > 0){
+                                        qrs[0].innerHTML = selectedItem.label.toString();
+                                    }
                                 }
                             } /* end if */
 
@@ -84,8 +84,39 @@ define(["dojo/_base/declare", "baf/dijit/Dialog", "baf/base/Util", "baf/dijit/gr
                 });
             }
 //            this.resultGrid.set("class",Util.id.qrGrid_class);
-            this.addChild(d.resultGrid);
+            this.addChild(this.resultGrid);
 
+            var bt = new Button({
+                label : "确认",
+                name : "rsConfirm",
+                onClick : function(){
+                    var selectItems = d.resultGrid.selection.getSelected();
+                    if(selectItems.length > 0){
+                        //输出字符串数组
+                        var values = [];
+                        var labels = [];
+                        selectItems.forEach(function(selectedItem){
+                            if(selectedItem){
+                                values.push(selectedItem.value.toString());
+                                if(selectedItem.label){
+                                    labels.push(selectedItem.label.toString());
+                                }
+                            }
+                        });
+                        d.sourceObj.set("value",values.join(","));
+                        if(labels.length > 0){
+                            //填充说明栏，如果存在
+                            var qrs = dojo.query("span[for="+d.sourceObj.name+"]", d.sourceObj.getParent().domNode);
+                            if(qrs.length > 0){
+                                qrs[0].innerHTML = labels.join(",").substring(0,Util.config.rs_label_max_length);
+                            }
+                        }
+                        //隐藏
+                        d.hide();
+                    }
+                }
+            });
+            this.addChild(bt);
             this.inherited(arguments);
         }
     });

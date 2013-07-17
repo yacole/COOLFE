@@ -22,7 +22,7 @@ define([],function(){
             //插件
             plugins : {
                 //导出
-                exporter: true,
+//                exporter: true,
                 //选择器
                 selector: {row : "single",col : "single",cell : "disabled"},
                 //拖拽
@@ -46,25 +46,21 @@ define([],function(){
                     maxPageStep: 4,
                     /*position of the pagination bar*/
                     position: "bottom"
-                },
+                }
                 //排序
-                nestedSorting: true
+//                nestedSorting: true
                 //勾选框
 //                indirectSelection:  {headerSelector:true}
             }
 //                    rowSelector: '20px',
         },
-        toolBar : {
+        tool : {
             //布局管理：选择，保存，管理，false时可作修改（无法保存）
             layout : true,
             //导出按钮
-            export : true,
+            export : false,
             //文本选择按钮
             text : true,
-            //排序：升序按钮
-            sortAsc : true,
-            //排序：降序按钮
-            sortDesc : true,
             //明细显示按钮
             detail : true,
             //打印
@@ -73,16 +69,11 @@ define([],function(){
             search : true,
             //汇总
             sum : true,
+            //排序
+            sort : true,
             //过滤器
             filter : true
-        },
-       gridMenu : {
-            //头部菜单：升序
-            sortAsc : true,
-            //头部菜单：降序
-            sortDesc : true,
-           //过滤器
-            filter : true
         }
+
     }
 });

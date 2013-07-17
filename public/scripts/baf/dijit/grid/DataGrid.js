@@ -17,7 +17,7 @@ function (declare,Util,EnhancedGrid,iframe){
             this.store.close();
             this.setStore(s);
         },
-        //获取当前列的列表,sortInfo:排序信息,sumInfo:汇总信息
+        //获取当前列的列表,sortInfo:排序信息
         getColumns: function(sortInfo){
             var structure = [];
             var o = this;

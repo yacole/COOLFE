@@ -1,14 +1,14 @@
-define(["dojo/_base/declare"],
-    function(declare){
+define(["dojo/_base/declare","baf/reporter/viewer/filter/_action"],
+    function(declare,action){
         /*
          *   摘要:
          *             参数对象
          */
         return declare("",[],{
             //动作：= ; != ; > ; < ; LIKE ; NOT LIKE ;IN ; NOT IN ;
-            action : 'IN',
+            action : action.IN,
             //列
-            cell : null,
+            field : null,
             //参数值
             value : null,
             //参数位置

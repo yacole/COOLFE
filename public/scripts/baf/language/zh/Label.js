@@ -44,7 +44,7 @@ define(function(){
         rightmenu_tab_closeright : "关闭右侧标签页",
         rightmenu_tab_rollback : "重新打开关闭的标签页",
 
-        //grid右键菜单相关
+        //grid工具栏和右键菜单
         grid_rowMenu_showDetail : "显示详细信息",
         grid_menu_exportToExcel : "导出为EXCEL",
         grid_headerMenu_hidden : "隐藏",
@@ -54,12 +54,50 @@ define(function(){
         grid_headerMenu_ascOrder : "按升序排列",
         grid_headerMenu_descOrder : "按降序排列",
         grid_headerMenu_setFilter : "设置过滤器",
+        grid_headerMenu_clearFilter : "清除过滤器",
         grid_layout : "布局",
         grid_layout_select : "选择布局",
         grid_layout_edit : "更改布局",
         grid_layout_save : "保存布局",
         grid_layout_manage : "管理布局",
-        grid_layout_clear : "全部清空"
+        grid_layout_clear : "全部清空",
+        grid_filter : "过滤器",
+        grid_export : "导出",
+        grid_print : "打印",
+        grid_sortAsc : "升序",
+        grid_sortDesc : "降序",
+        grid_search : "查找",
+        grid_detail : "明细",
+        grid_text : "文本",
+        grid_summary : "汇总",
+        grid_field : "字段",
+        grid_field_content : "内容",
+
+        //报表设置界面
+        grid_setup_currentParameter : "现有参数",
+        grid_setup_formula : "公式",
+        grid_setup_canplus : "可添加",
+        grid_setup_sort : "排序设置",
+        grid_setup_sortColumn : "排序列",
+        grid_setup_column : "列显示",
+        grid_setup_currentColumn : "列显示",
+
+
+        //报表过滤器
+        filter_action_IN : "在..中",
+        filter_action_NOT_IN : "不在..中",
+        filter_action_EQ : "等于",
+        filter_action_NE : "不等于",
+        filter_action_GT : "大于",
+        filter_action_GE : "大于等于",
+        filter_action_LT : "小于",
+        filter_action_LE : "小于等于",
+        filter_action_HE : "开头是",
+        filter_action_HNE : "开头不是",
+        filter_action_TE : "结尾是",
+        filter_action_TNE : "结尾不是",
+        filter_action_LIKE : "包含",
+        filter_action_NOT_LIKE : "不包含"
 
     }
 });

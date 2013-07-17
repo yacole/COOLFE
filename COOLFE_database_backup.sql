@@ -181,13 +181,16 @@ CREATE TABLE `bc_grid_layouts_tl` (
   `structure` text NOT NULL,
   PRIMARY KEY (`layout_id`) USING BTREE,
   UNIQUE KEY `bc_grid_layouts_U01` (`program_id`,`layout_name`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='报表布局信息表';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='报表布局信息表';
 
 --
 -- Dumping data for table `bc_grid_layouts_tl`
 --
 
 /*!40000 ALTER TABLE `bc_grid_layouts_tl` DISABLE KEYS */;
+INSERT INTO `bc_grid_layouts_tl` (`layout_id`,`program_id`,`layout_name`,`description`,`creation_date`,`created_by`,`last_update_date`,`last_updated_by`,`default_flag`,`layout_type`,`structure`) VALUES 
+ (1,5,'G_01','全局布局默认',1374039347,1,1374039347,1,1,'01','[{\"cells\":[[{\"width\":\"8\",\"field\":\"field_name\",\"name\":\"field_name\"},{\"width\":\"8\",\"field\":\"field_size\",\"name\":\"field_size\"},{\"width\":\"8\",\"field\":\"addfield_flag\",\"name\":\"addfield_flag\"},{\"width\":\"8\",\"field\":\"label\",\"name\":\"label\"},{\"width\":\"8\",\"field\":\"required_flag\",\"name\":\"required_flag\"}]],\"noscroll\":false},{\"cells\":[[{\"width\":\"8\",\"field\":\"disabled_flag\",\"name\":\"disabled_flag\"},{\"width\":\"8\",\"field\":\"hidden_flag\",\"name\":\"hidden_flag\"},{\"width\":\"8\",\"field\":\"default_value\",\"name\":\"default_value\"},{\"width\":\"8\",\"field\":\"valuelist_id\",\"name\":\"valuelist_id\"},{\"width\":\"8\",\"field\":\"validation_id\",\"name\":\"validation_id\"},{\"width\":\"8\",\"field\":\"creation_date\",\"name\":\"creation_date\"},{\"width\":\"8\",\"field\":\"created_by\",\"name\":\"created_by\"}]]}]'),
+ (2,5,'P_01','个人布局01',1374039465,1,1374039465,1,1,'02','[{\"cells\":[[{\"width\":\"8\",\"field\":\"field_name\",\"name\":\"field_name\"},{\"width\":\"8\",\"field\":\"field_size\",\"name\":\"field_size\"},{\"width\":\"8\",\"field\":\"addfield_flag\",\"name\":\"addfield_flag\"},{\"width\":\"8\",\"field\":\"label\",\"name\":\"label\"},{\"width\":\"8\",\"field\":\"help_text\",\"name\":\"help_text\"},{\"width\":\"8\",\"field\":\"required_flag\",\"name\":\"required_flag\"},{\"width\":\"8\",\"field\":\"disabled_flag\",\"name\":\"disabled_flag\"},{\"width\":\"8\",\"field\":\"hidden_flag\",\"name\":\"hidden_flag\"},{\"width\":\"8\",\"field\":\"default_value\",\"name\":\"default_value\"},{\"width\":\"8\",\"field\":\"valuelist_id\",\"name\":\"valuelist_id\"},{\"width\":\"8\",\"field\":\"validation_id\",\"name\":\"validation_id\"},{\"width\":\"8\",\"field\":\"creation_date\",\"name\":\"creation_date\"},{\"width\":\"8\",\"field\":\"created_by\",\"name\":\"created_by\"},{\"width\":\"8\",\"field\":\"last_update_date\",\"name\":\"last_update_date\"},{\"width\":\"8\",\"field\":\"last_updated_by\",\"name\":\"last_updated_by\"},{\"width\":\"8\",\"field\":\"validation_code\",\"name\":\"validation_code\"},{\"width\":\"8\",\"field\":\"valuelist_name\",\"name\":\"valuelist_name\"},{\"width\":\"8\",\"field\":\"valuelist_desc\",\"name\":\"valuelist_desc\"},{\"width\":\"8\",\"field\":\"validation_desc\",\"name\":\"validation_desc\"}]]}]');
 /*!40000 ALTER TABLE `bc_grid_layouts_tl` ENABLE KEYS */;
 
 

@@ -6,7 +6,7 @@ define(["dojo/_base/declare","baf/base/Util","baf/base/Env","dojo/request",
             srcObj : null,
 
             constructor : function(args){
-                args.title = "列显示";
+                args.title = Util.label.grid_setup_column;
                 args.href = Util.url.localUrl("reporter/viewer/setup/_structure.html");
                 this.inherited(arguments);
             },
@@ -15,96 +15,93 @@ define(["dojo/_base/declare","baf/base/Util","baf/base/Env","dojo/request",
                 var o = Env.reportGrid();
                 var srcObj = this.srcObj;
 
-                request.get(o.dataUrl,{handleAs : "json"}).then(function(data){
-                    var currentStructure = o.grid.getColumns();
+                var currentStructure = o.grid.getColumns();
 
-                    //定义左侧grid
-                    var ldata = u._dataFromStructure(currentStructure);
-                    var lstore = new ItemFileWriteStore({
-                        data : ldata
-                    });
-
-                    var lcolumn = [
-                        { name :"现有列", field : "name",width : 13}
-                    ];
-                    var gridLeft = new DataGrid({
-                        store: lstore,
-                        structure : lcolumn,
-                        //直接显示含HTML标签字段
-                        escapeHTMLInData: false,
-                        onRowDblClick : function(e){
-                            u._move(lstore,rstore, gridLeft.getItem(e.rowIndex));
-                        },
-                        canSort : function(){
-                            return false;
-                        }
-                    });
-                    dojo.byId("s_gridLeft").appendChild(gridLeft.domNode);
-                    gridLeft.startup();
-
-                    //定义右侧grid
-                    var rcolumn = [{ name :"可添加列", field : "name",width : 13}];
-                    var rdata = u._dataFromStructure(u._leftData(u._constructColumn(data),currentStructure));
-
-                    var rstore = new ItemFileWriteStore({
-                        data : rdata
-                    });
-                    var gridRight = new DataGrid({
-                        store: rstore,
-                        structure : rcolumn,
-                        //直接显示含HTML标签字段
-                        escapeHTMLInData: false,
-                        onRowDblClick : function(e){
-                            u._move(rstore,lstore, gridRight.getItem(e.rowIndex));
-                        }
-                    });
-                    dojo.byId("s_gridRight").appendChild(gridRight.domNode);
-                    gridRight.startup();
-
-                    //按钮
-                    var btToleft = new Button({
-                        label : "<<",
-                        onClick : function(){
-                            var items = gridRight.selection.getSelected();
-                            if(items.length > 0){
-                                items.forEach(function(item){
-                                    u._move(rstore,lstore,item);
-                                });
-                            }
-                        }
-                    });
-                    dojo.byId("s_btToLeft").appendChild(btToleft.domNode);
-                    btToleft.startup();
-
-                    //按钮
-                    var btToright = new Button({
-                        label : ">>",
-                        onClick : function(){
-                            var items = gridLeft.selection.getSelected();
-                            if(items.length > 0){
-                                items.forEach(function(item){
-                                    u._move(lstore,rstore,item);
-                                });
-                            }
-                        },
-                        canSort : function(){
-                            return false;
-                        }
-                    });
-                    dojo.byId("s_btToright").appendChild(btToright.domNode);
-                    btToright.startup();
-
-                    var submitButton = new Button({
-                        label : "确认",
-                        onClick : function(){
-                            srcObj.hide();
-                            o.grid.setStructure(u._dataToStructure(gridLeft.store._arrayOfAllItems));
-                        }
-                    });
-                    dojo.byId("s_submitButton").appendChild(submitButton.domNode);
-                    submitButton.startup();
-
+                //定义左侧grid
+                var ldata = u.dataFromStructure(currentStructure);
+                var lstore = new ItemFileWriteStore({
+                    data : ldata
                 });
+
+                var lcolumn = [
+                    { name : Util.label.grid_setup_currentColumn, field : "name",width : 13}
+                ];
+                var gridLeft = new DataGrid({
+                    store: lstore,
+                    structure : lcolumn,
+                    //直接显示含HTML标签字段
+                    escapeHTMLInData: false,
+                    onRowDblClick : function(e){
+                        u.move(lstore,rstore, gridLeft.getItem(e.rowIndex));
+                    },
+                    canSort : function(){
+                        return false;
+                    }
+                });
+                dojo.byId("s_gridLeft").appendChild(gridLeft.domNode);
+                gridLeft.startup();
+
+                //定义右侧grid
+                var rcolumn = [{ name : Util.label.grid_setup_canplus, field : "name",width : 13}];
+                var rdata = u.dataFromStructure(u.leftData(u.constructColumn(o.grid.getALLItems()),currentStructure));
+
+                var rstore = new ItemFileWriteStore({
+                    data : rdata
+                });
+                var gridRight = new DataGrid({
+                    store: rstore,
+                    structure : rcolumn,
+                    //直接显示含HTML标签字段
+                    escapeHTMLInData: false,
+                    onRowDblClick : function(e){
+                        u.move(rstore,lstore, gridRight.getItem(e.rowIndex));
+                    }
+                });
+                dojo.byId("s_gridRight").appendChild(gridRight.domNode);
+                gridRight.startup();
+
+                //按钮
+                var btToleft = new Button({
+                    label : "<<",
+                    onClick : function(){
+                        var items = gridRight.selection.getSelected();
+                        if(items.length > 0){
+                            items.forEach(function(item){
+                                u.move(rstore,lstore,item);
+                            });
+                        }
+                    }
+                });
+                dojo.byId("s_btToLeft").appendChild(btToleft.domNode);
+                btToleft.startup();
+
+                //按钮
+                var btToright = new Button({
+                    label : ">>",
+                    onClick : function(){
+                        var items = gridLeft.selection.getSelected();
+                        if(items.length > 0){
+                            items.forEach(function(item){
+                                u.move(lstore,rstore,item);
+                            });
+                        }
+                    },
+                    canSort : function(){
+                        return false;
+                    }
+                });
+                dojo.byId("s_btToright").appendChild(btToright.domNode);
+                btToright.startup();
+
+                var submitButton = new Button({
+                    label : Util.label.button_confirm,
+                    onClick : function(){
+                        srcObj.hide();
+                        o.grid.setStructure(u.dataToStructure(gridLeft.getALLItems()));
+                    }
+                });
+                dojo.byId("s_submitButton").appendChild(submitButton.domNode);
+                submitButton.startup();
             }
 
         });

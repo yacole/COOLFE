@@ -14,7 +14,7 @@ define(["dojo/_base/declare","dijit/Menu", "dijit/MenuItem", "dijit/MenuSeparato
         cellMenu: null,
         selectedRegionMenu: null,
         isDefault : true,
-        config : Config.gridMenu,
+        config : Config.tool,
 
         startup : function(){
             this.headerMenu = this._headerMenu();
@@ -62,22 +62,25 @@ define(["dojo/_base/declare","dijit/Menu", "dijit/MenuItem", "dijit/MenuSeparato
                 onClick : function(){
                     var cell = o.srcGrid.getCell(o.headerMenu.target.cellIndex);
                     o.srcGrid.setSortIndex([{attribute: cell.field,descending: false}]);
+                    o.srcGrid.refresh();
                 },
-                disabled : o._boolean(o.config.sortAsc)
+                disabled : o._boolean(o.config.sort)
             }));
             headerMenu.addChild(new MenuItem({
                 label : Util.label.grid_headerMenu_descOrder,
                 onClick : function(){
                     var cell = o.srcGrid.getCell(o.headerMenu.target.cellIndex);
                     o.srcGrid.setSortIndex([{attribute: cell.field,descending: true}]);
+                    o.srcGrid.refresh();
                 },
-                disabled : o._boolean(o.config.sortDesc)
+                disabled : o._boolean(o.config.sort)
             }));
             headerMenu.addChild(new MenuItem({
                 label : Util.label.grid_headerMenu_setFilter,
                 onClick : function(){
                     o.viewer.filter.show(o.headerMenu.target.cellIndex);
-                }
+                },
+                disabled : o._boolean(o.config.filter)
             }));
 //            headerMenu.startup();
             return headerMenu;
@@ -124,13 +127,15 @@ define(["dojo/_base/declare","dijit/Menu", "dijit/MenuItem", "dijit/MenuSeparato
         },
         //选择块右键菜单
         _cellMenu : function(){
+            var o = this;
             var cellMenu = new Menu();
             cellMenu.addChild(new MenuItem({
                 label : Util.label.grid_menu_exportToExcel,
                 onClick : function(){
                     //操作对象是否被赋值
                     o.srcGrid.exportToExcel();
-                }
+                },
+                disabled :  o._boolean(o.config.export)
             }));
 //            cellMenu.startup();
             return cellMenu;
