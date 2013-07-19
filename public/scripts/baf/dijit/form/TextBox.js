@@ -32,12 +32,13 @@ define(["dojo/_base/declare", "dijit/form/ValidationTextBox", "baf/base/Util",
             args.trim = true;
 //            this.uppercase = true;
 
-            if(!args.id){
-                args.id = Util.xId(args.name);
-            }else{
-                args.id = Util.xId(args.id);
+            if(args.name != undefined || args.id != undefined ){
+                if(!args.id){
+                    args.id = Util.xId(args.name);
+                }else{
+                    args.id = Util.xId(args.id);
+                }
             }
-
         },
 
         startup : function(){

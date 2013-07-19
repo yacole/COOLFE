@@ -251,7 +251,14 @@ function (declare,Util,EnhancedGrid,iframe){
         getALLItems : function(){
             //排除汇总行
             //do something...
-            return this.store._arrayOfAllItems;
+            var items = this.store._arrayOfAllItems;
+            //删除NULL行
+            for(var i=0;i<items.length;i++){
+                if(items[i] == null){
+                    items.splice(i,1);
+                }
+            }
+            return items;
         },
         //当前选择是否为列
         isSelectColumn : function(){
@@ -281,23 +288,6 @@ function (declare,Util,EnhancedGrid,iframe){
                 rs = 0;
             }
             return rs;
-        },
-        //获取单列数据
-        columnData : function(cellIndex){
-            var data = {items:[]};
-            var items = this.getALLItems();
-            var tmp = [];
-            var attr = this.getCell(cellIndex).field.toString();
-            if(items.length > 0){
-                items.forEach(function(item){
-                    tmp.push(item[attr].toString());
-                });
-                //排除重复性
-                Util.unique(tmp).forEach(function(item){
-                    data.items.push({value : item});
-                });
-            }
-            return data;
         }
     });
 });

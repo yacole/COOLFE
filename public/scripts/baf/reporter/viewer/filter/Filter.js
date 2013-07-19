@@ -1,8 +1,9 @@
 define(["dojo/_base/declare","dojo/request","baf/dijit/Dialog",
     "baf/reporter/viewer/filter/_parameter","baf/dijit/form/TextBox","baf/dijit/form/Button",
     "baf/base/Util","dojo/data/ItemFileWriteStore","dijit/form/Select","baf/reporter/viewer/filter/_action",
-    "baf/reporter/viewer/setup/_util"],
-    function(declare,request,Dialog,Parameter,TextBox,Button,Util,ItemFileWriteStore,Select,action,u){
+    "baf/reporter/viewer/setup/_util","baf/reporter/viewer/filter/_validator","baf/reporter/viewer/_string",
+    "baf/dijit/form/DateTextBox"],
+    function(declare,request,Dialog,Parameter,TextBox,Button,Util,ItemFileWriteStore,Select,action,u,validator,string,DateTextBox){
         /*
          *   摘要:
          *             过滤器，参数列表，用于viewer
@@ -21,7 +22,9 @@ define(["dojo/_base/declare","dojo/request","baf/dijit/Dialog",
             _createParameterBycellId : function(cellIndex){
                 if(cellIndex != undefined){
                     var cell = this.srcGrid.getCell(cellIndex);
-                    if(!this._hasParameter(cell.field)){
+//                    console.info(cell.field);
+//                    console.info(this._hasParameter(cell.field,undefined,false));
+                    if(!this._hasParameter(cell.field,undefined,false)){
                         //选择了一列
                         var p = new Parameter();
                         //默认action
@@ -31,19 +34,13 @@ define(["dojo/_base/declare","dojo/request","baf/dijit/Dialog",
                     }
                 }
             },
-            createParameter : function(field,actionName){
-                if(!this._hasParameter(field)){
-                    //选择了一列
-                    var p = new Parameter();
-                    var options = u.actionOptions();
-                    options.forEach(function(op){
-                        if(op.label == actionName){
-                            p.action = op.action;
-                        }
-                    });
-                    p.field = field;
-                    this.parameters.push(p);
-                }
+            createParameter : function(field,actionName,value,focus){
+                var p = new Parameter();
+                p.action = this.getActionByName(actionName);
+                p.field = field;
+                p.value = value;
+                p.focus = focus;
+                this.parameters.push(p);
             },
             //删除某个字段的过滤
             destroyParameter : function(field){
@@ -55,10 +52,33 @@ define(["dojo/_base/declare","dojo/request","baf/dijit/Dialog",
                     }
                 }
             },
+            //获取某个参数
+            getParameter : function(field,action,focus){
+                var rtp = null;
+                focus = (focus == undefined ? false : true);
+                if(this.parameters.length > 0){
+                    for(var i=0;i<this.parameters.length;i++){
+                        var p = this.parameters[i];
+                        if(action == undefined){
+                            if(p.field == field && p.focus == focus){
+                                rtp  = this.parameters[i];
+                            }
+                        }else{
+                            if(p.field == field && p.action == action  && p.focus == focus){
+                                rtp  = this.parameters[i];
+                            }
+                        }
+                    }
+                }
+                return rtp;
+            },
             //清除过滤器
             clear : function(){
-                this.parameters = [];
+                this.clearParameters();
                 this._setGridStore(this.allItems);
+            },
+            clearParameters : function(){
+                this.parameters = [];
             },
             //过滤器参数选择界面
             show : function(cellIndex){
@@ -88,7 +108,7 @@ define(["dojo/_base/declare","dojo/request","baf/dijit/Dialog",
                                 //创建一个下拉菜单，用于选择计算符
                                 var options = u.actionOptions();
                                 options.forEach(function(op){
-                                    if(op.value == p.action.name){
+                                    if(op.value == p.action.description){
                                         op.selected = true;
                                     }
                                 });
@@ -96,7 +116,7 @@ define(["dojo/_base/declare","dojo/request","baf/dijit/Dialog",
                                 var s = new Select({
                                     options : options,
                                     onChange : function(){
-                                        p.action = o._getActionByName(this.value);
+                                        p.action = o.getActionByName(this.value);
                                         //刷新输入框
                                         o._buildInputObj(p);
                                         td3.appendChild(p.inputObj.domNode);
@@ -138,48 +158,47 @@ define(["dojo/_base/declare","dojo/request","baf/dijit/Dialog",
                     p.inputObj.destroyRecursive();
                 }
                 var inputParam = new Object();
-                inputParam.name =  p.field;
+//                inputParam.name =  p.field;
                 inputParam.value =  p.value;
-                //除了LIKE和NOT LIKE不能选择
-                if(p.action != action.LIKE && p.action != action.NOT_LIKE && p.action != action.HE
-                    && p.action != action.HNE && p.action != action.TE && p.action != action.TNE){
-                    inputParam.canSelect = true;
-                    inputParam.selectData = this._columnData(p.field);
-                    switch(p.action){
-                        case action.IN :
-                            inputParam.mulitSelect = true;
-                            break;
-                        case action.NOT_IN:
-                            inputParam.mulitSelect = true;
-                            break;
-                        default :
-                            inputParam.mulitSelect = false;
-                            break;
-                    }
-                }
-                p.inputObj = new TextBox(inputParam);
-            },
-            //是否包含参数
-            _hasParameter : function(field){
-                var rt = false;
-                if(this.parameters.length > 0){
-                    for(var i=0;i<this.parameters.length;i++){
-                        if(this.parameters[i].field == field){
-                            rt = true;
+                //判断是否为日期，如果为日期字段则生成日期选择框
+                if(string.isDateStr(validator.notNULLcolumn(this.allItems, p.field))){
+                    p.inputObj = new DateTextBox({
+                        constraints: {datePattern: "yyyy-MM-dd"},
+                        value : p.value
+                    });
+                }else{
+                    //除了LIKE和NOT LIKE不能选择
+                    if(p.action != action.LIKE && p.action != action.NOT_LIKE && p.action != action.HE
+                        && p.action != action.HNE && p.action != action.TE && p.action != action.TNE){
+                        inputParam.canSelect = true;
+                        inputParam.selectData = this._columnData(p.field);
+                        switch(p.action){
+                            case action.IN :
+                                inputParam.mulitSelect = true;
+                                break;
+                            case action.NOT_IN:
+                                inputParam.mulitSelect = true;
+                                break;
+                            default :
+                                inputParam.mulitSelect = false;
+                                break;
                         }
                     }
+                    p.inputObj = new TextBox(inputParam);
                 }
-                return rt;
+
+            },
+            //是否包含参数
+            _hasParameter : function(field,action,focus){
+//                console.info(this.getParameter(field,action,focus));
+                return (this.getParameter(field,action,focus) != null);
             },
             //全部激活
             _focusParameters : function(){
                 if(this.parameters.length > 0){
                     this.parameters.forEach(function(p){
-                        //获取参数对应的对象
-                        var obj = Util.dijit_byId(p.field);
-                        if(obj){
-                            p.value = obj.value;
-                        }
+                        //dojo.date.locale.format(dateBox.value, {datePattern: "yyyy-MM-dd", selector: "date"})
+                        p.value = p.inputObj.displayedValue;
                         p.focus = true;
                     });
                 }
@@ -205,173 +224,7 @@ define(["dojo/_base/declare","dojo/request","baf/dijit/Dialog",
             },
             //设置过滤器
             setFilter : function(){
-                var newItems = [];
-                if(this.allItems.length > 0 && this.parameters.length > 0){
-                    for(var i=0;i<this.allItems.length;i++){
-                        var item = this.allItems[i];
-                        //返回的行数据
-                        var rtItem = new Object();
-                        //通过所有参数过滤
-                        this.parameters.forEach(function(p){
-                            switch(p.action){
-                                case action.EQ:
-                                    if(item[p.field].toString() == p.value){
-                                        rtItem = item;
-                                    }else{
-                                        rtItem = null;
-                                    }
-                                    break;
-                                case action.NE:
-                                    if(item[p.field].toString() != p.value){
-                                        rtItem = item;
-                                    }else{
-                                        rtItem = null;
-                                    }
-                                    break;
-                                case action.IN:
-                                    var values = p.value.split(",");
-                                    if(values.length > 0){
-                                        var rtflag = false;
-                                        for(var i=0;i<values.length;i++){
-                                            if(item[p.field].toString() == values[i]){
-                                                rtflag = true;
-                                            }
-                                        }
-                                        //查找结果
-                                        if(rtflag){
-                                            rtItem = item;
-                                        }else{
-                                            rtItem = null;
-                                        }
-                                    }else{
-                                        if(item[p.field].toString() != p.value){
-                                            rtItem = item;
-                                        }else{
-                                            rtItem = null;
-                                        }
-                                    }
-
-                                    break;
-                                case action.NOT_IN:
-                                    var values = p.value.split(",");
-                                    if(values.length > 0){
-                                        var rtflag = false;
-                                        for(var i=0;i<values.length;i++){
-                                            if(item[p.field].toString() == values[i]){
-                                                rtflag = true;
-                                            }
-                                        }
-                                        //查找结果
-                                        if(rtflag){
-                                            rtItem = null;
-                                        }else{
-                                            rtItem = item;
-                                        }
-                                    }else{
-                                        if(item[p.field].toString() != p.value){
-                                            rtItem = item;
-                                        }else{
-                                            rtItem = null;
-                                        }
-                                    }
-                                    break;
-
-                                case action.GT:
-                                    if(item[p.field].toString() > p.value){
-                                        rtItem = item;
-                                    }else{
-                                        rtItem = null;
-                                    }
-                                    break;
-                                case action.GE:
-                                    if(item[p.field].toString() >= p.value){
-                                        rtItem = item;
-                                    }else{
-                                        rtItem = null;
-                                    }
-                                    break;
-                                case action.LT:
-                                    if(item[p.field].toString() < p.value){
-                                        rtItem = item;
-                                    }else{
-                                        rtItem = null;
-                                    }
-                                    break;
-                                case action.LE:
-                                    if(item[p.field].toString() <= p.value){
-                                        rtItem = item;
-                                    }else{
-                                        rtItem = null;
-                                    }
-                                    break;
-                                case action.HE:
-                                    if(item[p.field].toString().indexOf(p.value) == 0){
-                                        rtItem = item;
-                                    }else{
-                                        rtItem = null;
-                                    }
-                                    break;
-                                case action.HNE:
-                                    if(item[p.field].toString().indexOf(p.value) != 0){
-                                        rtItem = item;
-                                    }else{
-                                        rtItem = null;
-                                    }
-                                    break;
-                                case action.TE:
-                                    var str = item[p.field].toString();
-                                    var wlen = p.value.length;
-                                    if(wlen > str.length){
-                                        rtItem = null;
-                                    }else{
-                                        var s = str.substr(str.length - wlen,wlen);
-                                        if(s == p.value){
-                                            rtItem = item;
-                                        }else{
-                                            rtItem = null;
-                                        }
-                                    }
-                                    break;
-                                case action.TNE:
-                                    var str = item[p.field].toString();
-                                    var wlen = p.value.length;
-                                    if(wlen > str.length){
-                                        rtItem = null;
-                                    }else{
-                                        var s = str.substr(str.length - wlen,wlen);
-                                        if(s != p.value){
-                                            rtItem = item;
-                                        }else{
-                                            rtItem = null;
-                                        }
-                                    }
-                                    break;
-                                case action.LIKE:
-                                    if(item[p.field].toString().indexOf(p.value) >= 0){
-                                        rtItem = item;
-                                    }else{
-                                        rtItem = null;
-                                    }
-                                    break;
-                                case action.NOT_LIKE:
-                                    if(item[p.field].toString().indexOf(p.value) < 0){
-                                        rtItem = item;
-                                    }else{
-                                        rtItem = null;
-                                    }
-                                    break;
-                                default:
-                                    rtItem = null;
-                                    break;
-                            }
-
-                       });//foreach
-                        if(rtItem){
-                            newItems.push(rtItem);
-                            rtItem = null;
-                        }
-                   }//for
-                }//if
+                var newItems = validator.validate(this.allItems,this.parameters);
                 this._setGridStore(newItems);
             },
             //获取单列的数据
@@ -383,6 +236,8 @@ define(["dojo/_base/declare","dojo/request","baf/dijit/Dialog",
                     items.forEach(function(item){
                         tmp.push(item[field].toString());
                     });
+                    //排序
+                    tmp.sort();
                     //排除重复性
                     Util.unique(tmp).forEach(function(item){
                         data.items.push({value : item});
@@ -391,7 +246,7 @@ define(["dojo/_base/declare","dojo/request","baf/dijit/Dialog",
                 return data;
             },
             //根据名称查找Action
-            _getActionByName : function(name){
+            getActionByName : function(name){
                 var rtAction = new Object();
                 u.actionOptions().forEach(function(e){
                     if(e.value == name){

@@ -10,6 +10,8 @@ define(["baf/base/Util","baf/reporter/viewer/filter/_action"],function(Util,acti
                         var s = new Object();
                         s.actionName = e.action.description.toString();
                         s.field = e.field;
+                        s.focus = true;
+                        s.value = (e.value == undefined ? "" : e.value);
                         data.items.push(s);
                     });
                 }else{
@@ -103,27 +105,32 @@ define(["baf/base/Util","baf/reporter/viewer/filter/_action"],function(Util,acti
             }
             if(filterInfo){
                 newItem.actionName = item.actionName;
+                newItem.focus = true;
+                newItem.value = "";
             }
             directStore.newItem(newItem);
-            sourceStore.deleteItem(item);
+            //过滤器不删除右侧
+            if(!filterInfo){
+                sourceStore.deleteItem(item);
+            }
         },
         //获取action列表
         actionOptions : function(){
             return [
-                { value: action.IN.name, label: action.IN.description,action : action.IN},
-                { value: action.NOT_IN.name, label: action.NOT_IN.description,action :action.NOT_IN},
-                { value: action.EQ.name, label: action.EQ.description,action :action.EQ},
-                { value: action.NE.name, label: action.NE.description,action :action.NE},
-                { value: action.GT.name, label: action.GT.description,action :action.GT},
-                { value: action.GE.name, label: action.GE.description,action :action.GE},
-                { value: action.LT.name, label: action.LT.description,action :action.LT},
-                { value: action.LE.name, label: action.LE.description,action :action.LE},
-                { value: action.HE.name, label: action.HE.description,action :action.HE},
-                { value: action.HNE.name, label: action.HNE.description,action :action.HNE},
-                { value: action.TE.name, label: action.TE.description,action :action.TE},
-                { value: action.TNE.name, label: action.TNE.description,action :action.TNE},
-                { value: action.LIKE.name, label: action.LIKE.description,action :action.LIKE},
-                { value: action.NOT_LIKE.name, label: action.NOT_LIKE.description,action :action.NOT_LIKE}
+                { value: action.IN.description, label: action.IN.description,action : action.IN},
+                { value: action.NOT_IN.description, label: action.NOT_IN.description,action :action.NOT_IN},
+                { value: action.EQ.description, label: action.EQ.description,action :action.EQ},
+                { value: action.NE.description, label: action.NE.description,action :action.NE},
+                { value: action.GT.description, label: action.GT.description,action :action.GT},
+                { value: action.GE.description, label: action.GE.description,action :action.GE},
+                { value: action.LT.description, label: action.LT.description,action :action.LT},
+                { value: action.LE.description, label: action.LE.description,action :action.LE},
+                { value: action.HE.description, label: action.HE.description,action :action.HE},
+                { value: action.HNE.description, label: action.HNE.description,action :action.HNE},
+                { value: action.TE.description, label: action.TE.description,action :action.TE},
+                { value: action.TNE.description, label: action.TNE.description,action :action.TNE},
+                { value: action.LIKE.description, label: action.LIKE.description,action :action.LIKE},
+                { value: action.NOT_LIKE.description, label: action.NOT_LIKE.description,action :action.NOT_LIKE}
             ];
         }
     }

@@ -87,6 +87,14 @@ function rs_to_itemStore($rs,$identifier = null,$label = null){
     return json_encode($data);
 }
 
+//直接输出json到itemStore
+function export_to_itemStore($rows,$identifier = null,$label = null){
+    $data["identifier"] = $identifier;
+    $data["label"] = $label;
+    $data['items'] = $rows;
+    echo json_encode($data);
+}
+
 //字符串转移删除HTML标签以及换行和空格
 function cftrim( $str )
 {
@@ -184,7 +192,20 @@ function set_creation_date($data){
     $data['created_by'] = _sess('uid');
     return $data;
 }
-
+//转换数据库的时间和操作者为系统使用格式
+function cf_format($rows){
+    for($i = 0; $i < count($rows);$i++){
+        foreach ($rows[$i] as $key => $value) {
+            if(strpos($key,'_flag') > 0 && !strpos($key,'_flag_')) {
+                $rows[$i][$key] = ( $rows[$i][$key] == 0 ? "X" : "" );
+            }
+            if(strpos($key,'_date') > 0 && !strpos($key,'_flag_')) {
+                $rows[$i][$key] = date('Y-m-d H:i:s',$rows[$i]["$key"]);
+            }
+        }
+    }
+    return $rows;
+}
 
 //判断是否被设置
 function set_value($name){
@@ -194,6 +215,7 @@ function set_value($name){
         return null;
     }
 }
+//获取参数，如果不存在则为空
 function get_parameter($index){
     $return = "";
     if($_GET){

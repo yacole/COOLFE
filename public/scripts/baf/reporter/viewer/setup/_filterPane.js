@@ -37,7 +37,8 @@ define(["dojo/_base/declare","baf/base/Util","baf/base/Env","dojo/request",
                     escapeHTMLInData: false,
                     singleClickEdit : true,
                     onRowDblClick : function(e){
-                        u.move(lstore,rstore, gridLeft.getItem(e.rowIndex),false,true);
+                        this.store.deleteItem(this.getItem(e.rowIndex));
+//                        u.move(lstore,rstore, gridLeft.getItem(e.rowIndex),false,true);
                     },
                     canSort : function(){
                         return false;
@@ -48,7 +49,7 @@ define(["dojo/_base/declare","baf/base/Util","baf/base/Env","dojo/request",
 
                 //定义右侧grid
                 var rcolumn = [{ name :Util.label.grid_setup_canplus, field : "field",width : 12}];
-                var rdata = u.dataFromStructure(u.leftData(this._parameterList(),o.filter.parameters),true);
+                var rdata = u.dataFromStructure(this._parameterList(),true);
 
                 var rstore = new ItemFileWriteStore({
                     data : rdata
@@ -87,7 +88,8 @@ define(["dojo/_base/declare","baf/base/Util","baf/base/Env","dojo/request",
                         var items = gridLeft.selection.getSelected();
                         if(items.length > 0){
                             items.forEach(function(item){
-                                u.move(lstore,rstore,item,false,true);
+                                lstore.deleteItem(item);
+//                                u.move(lstore,rstore,item,false,true);
                             });
                         }
                     },
@@ -104,16 +106,17 @@ define(["dojo/_base/declare","baf/base/Util","baf/base/Env","dojo/request",
                         srcObj.hide();
                         var filter = o.filter;
                         var litems = gridLeft.getALLItems();
-                        console.info(litems);
                         if(litems.length > 0){
-                            //先清除所有参数，再创建
-                            filter.clear();
+                            filter.clearParameters();
                             litems.forEach(function(e){
-                                filter.createParameter(e.field.toString(), e.actionName.toString());
+                                if(e){
+                                    filter.createParameter(e.field.toString(), e.actionName.toString(), e.value.toString(),true);
+                                }
                             });
                             filter.show();
+                        }else{
+                            filter.clear();
                         }
-
                     }
                 });
                 dojo.byId("f_submitButton").appendChild(submitButton.domNode);
