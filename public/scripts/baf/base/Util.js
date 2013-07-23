@@ -2,8 +2,8 @@ var language = "zh"; //全局变量：用于控制语言包,默认为"zh"
 
 define(["baf/config/Url", "baf/language/"+language+"/Label", "baf/language/"+language+"/Message",
     "baf/config/Idlist", "baf/config/Config", "dojo/dom-construct", "dijit/Dialog",
-    "dijit/form/Button","dojo/request","baf/command/Command"],
-    function(url,label,message,id,config,domConstruct,Dialog,Button,request,Command){
+    "dijit/form/Button","dojo/request","baf/command/Command","baf/base/string"],
+    function(url,label,message,id,config,domConstruct,Dialog,Button,request,Command,string){
         /*
          *   摘要:
          *       主要是存放一些公用的函数和工具，创建各种工具的快捷通道，比如，url,label,message,id,config等，
@@ -16,6 +16,7 @@ define(["baf/config/Url", "baf/language/"+language+"/Label", "baf/language/"+lan
             message : message,  //用于存放系统中提示框的内容
             id : id,    //用于封装程序中用到的ID
             config : config,    //配置文件
+            string : string , //字符串函数
 
             /*
             * 公用函数：字符串处理，ui处理等等
@@ -27,7 +28,7 @@ define(["baf/config/Url", "baf/language/"+language+"/Label", "baf/language/"+lan
                 if(typeof field === 'boolean'){
                     return field;
                 }else{
-                    return field == '1' ? true : false;
+                    return field == 'X' || field == '1' ? true : false;
                 }
             },
             //处理checkbox的勾选返回结果
@@ -222,6 +223,19 @@ define(["baf/config/Url", "baf/language/"+language+"/Label", "baf/language/"+lan
                     desc = this.trim(target[0].innerHTML);
                 }
                 return desc;
+            },
+            //获取非空行中的字段
+            notNULLcolumn : function(allItems,field){
+                var items = allItems;
+                var rts = "";
+                if(items.length > 0){
+                    items.forEach(function(item){
+                        if(item[field] && item[field].toString() != "" && rts == ""){
+                            rts = item[field].toString();
+                        }
+                    });
+                }
+                return rts;
             },
 
             /*

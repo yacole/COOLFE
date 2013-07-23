@@ -82,7 +82,7 @@ define(["baf/dijit/Dialog","baf/base/Util","baf/base/Env","dojo/request",
                                     //去除类型选择
 //                                    typeSelect.options.splice(0,1);
                                     typeSelect.removeOption(0);
-//                                    typeSelect.attr("value","01");
+                                    typeSelect.attr("value","02");
 
                                     //设置默认值
                                     if(o.layout){
@@ -147,7 +147,7 @@ define(["baf/dijit/Dialog","baf/base/Util","baf/base/Env","dojo/request",
                                     //去除类型选择
 //                                    typeSelect.options.splice(0,1);
                                     typeSelect.removeOption(0);
-//                                    typeSelect.attr("value","01");
+                                    typeSelect.attr("value","02");
                                     //默认布局按钮事件
                                     dojo.connect(Util.dijit_byId("defaultButton"),"onClick",function(){
                                         var items = grid.selection.getSelected();

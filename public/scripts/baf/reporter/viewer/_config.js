@@ -24,7 +24,7 @@ define([],function(){
                 //导出
 //                exporter: true,
                 //选择器
-                selector: {row : "single",col : "single",cell : "disabled"},
+                selector: {row : "multi",col : "single",cell : "disabled"},
                 //拖拽
                 dnd: {
                     dndConfig: {
@@ -36,8 +36,8 @@ define([],function(){
                 },
                 //分页
                 pagination: {
-                    pageSizes: ["1000","2500", "5000", "All"],
-                    defaultPageSize : 1000,
+                    pageSizes: ["10","25", "50", "100", "All"],
+                    defaultPageSize : 20,
                     description: true,
                     sizeSwitch: true,
                     pageStepper: true,
@@ -64,11 +64,11 @@ define([],function(){
             //明细显示按钮
             detail : true,
             //打印
-            print : true,
+            printer : true,
             //查找
             search : true,
             //汇总
-            sum : true,
+            summary : true,
             //排序
             sort : true,
             //过滤器

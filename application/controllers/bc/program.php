@@ -104,8 +104,7 @@ class Program extends CI_Controller {
     //报表测试
    function rpt_program_list(){
        $rs = $this->uifield->find_all();
-       $rows = cf_format($rs->result_array());
-       export_to_itemStore($rows,"ui_field_id","label");
+       export_to_itemStore($rs);
    }
 
     //获取报表布局
@@ -119,7 +118,7 @@ class Program extends CI_Controller {
     }
 
     function rpt_layouts(){
-        echo rs_to_itemStore($this->grid->find_by_program_id(get_parameter('program_id')));
+        export_to_itemStore($this->grid->find_by_program_id(get_parameter('program_id')));
     }
 
     /*

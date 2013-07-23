@@ -2,7 +2,6 @@ define(["dojo/_base/declare","baf/dijit/Dialog","baf/base/Util","baf/base/Env",
     "baf/dijit/grid/DataGrid","dojo/data/ItemFileReadStore"],
     function(declare,Dialog,Util,Env,DataGrid,ItemFileReadStore){
         return declare ("",[Dialog],{
-            grid : null,
             srcGrid : null,
 
             build : function(row,srcGrid){

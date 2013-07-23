@@ -29,8 +29,8 @@ define(["dojo/_base/declare", "baf/dijit/Dialog", "baf/base/Util", "baf/dijit/gr
             //默认结构
             if(!this.column){
                 this.column = [
-                    { name : Util.label.column_value, field : "value",width : 12},
-                    { name : Util.label.column_label, field : "label",width : 22}
+                    { name : Util.label.column_value, field : "value",width : Util.config.result_grid_value_width},
+                    { name : Util.label.column_label, field : "label",width : Util.config.result_grid_label_width}
                 ];
             }
             //设置存储
@@ -50,7 +50,7 @@ define(["dojo/_base/declare", "baf/dijit/Dialog", "baf/base/Util", "baf/dijit/gr
             gridConfig.store = store;
             gridConfig.structure = this.column;
             gridConfig.id = Util.xId(Util.id.qrGrid);
-            gridConfig.height = "20em";
+            gridConfig.height = Util.config.result_window_height + "em";
             gridConfig.autoWidth = true;
             //判断是否为多选
             if(this.sourceObj.mulitSelect){
@@ -87,7 +87,7 @@ define(["dojo/_base/declare", "baf/dijit/Dialog", "baf/base/Util", "baf/dijit/gr
             this.addChild(this.resultGrid);
 
             var bt = new Button({
-                label : "确认",
+                label : Util.label.button_confirm,
                 name : "rsConfirm",
                 onClick : function(){
                     var selectItems = d.resultGrid.selection.getSelected();

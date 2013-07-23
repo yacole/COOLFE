@@ -159,14 +159,14 @@ class Uifield extends CI_Controller {
     function find_fields_by_program_name(){
         if(isset($_GET['program_name'])){
             $rs = $this->uifield->find_fields_by_program_name($_GET['program_name']);
-            echo rs_to_itemStore($rs,'field_name','label');
+            export_to_itemStore($rs,'field_name','label');
         }
     }
 
     function find_fields_by_program_id(){
         if(isset($_GET['program_id'])){
             $rs = $this->uifield->find_fields_by_program_id($_GET['program_id']);
-            echo rs_to_itemStore($rs,'field_name','label');
+            export_to_itemStore($rs,'field_name','label');
         }
     }
 

@@ -88,7 +88,8 @@ function rs_to_itemStore($rs,$identifier = null,$label = null){
 }
 
 //直接输出json到itemStore
-function export_to_itemStore($rows,$identifier = null,$label = null){
+function export_to_itemStore($rs,$identifier = null,$label = null){
+    $rows = cf_format($rs->result_array());
     $data["identifier"] = $identifier;
     $data["label"] = $label;
     $data['items'] = $rows;
@@ -197,7 +198,7 @@ function cf_format($rows){
     for($i = 0; $i < count($rows);$i++){
         foreach ($rows[$i] as $key => $value) {
             if(strpos($key,'_flag') > 0 && !strpos($key,'_flag_')) {
-                $rows[$i][$key] = ( $rows[$i][$key] == 0 ? "X" : "" );
+                $rows[$i][$key] = ( $rows[$i][$key] == 1 ? "X" : "" );
             }
             if(strpos($key,'_date') > 0 && !strpos($key,'_flag_')) {
                 $rows[$i][$key] = date('Y-m-d H:i:s',$rows[$i]["$key"]);

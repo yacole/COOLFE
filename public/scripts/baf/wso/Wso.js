@@ -104,12 +104,12 @@ define(["dojo/_base/declare","baf/base/Util","dijit/layout/TabContainer","baf/ws
                     var tabpane = this;
 
                     //创建系统菜单和工具栏
-//                    var sysMenuBar = new MenuBar({
-//                        id : Util.id.wso_MenuBar + timestamp,
-//                        program_id : data.program_id,
-//                        timestamp : timestamp
-//                    }).build();
-//                    sysMenuBar.set("class",Util.id.wso_MenuBar_class);
+                    var sysMenuBar = new MenuBar({
+                        id : Util.id.wso_MenuBar + timestamp,
+                        program_id : data.program_id,
+                        timestamp : timestamp
+                    }).build();
+                    sysMenuBar.set("class",Util.id.wso_MenuBar_class);
 
                     //获取工具栏
                     var sysToolBar = new ToolBar({
@@ -131,7 +131,7 @@ define(["dojo/_base/declare","baf/base/Util","dijit/layout/TabContainer","baf/ws
                             closable : true,
                             id : Util.id.wso_Child + timestamp,
                             fields :  reponse.items,
-//                            menuBar : sysMenuBar,
+                            menuBar : sysMenuBar,
                             toolBar : sysToolBar
                         };
                         var wso ;
@@ -147,8 +147,6 @@ define(["dojo/_base/declare","baf/base/Util","dijit/layout/TabContainer","baf/ws
                                 //创建一个FORM工作区
                                 wso = new Report(wsoAtrributes);
                                 break;
-                            default:
-                                ;
                         } // switch(
 
                         //加入工作区并激活

@@ -1,9 +1,8 @@
 define(["dojo/_base/declare","dojo/request","baf/dijit/Dialog",
     "baf/reporter/viewer/filter/_parameter","baf/dijit/form/TextBox","baf/dijit/form/Button",
     "baf/base/Util","dojo/data/ItemFileWriteStore","dijit/form/Select","baf/reporter/viewer/filter/_action",
-    "baf/reporter/viewer/setup/_util","baf/reporter/viewer/filter/_validator","baf/reporter/viewer/_string",
-    "baf/dijit/form/DateTextBox"],
-    function(declare,request,Dialog,Parameter,TextBox,Button,Util,ItemFileWriteStore,Select,action,u,validator,string,DateTextBox){
+    "baf/reporter/viewer/setup/_util","baf/reporter/viewer/filter/_validator","baf/dijit/form/DateTextBox"],
+    function(declare,request,Dialog,Parameter,TextBox,Button,Util,ItemFileWriteStore,Select,action,u,validator,DateTextBox){
         /*
          *   摘要:
          *             过滤器，参数列表，用于viewer
@@ -12,11 +11,9 @@ define(["dojo/_base/declare","dojo/request","baf/dijit/Dialog",
             //字段列表
             parameters : [],
             srcGrid : null,
-            allItems : null,
 
             constructor : function(args){
                 this.srcGrid = args.srcGrid;
-                this.allItems = args.allItems;
             },
             //动态添加参数
             _createParameterBycellId : function(cellIndex){
@@ -75,7 +72,7 @@ define(["dojo/_base/declare","dojo/request","baf/dijit/Dialog",
             //清除过滤器
             clear : function(){
                 this.clearParameters();
-                this._setGridStore(this.allItems);
+                this._setGridStore(this.srcGrid.snapItems);
             },
             clearParameters : function(){
                 this.parameters = [];
@@ -161,7 +158,7 @@ define(["dojo/_base/declare","dojo/request","baf/dijit/Dialog",
 //                inputParam.name =  p.field;
                 inputParam.value =  p.value;
                 //判断是否为日期，如果为日期字段则生成日期选择框
-                if(string.isDateStr(validator.notNULLcolumn(this.allItems, p.field))){
+                if(Util.string.isDateStr(Util.notNULLcolumn(this.srcGrid.snapItems, p.field))){
                     p.inputObj = new DateTextBox({
                         constraints: {datePattern: "yyyy-MM-dd"},
                         value : p.value
@@ -224,13 +221,13 @@ define(["dojo/_base/declare","dojo/request","baf/dijit/Dialog",
             },
             //设置过滤器
             setFilter : function(){
-                var newItems = validator.validate(this.allItems,this.parameters);
+                var newItems = validator.validate(this.srcGrid.snapItems,this.parameters);
                 this._setGridStore(newItems);
             },
             //获取单列的数据
             _columnData : function(field){
                 var data = {items:[]};
-                var items = this.allItems;
+                var items = this.srcGrid.snapItems;
                 var tmp = [];
                 if(items.length > 0){
                     items.forEach(function(item){

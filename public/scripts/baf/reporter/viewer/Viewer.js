@@ -4,10 +4,11 @@ define(["dojo/_base/declare","dojox/layout/ContentPane","baf/base/Util","dojo/re
     "dojo/data/ItemFileWriteStore","baf/dijit/grid/DataGrid","baf/reporter/viewer/setup/_setupDialog",
     "dojox/grid/enhanced/plugins/DnD","dojo/json","dojox/grid/enhanced/plugins/Pagination",
     "dojox/grid/enhanced/plugins/NestedSorting","baf/reporter/viewer/_detailDialog","baf/reporter/viewer/_config",
-    "baf/reporter/viewer/setup/_util","baf/reporter/viewer/filter/Filter","dojox/grid/enhanced/plugins/IndirectSelection"],
+    "baf/reporter/viewer/setup/_util","baf/reporter/viewer/filter/Filter","dojox/grid/enhanced/plugins/IndirectSelection",
+    "dojox/grid/enhanced/plugins/Printer","baf/reporter/viewer/printer/_printerDialog"],
     function (declare,ContentPane,Util,request,gridCSVWriter,gridSelector,gridMenu,
               MenusObject,ToolBarForReport,layoutDialog,ItemFileWriteStore,DataGrid,setupDialog,
-              DnD,JSON,Pagination,NestedSorting,detailDialog,Config,u,Filter,IndirectSelection){
+              DnD,JSON,Pagination,NestedSorting,detailDialog,Config,u,Filter,IndirectSelection,Printer,printerDialog){
         /*
          *   摘要:
          *                    报表查看器
@@ -17,7 +18,6 @@ define(["dojo/_base/declare","dojox/layout/ContentPane","baf/base/Util","dojo/re
             grid :null,
             program_id : null,
             timestamp : null,
-            layouts : null,
             //针对grid的工具栏
             toolBar : null,
             layout : null,
@@ -101,6 +101,11 @@ define(["dojo/_base/declare","dojox/layout/ContentPane","baf/base/Util","dojo/re
                             gridConfig.plugins.exporter = true;
                         }
 
+                        //打印设置
+                        if(o.config && o.config.tool.printer){
+                            gridConfig.plugins.printer = true;
+                        }
+
                         o.grid = new DataGrid(gridConfig);
 
                         //设置源数据
@@ -110,12 +115,21 @@ define(["dojo/_base/declare","dojox/layout/ContentPane","baf/base/Util","dojo/re
                         o.toolBar.setSrcGrid(o.grid,o);
                         o.addChild(o.grid);
 
-                        //设置过滤器
-                        o.filter = new Filter({
-                            srcGrid : o.grid,
-                            allItems : o.grid.getALLItems()
-                        });
-
+                        if(o.config && o.config.tool.filter){
+                            //数据快照
+                            o.grid.snapItems = o.grid.getALLItems();
+                            //设置过滤器
+                            o.filter = new Filter({
+                                srcGrid : o.grid
+                            });
+                        }
+//                        //汇总
+//                        if(o.config && o.config.tool.summary){
+//                            //数据快照
+//                            if(!o.grid.snapItems){
+//                                o.grid.snapItems = o.grid.getALLItems();
+//                            }
+//                        }
                     });
                 });
             },
@@ -160,7 +174,14 @@ define(["dojo/_base/declare","dojox/layout/ContentPane","baf/base/Util","dojo/re
                 });
                 dDialog.build(row,this.grid);
                 dDialog.show();
+            },
+            //打印预览
+            showPrinter : function(){
+                var pDialog = new printerDialog({
+                    title : Util.label.grid_printer_setup
+                });
+                pDialog.show();
             }
 
-        });
+       });
     });

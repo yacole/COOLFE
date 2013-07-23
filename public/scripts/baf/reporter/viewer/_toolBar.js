@@ -17,7 +17,7 @@ define(["dojo/_base/declare", "dojo/request", "dijit/Toolbar",
             sortAscButton : null,
             sortDescButton : null,
             detailButton : null,
-            printButton : null,
+            printerButton : null,
             searchButton : null,
             filterButton : null,
             sumButton : null,
@@ -88,11 +88,14 @@ define(["dojo/_base/declare", "dojo/request", "dijit/Toolbar",
                 });
                 this.addChild(this.exportButton);
 
-                this.printButton = new Button({
-                    label : Util.label.grid_print,
-                    disabled : o._boolean(o.config.print)
+                this.printerButton = new Button({
+                    label : Util.label.grid_printer,
+                    disabled : o._boolean(o.config.printer),
+                    onClick : function(){
+                        o.viewer.showPrinter();
+                    }
                 });
-                this.addChild(this.printButton);
+                this.addChild(this.printerButton);
 
                 this.addChild(new ToolbarSeparator({}));
 
@@ -200,7 +203,12 @@ define(["dojo/_base/declare", "dojo/request", "dijit/Toolbar",
 
                 this.sumButton = new DropDownButton({
                     label : Util.label.grid_summary,
-                    disabled : o._boolean(o.config.sum),
+                    disabled : o._boolean(o.config.summary),
+//                    onClick : function(){
+//                        if(o.srcGrid.isSelectColumn() && o.target){
+//                            o.srcGrid.showSummaryRow(o.target.cellIndex);
+//                        }
+//                    }
                     onClick : function(){
                         var sum = 0;
                         if(o.srcGrid.isSelectColumn() && o.target){

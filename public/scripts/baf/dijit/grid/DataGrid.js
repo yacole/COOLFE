@@ -5,9 +5,14 @@ function (declare,Util,EnhancedGrid,iframe){
      *      表格组件
      *   */
     return declare("",[EnhancedGrid],{
+        //快照数据
+        snapItems : null,
+        //汇总行
+        summaryRow : null,
 
         //重新刷新gird，如果没有指定数据源则刷新本身
         refresh : function(store){
+            this.summaryRow = null;
             var s = null;
             if(store){
                 s = store;
@@ -251,13 +256,18 @@ function (declare,Util,EnhancedGrid,iframe){
         getALLItems : function(){
             //排除汇总行
             //do something...
-            var items = this.store._arrayOfAllItems;
+            var items = this.store._arrayOfTopLevelItems;
             //删除NULL行
             for(var i=0;i<items.length;i++){
                 if(items[i] == null){
                     items.splice(i,1);
                 }
             }
+//            console.info(this._hasSummaryRow());
+//            if(this._hasSummaryRow()){
+//                console.info("gogo");
+//                items.splice(this.summaryRow,1);
+//            }
             return items;
         },
         //当前选择是否为列
@@ -277,7 +287,7 @@ function (declare,Util,EnhancedGrid,iframe){
             var rs = 0;
             if(items.length>0){
                 //判断是否为数字
-                if(!isNaN(Number(items[0][field]))){
+                if(Util.string.isNumber(items[0][field].toString())){
                     items.forEach(function(item){
                         rs = rs + Number(item[field]);
                     });
@@ -288,6 +298,32 @@ function (declare,Util,EnhancedGrid,iframe){
                 rs = 0;
             }
             return rs;
+        },
+        //拥有汇总行
+        _hasSummaryRow : function(){
+            return (this.summaryRow != null && this.summaryRow >= 0) ? true : false;
+        },
+        //当过滤器过滤时更新汇总行
+        _updateSummaryRow : function(CellIndex){
+            var item = this.getItem(this.summaryRow);
+            var cell = this.getCell(CellIndex);
+            this.store.setValue(item,cell.field,this.summaryColumn(CellIndex));
+        },
+        _addSummaryRow : function(CellIndex){
+            var cell = this.getCell(CellIndex);
+            var item = new Object();
+            item[cell.field] = this.summaryColumn(CellIndex);
+            item[this.getCell(0).field] = "汇总：";
+            item["summaryRow"] = 1;
+            this.summaryRow = this.store._arrayOfAllItems.length;
+            this.store.newItem(item);
+        },
+        showSummaryRow : function(CellIndex){
+            if(this._hasSummaryRow()){
+                this._updateSummaryRow(CellIndex);
+            }else{
+                this._addSummaryRow(CellIndex);
+            }
         }
     });
 });

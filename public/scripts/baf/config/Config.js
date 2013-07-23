@@ -26,7 +26,17 @@ define([],function(){
         remote_timeout : 2000,
 
         //返回结果时，说明字段阶段处理
-        rs_label_max_length : 50
+        rs_label_max_length : 50,
+
+        //打印预览
+        printer_preview_type : "HTML", //"HTML","Dialog"
+        printer_preview_window_style : "width:600px,height:400px",
+
+        //结果集窗口值字段长度
+        result_grid_label_width : 20,
+        result_grid_value_width : 12,
+        //结果集窗口高度
+        result_window_height: 20
 
     };
 });

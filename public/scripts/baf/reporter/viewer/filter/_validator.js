@@ -1,8 +1,7 @@
-define(["baf/reporter/viewer/filter/_action","baf/reporter/viewer/_string"],
-    function(action,string){
+define(["baf/reporter/viewer/filter/_action","baf/base/Util"],
+    function(action,Util){
     return {
         validate : function(allItems,parameters){
-            var o = this;
             var newItems = [];
             if(allItems.length > 0 && parameters.length > 0){
                 for(var i=0;i<allItems.length;i++){
@@ -67,7 +66,7 @@ define(["baf/reporter/viewer/filter/_action","baf/reporter/viewer/_string"],
 
                             case action.GT:
                                 //判断数字类型
-                                if(string.isNumber(o.notNULLcolumn(allItems,p.field))){
+                                if(Util.string.isNumber(Util.notNULLcolumn(allItems,p.field))){
                                     if(Number(item[p.field].toString()) > Number(p.value)){
                                         find_flag = true;
                                     }
@@ -79,7 +78,7 @@ define(["baf/reporter/viewer/filter/_action","baf/reporter/viewer/_string"],
                                 break;
                             case action.GE:
                                 //判断数字类型
-                                if(string.isNumber(o.notNULLcolumn(allItems,p.field))){
+                                if(Util.string.isNumber(Util.notNULLcolumn(allItems,p.field))){
                                     if(Number(item[p.field].toString()) >= Number(p.value)){
                                         find_flag = true;
                                     }
@@ -91,7 +90,7 @@ define(["baf/reporter/viewer/filter/_action","baf/reporter/viewer/_string"],
                                 break;
                             case action.LT:
                                 //判断数字类型
-                                if(string.isNumber(o.notNULLcolumn(allItems,p.field))){
+                                if(Util.string.isNumber(Util.notNULLcolumn(allItems,p.field))){
                                     if(Number(item[p.field].toString()) < Number(p.value)){
                                         find_flag = true;
                                     }
@@ -103,7 +102,7 @@ define(["baf/reporter/viewer/filter/_action","baf/reporter/viewer/_string"],
                                 break;
                             case action.LE:
                                 //判断数字类型
-                                if(string.isNumber(o.notNULLcolumn(allItems,p.field))){
+                                if(Util.string.isNumber(Util.notNULLcolumn(allItems,p.field))){
                                     if(Number(item[p.field].toString()) <= Number(p.value)){
                                         find_flag = true;
                                     }
@@ -168,19 +167,6 @@ define(["baf/reporter/viewer/filter/_action","baf/reporter/viewer/_string"],
                 }//for
             }//if
             return newItems;
-        },
-        //获取非空行中的字段
-        notNULLcolumn : function(allItems,field){
-            var items = allItems;
-            var rts = "";
-            if(items.length > 0){
-                items.forEach(function(item){
-                    if(item[field] && item[field].toString() != "" && rts == ""){
-                        rts = item[field].toString();
-                    }
-                });
-            }
-            return rts;
         }
     }
 });

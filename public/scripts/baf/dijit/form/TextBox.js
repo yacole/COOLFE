@@ -44,22 +44,18 @@ define(["dojo/_base/declare", "dijit/form/ValidationTextBox", "baf/base/Util",
         startup : function(){
             var textbox = this;
 
-//            console.info(textbox.getParent());
-
-            var entry = Util.field(textbox.name);
+            var entry = Util.field(this.name);
             //在字段能对应的情况下
             if(entry){
-                textbox.field_id = entry.ui_field_id;
-//                console.info(Util.url.find_validator_by_uifield_id({field_id : textbox.field_id}));
-                //设置属性
-                if(entry.validation_id){
-                    this.canSelect = true;
-                    request.get(Util.url.find_validator_byId({validation_id : entry.validation_id}),{handleAs : "json"}).then(function(data){
+                //唯一性标识ID
+                this.field_id = entry.ui_field_id;
 
+                //设置验证规则
+                if(entry.validation_id){
+                    request.get(Util.url.find_validator_byId({validation_id : entry.validation_id}),{handleAs : "json"}).then(function(data){
                         if(data){
                             //函数验证
                             textbox.remoteValidator = data;
-
                             if(data.regexp){
                                 //正则表达式
                                 textbox.set("regExp",data.regexp);
@@ -69,33 +65,37 @@ define(["dojo/_base/declare", "dijit/form/ValidationTextBox", "baf/base/Util",
                     });
                 }
 
-//                console.info(textbox);
+                //设置失效标识
+                this.set("disabled" , Util.xflag(entry.disabled_flag));
 
-                textbox.set("disabled" , Util.xflag(entry.disabled_flag));
-
-                if(!textbox.value){
-                    textbox.set("value",entry.default_value);
+                //设置默认值
+                if(!this.value){
+                    this.set("value",entry.default_value);
                 }
 
-                if(!textbox.required){
-                    textbox.set("required",Util.xflag(entry.required_flag));
+                //设置必须属性
+                if(!this.required){
+                    this.set("required",Util.xflag(entry.required_flag));
                 }
 
-
+                //设置隐藏属性
                 if(Util.xflag(entry.hidden_flag)){
-                    textbox.set("type","hidden");
+                    this.set("type","hidden");
                 }
 
-                //设置唯一性表示ID
-//                textbox.set("id" , Util.xId(textbox.name));
-
+                //设置输入框长度
                 if(entry.field_size){
                     textbox.set("style" , "width : "+entry.field_size+"em;");
 //                textbox.style = "width : "+entry.size+"px;";
                 }
 
-                textbox.valuelist_id = entry.valuelist_id;
-                textbox.label = entry.label;
+                //设置选择值列表
+                if(entry.valuelist_id){
+                    this.canSelect = true;
+                    this.valuelist_id = entry.valuelist_id;
+                }
+                //设置标题
+                this.label = entry.label;
 
             }
 
@@ -111,7 +111,6 @@ define(["dojo/_base/declare", "dijit/form/ValidationTextBox", "baf/base/Util",
 
             //如果存在值列表
             if(this.canSelect){
-//                console.info(textbox.valuelist_id);
                 var textbox = this;
                 var bt = new Button({
                     label : Util.label.reseach,
@@ -125,7 +124,7 @@ define(["dojo/_base/declare", "dijit/form/ValidationTextBox", "baf/base/Util",
                             if(textbox.selectData){
                                 var qr = new QueryResult({
                                     data : textbox.selectData,
-                                    column : [{name : Util.fieldLabel(textbox.name),field : "value",width : 20}],
+                                    column : [{name : Util.fieldLabel(textbox.name),field : "value",width : Util.config.result_grid_label_width}],
                                     sourceObj : textbox
                                 });
                                 qr.show();
@@ -136,7 +135,6 @@ define(["dojo/_base/declare", "dijit/form/ValidationTextBox", "baf/base/Util",
                     style : "position: fixed;"
                 });
                 bt.placeAt(this.domNode,"after");
-//                console.info(textbox.domNode);
             }
         },
 

@@ -13,10 +13,12 @@ define(["dojo/_base/declare", "dijit/form/Form", "baf/base/Util", "baf/base/Env"
             constructor : function(args){
 
                 if(args.formType != Util.id.formType_innerForm){
-                    if(!args.id){
-                        args.id = Util.xId(args.name);
-                    }else{
-                        args.id = Util.xId(args.id);
+                    if(args.name != undefined || args.id != undefined ){
+                        if(!args.id){
+                            args.id = Util.xId(args.name);
+                        }else{
+                            args.id = Util.xId(args.id);
+                        }
                     }
                 }
 
