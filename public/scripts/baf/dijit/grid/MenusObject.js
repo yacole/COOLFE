@@ -1,6 +1,6 @@
 define(["dojo/_base/declare","dijit/Menu", "dijit/MenuItem", "dijit/MenuSeparator",
-    "baf/base/Util","baf/base/Env","baf/reporter/viewer/_config"],
-    function (declare,Menu,MenuItem,MenuSeparator,Util,Env,Config){
+    "base/Util","base/Env","report/viewer/_config","cmd/Help"],
+    function (declare,Menu,MenuItem,MenuSeparator,Util,Env,Config,Help){
     /*
      *   摘要:
      *      表格组件默认右键菜单
@@ -30,6 +30,7 @@ define(["dojo/_base/declare","dijit/Menu", "dijit/MenuItem", "dijit/MenuSeparato
         _headerMenu : function(){
             var o = this;
             var headerMenu = new Menu();
+            //隐藏
             headerMenu.addChild(new MenuItem({
                 label : Util.label.grid_headerMenu_hidden,
                 onClick : function(){
@@ -38,18 +39,21 @@ define(["dojo/_base/declare","dijit/Menu", "dijit/MenuItem", "dijit/MenuSeparato
                     }
                 }
             }));
+            //添加列
             headerMenu.addChild(new MenuItem({
                 label : Util.label.grid_headerMenu_addcolumn,
                 onClick : function(){
                     o.viewer.showSetup();
                 }
             }));
+            //调整至最佳宽度
             headerMenu.addChild(new MenuItem({
                 label : Util.label.grid_headerMenu_fixWidth,
                 onClick : function(){
                     o.srcGrid.fixWidth();
                 }
             }));
+            //冻结至此列
             headerMenu.addChild(new MenuItem({
                 label : Util.label.grid_headerMenu_freeze,
                 onClick : function(){
@@ -57,6 +61,7 @@ define(["dojo/_base/declare","dijit/Menu", "dijit/MenuItem", "dijit/MenuSeparato
                 }
             }));
             headerMenu.addChild(new MenuSeparator());
+            //升序排序
             headerMenu.addChild(new MenuItem({
                 label : Util.label.grid_headerMenu_ascOrder,
                 onClick : function(){
@@ -66,6 +71,7 @@ define(["dojo/_base/declare","dijit/Menu", "dijit/MenuItem", "dijit/MenuSeparato
                 },
                 disabled : o._boolean(o.config.sort)
             }));
+            //降序排序
             headerMenu.addChild(new MenuItem({
                 label : Util.label.grid_headerMenu_descOrder,
                 onClick : function(){
@@ -75,12 +81,21 @@ define(["dojo/_base/declare","dijit/Menu", "dijit/MenuItem", "dijit/MenuSeparato
                 },
                 disabled : o._boolean(o.config.sort)
             }));
+            //设置过滤器
             headerMenu.addChild(new MenuItem({
                 label : Util.label.grid_headerMenu_setFilter,
                 onClick : function(){
                     o.viewer.filter.show(o.headerMenu.target.cellIndex);
                 },
                 disabled : o._boolean(o.config.filter)
+            }));
+            //字段帮助
+            headerMenu.addChild(new MenuItem({
+                label : "字段帮助",
+                onClick : function(e){
+                    var cell = o.srcGrid.getCell(o.headerMenu.target.cellIndex);
+                    Help.field(cell.field);
+                }
             }));
 //            headerMenu.startup();
             return headerMenu;

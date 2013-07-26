@@ -64,7 +64,7 @@ $autoload['libraries'] = array('session','database');
 |	$autoload['helper'] = array('url', 'file');
 */
 
-$autoload['helper'] = array('coolfe');
+$autoload['helper'] = array('coolfe','url');
 
 
 /*

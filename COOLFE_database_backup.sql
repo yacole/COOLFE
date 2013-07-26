@@ -28,6 +28,29 @@ DROP TABLE IF EXISTS `bc_grid_layouts_v`;
 DROP VIEW IF EXISTS `bc_grid_layouts_v`;
 
 --
+-- Temporary table structure for view `bc_reports_v`
+--
+DROP TABLE IF EXISTS `bc_reports_v`;
+DROP VIEW IF EXISTS `bc_reports_v`;
+CREATE TABLE `bc_reports_v` (
+  `report_id` int(10) unsigned,
+  `name` varchar(45),
+  `description` varchar(45),
+  `report_group_id` int(10) unsigned,
+  `creation_date` int(10) unsigned,
+  `created_by` int(10) unsigned,
+  `last_update_date` int(10) unsigned,
+  `last_updated_by` int(10) unsigned,
+  `structure` text,
+  `grid_type` varchar(45),
+  `release_date` int(10) unsigned,
+  `release_flag` tinyint(1),
+  `last_version_flag` tinyint(1),
+  `source_text` text,
+  `source_type` varchar(45)
+);
+
+--
 -- Temporary table structure for view `bc_uifields_v`
 --
 DROP TABLE IF EXISTS `bc_uifields_v`;
@@ -189,8 +212,7 @@ CREATE TABLE `bc_grid_layouts_tl` (
 
 /*!40000 ALTER TABLE `bc_grid_layouts_tl` DISABLE KEYS */;
 INSERT INTO `bc_grid_layouts_tl` (`layout_id`,`program_id`,`layout_name`,`description`,`creation_date`,`created_by`,`last_update_date`,`last_updated_by`,`default_flag`,`layout_type`,`structure`) VALUES 
- (1,5,'G_01','全局布局默认',1374039347,1,1374039347,1,1,'01','[{\"cells\":[[{\"width\":\"8\",\"field\":\"field_name\",\"name\":\"field_name\"},{\"width\":\"8\",\"field\":\"field_size\",\"name\":\"field_size\"},{\"width\":\"8\",\"field\":\"addfield_flag\",\"name\":\"addfield_flag\"},{\"width\":\"8\",\"field\":\"label\",\"name\":\"label\"},{\"width\":\"8\",\"field\":\"required_flag\",\"name\":\"required_flag\"}]],\"noscroll\":false},{\"cells\":[[{\"width\":\"8\",\"field\":\"disabled_flag\",\"name\":\"disabled_flag\"},{\"width\":\"8\",\"field\":\"hidden_flag\",\"name\":\"hidden_flag\"},{\"width\":\"8\",\"field\":\"default_value\",\"name\":\"default_value\"},{\"width\":\"8\",\"field\":\"valuelist_id\",\"name\":\"valuelist_id\"},{\"width\":\"8\",\"field\":\"validation_id\",\"name\":\"validation_id\"},{\"width\":\"8\",\"field\":\"creation_date\",\"name\":\"creation_date\"},{\"width\":\"8\",\"field\":\"created_by\",\"name\":\"created_by\"}]]}]'),
- (2,5,'P_01','个人布局01',1374039465,1,1374039465,1,1,'02','[{\"cells\":[[{\"width\":\"8\",\"field\":\"field_name\",\"name\":\"field_name\"},{\"width\":\"8\",\"field\":\"field_size\",\"name\":\"field_size\"},{\"width\":\"8\",\"field\":\"addfield_flag\",\"name\":\"addfield_flag\"},{\"width\":\"8\",\"field\":\"label\",\"name\":\"label\"},{\"width\":\"8\",\"field\":\"help_text\",\"name\":\"help_text\"},{\"width\":\"8\",\"field\":\"required_flag\",\"name\":\"required_flag\"},{\"width\":\"8\",\"field\":\"disabled_flag\",\"name\":\"disabled_flag\"},{\"width\":\"8\",\"field\":\"hidden_flag\",\"name\":\"hidden_flag\"},{\"width\":\"8\",\"field\":\"default_value\",\"name\":\"default_value\"},{\"width\":\"8\",\"field\":\"valuelist_id\",\"name\":\"valuelist_id\"},{\"width\":\"8\",\"field\":\"validation_id\",\"name\":\"validation_id\"},{\"width\":\"8\",\"field\":\"creation_date\",\"name\":\"creation_date\"},{\"width\":\"8\",\"field\":\"created_by\",\"name\":\"created_by\"},{\"width\":\"8\",\"field\":\"last_update_date\",\"name\":\"last_update_date\"},{\"width\":\"8\",\"field\":\"last_updated_by\",\"name\":\"last_updated_by\"},{\"width\":\"8\",\"field\":\"validation_code\",\"name\":\"validation_code\"},{\"width\":\"8\",\"field\":\"valuelist_name\",\"name\":\"valuelist_name\"},{\"width\":\"8\",\"field\":\"valuelist_desc\",\"name\":\"valuelist_desc\"},{\"width\":\"8\",\"field\":\"validation_desc\",\"name\":\"validation_desc\"}]]}]');
+ (2,5,'P_01','个人布局01',1374039465,1,1374728335,1,1,'02','[{\"cells\":[[{\"width\":\"11\",\"field\":\"field_name\",\"name\":\"字段\"},{\"width\":\"7\",\"field\":\"field_size\",\"name\":\"field_size\"},{\"width\":\"4\",\"field\":\"label\",\"name\":\"label\"},{\"width\":\"9\",\"field\":\"required_flag\",\"name\":\"required_flag\"},{\"width\":\"9\",\"field\":\"disabled_flag\",\"name\":\"disabled_flag\"},{\"width\":\"8\",\"field\":\"hidden_flag\",\"name\":\"hidden_flag\"},{\"width\":\"9\",\"field\":\"default_value\",\"name\":\"default_value\"},{\"width\":\"8\",\"field\":\"valuelist_id\",\"name\":\"valuelist_id\"},{\"width\":\"9\",\"field\":\"validation_id\",\"name\":\"validation_id\"},{\"width\":\"13\",\"field\":\"creation_date\",\"name\":\"creation_date\"},{\"width\":\"7\",\"field\":\"created_by\",\"name\":\"created_by\"},{\"width\":\"13\",\"field\":\"last_update_date\",\"name\":\"last_update_date\"},{\"width\":\"11\",\"field\":\"last_updated_by\",\"name\":\"last_updated_by\"},{\"width\":\"12\",\"field\":\"validation_code\",\"name\":\"validation_code\"},{\"width\":\"13\",\"field\":\"valuelist_name\",\"name\":\"valuelist_name\"},{\"width\":\"10\",\"field\":\"valuelist_desc\",\"name\":\"valuelist_desc\"},{\"width\":\"11\",\"field\":\"validation_desc\",\"name\":\"validation_desc\"}]]}]');
 /*!40000 ALTER TABLE `bc_grid_layouts_tl` ENABLE KEYS */;
 
 
@@ -536,7 +558,7 @@ CREATE TABLE `bc_program_variants_tl` (
 
 DROP TABLE IF EXISTS `bc_programs_tl`;
 CREATE TABLE `bc_programs_tl` (
-  `program_id` int(10) unsigned NOT NULL COMMENT '程序ID',
+  `program_id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '程序ID',
   `program_type` varchar(10) NOT NULL COMMENT '程序类型',
   `program_name` varchar(20) NOT NULL COMMENT '程序名称',
   `title` varchar(100) NOT NULL COMMENT '程序标题',
@@ -553,22 +575,52 @@ CREATE TABLE `bc_programs_tl` (
   `qform_flag` tinyint(1) NOT NULL COMMENT '查询界面标识，如果是QFORM无需填写directed_to',
   `directed_to` varchar(45) CHARACTER SET latin1 DEFAULT NULL COMMENT '数据提交到',
   `home_page` int(10) unsigned DEFAULT NULL,
+  `report_id` int(10) unsigned DEFAULT NULL COMMENT '报表ID',
   PRIMARY KEY (`program_id`) USING BTREE,
   UNIQUE KEY `BC_PROGRAMS_N01` (`program_name`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='系统程序表';
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='系统程序表';
 
 --
 -- Dumping data for table `bc_programs_tl`
 --
 
 /*!40000 ALTER TABLE `bc_programs_tl` DISABLE KEYS */;
-INSERT INTO `bc_programs_tl` (`program_id`,`program_type`,`program_name`,`title`,`help_text`,`appliction_code`,`controller`,`action`,`menu_bar_id`,`system_flag`,`creation_date`,`created_by`,`last_update_date`,`last_updated_by`,`qform_flag`,`directed_to`,`home_page`) VALUES 
- (1,'01','BC_PROGRAM_H','PROGRAM CREATE',NULL,'01','BC/PROGRAM','index',NULL,0,NULL,NULL,NULL,NULL,0,NULL,NULL),
- (2,'01','BC_PROGRAM_C','AA',NULL,'01','bc/program','create',NULL,0,NULL,NULL,NULL,NULL,0,NULL,1),
- (3,'01','BC_UI_FIELD_M','BC_UI_FIELD_M',NULL,'01','bc/uifield','index',NULL,0,NULL,NULL,NULL,NULL,0,NULL,NULL),
- (4,'01','BC_PROGRAM_R','程序显示',NULL,'01','bc/program','index',NULL,0,NULL,NULL,NULL,NULL,0,NULL,NULL),
- (5,'02','RPT_PROGRAM_LIST','程序清单报表',NULL,'01','bc/program','rpt_program_list',NULL,0,NULL,NULL,NULL,NULL,0,NULL,NULL);
+INSERT INTO `bc_programs_tl` (`program_id`,`program_type`,`program_name`,`title`,`help_text`,`appliction_code`,`controller`,`action`,`menu_bar_id`,`system_flag`,`creation_date`,`created_by`,`last_update_date`,`last_updated_by`,`qform_flag`,`directed_to`,`home_page`,`report_id`) VALUES 
+ (1,'01','BC_PROGRAM_H','PROGRAM CREATE',NULL,'01','BC/PROGRAM','index',NULL,0,NULL,NULL,NULL,NULL,0,NULL,NULL,NULL),
+ (2,'01','BC_PROGRAM_C','AA',NULL,'01','bc/program','create',NULL,0,NULL,NULL,NULL,NULL,0,NULL,1,NULL),
+ (3,'01','BC_UI_FIELD_M','BC_UI_FIELD_M',NULL,'01','bc/uifield','index',NULL,0,NULL,NULL,NULL,NULL,0,NULL,NULL,NULL),
+ (4,'01','BC_PROGRAM_R','程序显示',NULL,'01','bc/program','index',NULL,0,NULL,NULL,NULL,NULL,0,NULL,NULL,NULL),
+ (5,'02','RPT_PROGRAM_LIST','程序清单报表',NULL,'01','bc/program','rpt_program_list',NULL,0,NULL,NULL,NULL,NULL,0,NULL,NULL,1),
+ (6,'01','BC_REPORT_BUILDER','报表设计器',NULL,'01','bc/report','builder',NULL,0,NULL,NULL,NULL,NULL,0,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `bc_programs_tl` ENABLE KEYS */;
+
+
+--
+-- Definition of table `bc_report_groups_tl`
+--
+
+DROP TABLE IF EXISTS `bc_report_groups_tl`;
+CREATE TABLE `bc_report_groups_tl` (
+  `report_group_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) NOT NULL,
+  `description` varchar(100) NOT NULL,
+  `creation_date` int(10) unsigned DEFAULT NULL,
+  `created_by` int(10) unsigned DEFAULT NULL,
+  `last_update_date` int(10) unsigned DEFAULT NULL,
+  `last_updated_by` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`report_group_id`),
+  UNIQUE KEY `bc_report_groups_u01` (`name`),
+  KEY `bc_report_groups_n01` (`name`,`description`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='报表组信息表';
+
+--
+-- Dumping data for table `bc_report_groups_tl`
+--
+
+/*!40000 ALTER TABLE `bc_report_groups_tl` DISABLE KEYS */;
+INSERT INTO `bc_report_groups_tl` (`report_group_id`,`name`,`description`,`creation_date`,`created_by`,`last_update_date`,`last_updated_by`) VALUES 
+ (1,'DEFAULT','系统默认报表组',NULL,NULL,NULL,NULL);
+/*!40000 ALTER TABLE `bc_report_groups_tl` ENABLE KEYS */;
 
 
 --
@@ -578,7 +630,7 @@ INSERT INTO `bc_programs_tl` (`program_id`,`program_type`,`program_name`,`title`
 DROP TABLE IF EXISTS `bc_report_parameters`;
 CREATE TABLE `bc_report_parameters` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `program_id` int(10) unsigned NOT NULL COMMENT '程序ID',
+  `report_id` int(10) unsigned NOT NULL COMMENT '报表ID',
   `field` varchar(45) NOT NULL COMMENT '字段名',
   `action` varchar(45) NOT NULL COMMENT '判断类型',
   `default_value` varchar(2000) NOT NULL COMMENT '默认值',
@@ -586,9 +638,11 @@ CREATE TABLE `bc_report_parameters` (
   `created_by` int(10) unsigned DEFAULT NULL,
   `last_updated_by` int(10) unsigned DEFAULT NULL,
   `last_update_date` int(10) unsigned DEFAULT NULL,
+  `valuelist_id` int(10) unsigned DEFAULT NULL COMMENT '值列表',
+  `required_flag` tinyint(1) NOT NULL COMMENT '必输标识',
   PRIMARY KEY (`id`),
-  KEY `bc_report_parameters_n01` (`program_id`),
-  KEY `bc_report_parameters_u01` (`program_id`,`field`,`action`)
+  KEY `bc_report_parameters_n01` (`report_id`) USING BTREE,
+  KEY `bc_report_parameters_u01` (`report_id`,`field`,`action`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='报表参数列表';
 
 --
@@ -597,6 +651,69 @@ CREATE TABLE `bc_report_parameters` (
 
 /*!40000 ALTER TABLE `bc_report_parameters` DISABLE KEYS */;
 /*!40000 ALTER TABLE `bc_report_parameters` ENABLE KEYS */;
+
+
+--
+-- Definition of table `bc_report_source_tl`
+--
+
+DROP TABLE IF EXISTS `bc_report_source_tl`;
+CREATE TABLE `bc_report_source_tl` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `source_text` text NOT NULL,
+  `release_flag` tinyint(1) NOT NULL COMMENT '释放标识',
+  `report_id` int(10) unsigned NOT NULL COMMENT '报表id',
+  `created_by` int(10) unsigned DEFAULT NULL,
+  `last_version_flag` tinyint(1) NOT NULL COMMENT '最终版本标识',
+  `creation_date` int(10) unsigned DEFAULT NULL,
+  `last_update_date` int(10) unsigned DEFAULT NULL,
+  `last_updated_by` int(10) unsigned DEFAULT NULL,
+  `release_date` int(10) unsigned DEFAULT NULL COMMENT '释放日期',
+  `source_type` varchar(45) NOT NULL COMMENT '类型',
+  PRIMARY KEY (`id`),
+  KEY `bc_report_source_n01` (`release_flag`,`report_id`,`last_version_flag`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='报表语句表';
+
+--
+-- Dumping data for table `bc_report_source_tl`
+--
+
+/*!40000 ALTER TABLE `bc_report_source_tl` DISABLE KEYS */;
+INSERT INTO `bc_report_source_tl` (`id`,`source_text`,`release_flag`,`report_id`,`created_by`,`last_version_flag`,`creation_date`,`last_update_date`,`last_updated_by`,`release_date`,`source_type`) VALUES 
+ (1,'bc/program/rpt_program_list',1,1,NULL,0,NULL,NULL,NULL,NULL,'02'),
+ (2,'select*from bc_uifields_v',1,1,NULL,1,NULL,NULL,NULL,NULL,'01');
+/*!40000 ALTER TABLE `bc_report_source_tl` ENABLE KEYS */;
+
+
+--
+-- Definition of table `bc_reports_tl`
+--
+
+DROP TABLE IF EXISTS `bc_reports_tl`;
+CREATE TABLE `bc_reports_tl` (
+  `report_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) NOT NULL COMMENT '报表名称',
+  `description` varchar(45) NOT NULL COMMENT '报表说明',
+  `report_group_id` int(10) unsigned NOT NULL COMMENT '报表组',
+  `creation_date` int(10) unsigned DEFAULT NULL,
+  `created_by` int(10) unsigned DEFAULT NULL,
+  `last_update_date` int(10) unsigned DEFAULT NULL,
+  `last_updated_by` int(10) unsigned DEFAULT NULL,
+  `structure` text NOT NULL COMMENT '报表结构',
+  `grid_type` varchar(45) NOT NULL COMMENT '表格类型',
+  PRIMARY KEY (`report_id`),
+  UNIQUE KEY `bc_reports_u01` (`name`),
+  KEY `bc_reports_n01` (`name`,`description`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='报表信息表';
+
+--
+-- Dumping data for table `bc_reports_tl`
+--
+
+/*!40000 ALTER TABLE `bc_reports_tl` DISABLE KEYS */;
+INSERT INTO `bc_reports_tl` (`report_id`,`name`,`description`,`report_group_id`,`creation_date`,`created_by`,`last_update_date`,`last_updated_by`,`structure`,`grid_type`) VALUES 
+ (1,'BC_FIELD_LIST','字段清单',1,NULL,NULL,NULL,NULL,'','02');
+/*!40000 ALTER TABLE `bc_reports_tl` ENABLE KEYS */;
 
 
 --
@@ -766,7 +883,7 @@ CREATE TABLE `bc_ui_fields_tl` (
   `last_updated_by` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`ui_field_id`),
   UNIQUE KEY `BC_ui_fields_U01` (`program_id`,`field_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8 COMMENT='界面字段信息表';
+) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=utf8 COMMENT='界面字段信息表';
 
 --
 -- Dumping data for table `bc_ui_fields_tl`
@@ -789,10 +906,11 @@ INSERT INTO `bc_ui_fields_tl` (`ui_field_id`,`program_id`,`field_name`,`field_si
  (39,3,'new_bt','10',0,'新建','',0,0,0,'',NULL,NULL,1369628443,1,1369809481,1),
  (40,2,'program_name','20',0,'程序','',1,0,0,'',NULL,NULL,1369628759,1,1369632846,1),
  (41,2,'appliction_code','',0,'应用','',1,0,0,'15',1,NULL,1369628794,1,1369632916,1),
- (42,5,'program_name','20',0,'程序名','',0,0,0,'',NULL,NULL,1370309951,1,1370311595,1),
- (43,5,'layout_type','10',0,'布局类型','',0,0,0,'',6,NULL,1370416097,1,1372140614,1),
- (44,5,'layout_name','10',0,'布局','',1,0,0,'',NULL,NULL,1370503706,1,1370503769,1),
- (45,5,'description','20',0,'说明','',1,0,0,'',NULL,NULL,1370503739,1,1371194348,1);
+ (46,5,'field_name','6',0,'字段','帮助文档<b>测试</b><br /><ul><li><i>test1</i></li><li><i><u>test2</u></i></li><li><strike>test3 </strike><br /></li></ul>',0,0,0,'',NULL,NULL,1374718126,1,1374722716,1),
+ (47,6,'report_name','14',0,'报表','',1,0,0,'',NULL,NULL,1374801193,1,1374801604,1),
+ (48,6,'description','20',0,'描述','',1,0,0,'',NULL,NULL,1374801897,1,1374801897,1),
+ (49,6,'report_type','8',0,'报表类型','',0,0,0,'',7,NULL,1374801998,1,1374802705,1),
+ (50,6,'source_text','40',0,'数据来源','',1,1,0,'',NULL,NULL,1374802067,1,1374820754,1);
 /*!40000 ALTER TABLE `bc_ui_fields_tl` ENABLE KEYS */;
 
 
@@ -1013,7 +1131,7 @@ CREATE TABLE `bc_valuelist_lines_tl` (
   PRIMARY KEY (`line_id`) USING BTREE,
   UNIQUE KEY `BC_VALUELIST_LINES _N01` (`valuelist_id`,`segment`) USING BTREE,
   CONSTRAINT `FK_BC_VALUELIST_LINES_TL_1` FOREIGN KEY (`VALUELIST_ID`) REFERENCES `bc_valuelists_tl` (`VALUELIST_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8 COMMENT='值列表行表';
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8 COMMENT='值列表行表';
 
 --
 -- Dumping data for table `bc_valuelist_lines_tl`
@@ -1041,7 +1159,9 @@ INSERT INTO `bc_valuelist_lines_tl` (`line_id`,`valuelist_id`,`segment`,`descrip
  (18,1,'14','经销商平台',0,NULL,NULL,NULL,NULL,''),
  (20,1,'15','标准',0,NULL,NULL,NULL,NULL,''),
  (21,6,'01','全局',0,NULL,NULL,NULL,NULL,''),
- (22,6,'02','私人',0,NULL,NULL,NULL,NULL,'');
+ (22,6,'02','私人',0,NULL,NULL,NULL,NULL,''),
+ (23,7,'01','SQL',0,NULL,NULL,NULL,NULL,''),
+ (26,7,'02','FUN',0,NULL,NULL,NULL,NULL,'');
 /*!40000 ALTER TABLE `bc_valuelist_lines_tl` ENABLE KEYS */;
 
 
@@ -1070,7 +1190,7 @@ CREATE TABLE `bc_valuelists_tl` (
   PRIMARY KEY (`valuelist_id`) USING BTREE,
   UNIQUE KEY `BC_VALUELIST_N02` (`valuelist_name`) USING BTREE,
   KEY `BC_VALUELIST_N01` (`valuelist_name`,`description`,`source_view`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='值集表';
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COMMENT='值集表';
 
 --
 -- Dumping data for table `bc_valuelists_tl`
@@ -1083,7 +1203,8 @@ INSERT INTO `bc_valuelists_tl` (`valuelist_id`,`valuelist_name`,`description`,`f
  (3,'BC_PROGRAM_TYPE','program types',0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
  (4,'BC_VALIDATOR','验证码',1,'description','validation_code','bc_validator_tl',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
  (5,'BC_VALUELIST','值集',1,'description','valuelist_name','bc_valuelists_tl',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
- (6,'BC_GRID_LAYOUT_TYPE','布局类型',0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+ (6,'BC_GRID_LAYOUT_TYPE','布局类型',0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+ (7,'BC_REPORT_TYPE','报表类型',0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `bc_valuelists_tl` ENABLE KEYS */;
 
 
@@ -1094,6 +1215,14 @@ INSERT INTO `bc_valuelists_tl` (`valuelist_id`,`valuelist_name`,`description`,`f
 DROP TABLE IF EXISTS `bc_grid_layouts_v`;
 DROP VIEW IF EXISTS `bc_grid_layouts_v`;
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `bc_grid_layouts_v` AS select `h`.`layout_id` AS `layout_id`,`h`.`program_id` AS `program_id`,`h`.`layout_name` AS `layout_name`,`h`.`description` AS `description`,`h`.`creation_date` AS `creation_date`,`h`.`created_by` AS `created_by`,`h`.`last_update_date` AS `last_update_date`,`h`.`last_updated_by` AS `last_updated_by`,`h`.`default_flag` AS `default_flag`,`l`.`field` AS `field`,`l`.`label` AS `label`,`l`.`pos` AS `pos`,`l`.`size` AS `size` from (`bc_grid_layouts_tl` `h` join `bc_glayout_columns_tl` `l`) where (`h`.`layout_id` = `l`.`layout_id`);
+
+--
+-- Definition of view `bc_reports_v`
+--
+
+DROP TABLE IF EXISTS `bc_reports_v`;
+DROP VIEW IF EXISTS `bc_reports_v`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `bc_reports_v` AS select `h`.`report_id` AS `report_id`,`h`.`name` AS `name`,`h`.`description` AS `description`,`h`.`report_group_id` AS `report_group_id`,`h`.`creation_date` AS `creation_date`,`h`.`created_by` AS `created_by`,`h`.`last_update_date` AS `last_update_date`,`h`.`last_updated_by` AS `last_updated_by`,`h`.`structure` AS `structure`,`h`.`grid_type` AS `grid_type`,`l`.`release_date` AS `release_date`,`l`.`release_flag` AS `release_flag`,`l`.`last_version_flag` AS `last_version_flag`,`l`.`source_text` AS `source_text`,`l`.`source_type` AS `source_type` from (`bc_reports_tl` `h` join `bc_report_source_tl` `l`) where (`h`.`report_id` = `l`.`report_id`);
 
 --
 -- Definition of view `bc_uifields_v`

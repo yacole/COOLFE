@@ -1,6 +1,5 @@
-define(["dojo/_base/declare", "dojo/request", "dijit/Toolbar",
-    "dijit/ToolbarSeparator", "dijit/form/Button", "baf/base/Util",
-    "baf/base/Env"],
+define(["dojo/_base/declare", "dojo/request", "dijit/Toolbar","dijit/ToolbarSeparator",
+    "dijit/form/Button", "base/Util","base/Env"],
     function(declare,request,Toolbar,ToolbarSeparator,Button,Util,Env){
         /*
          *   摘要:
@@ -13,6 +12,8 @@ define(["dojo/_base/declare", "dojo/request", "dijit/Toolbar",
             queryButton : null,
             //首页按钮
             homeButton : null,
+            //返回按钮
+            backButton : null,
             //关闭当前页按钮
             closeButton : null,
             //退出系统按钮
@@ -31,6 +32,16 @@ define(["dojo/_base/declare", "dojo/request", "dijit/Toolbar",
                     }
                 });
                 this.addChild(this.homeButton);
+
+                this.backButton = new Button({
+                    label : "返回",
+                    onClick : function(){
+                        var currentWso = Env.currentWso();
+                        currentWso.callback();
+                    },
+                    disabled : true
+                });
+                this.addChild(this.backButton);
 
 //                this.queryButton = new Button({
 //                    label : "Q",

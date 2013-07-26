@@ -1,4 +1,4 @@
-define(["dojo/topic","baf/dijit/Dialog","baf/dijit/RightMenu","baf/base/Util","baf/base/Env","baf/command/Response"],
+define(["dojo/topic","baf/dijit/Dialog","baf/dijit/RightMenu","base/Util","base/Env","./Response"],
     function(topic,Dialog,RightMenu,Util,ENV,Response){
         /*
          *   摘要:

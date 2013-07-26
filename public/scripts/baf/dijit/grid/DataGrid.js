@@ -1,4 +1,4 @@
-define(["dojo/_base/declare","baf/base/Util","dojox/grid/EnhancedGrid","dojo/io/iframe"],
+define(["dojo/_base/declare","base/Util","dojox/grid/EnhancedGrid","dojo/io/iframe"],
 function (declare,Util,EnhancedGrid,iframe){
     /*
      *   摘要:

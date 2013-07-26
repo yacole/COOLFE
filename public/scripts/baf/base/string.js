@@ -6,6 +6,39 @@ define([],function(){
 //  boolean isDatePart(dateStr)      ：判断字符串是否为合法的日期格式：YYYY-MM-DD
 //  boolean isTimePart(dateStr)      ：判断字符串是否为合法的时间格式：HH:MM:SS
     return {
+        /*
+         字符串空格处理
+         */
+        //去左空格;
+        ltrim : function(string){
+            return string.replace(/^\s*/, "");
+        },
+        //去右空格;
+        rtrim : function(string){
+            return string.replace(/\s*$/, "");
+        },
+        //去左右空格
+        trim : function(string){
+            //s.replace(/(^s*)|(s*$)/g, "");
+            return this.rtrim(this.ltrim(string));
+        },
+        mbStringLength : function(s) {
+            var totalLength = 0;
+            var i;
+            var charCode;
+            for (i = 0; i < s.length; i++) {
+                charCode = s.charCodeAt(i);
+                if (charCode < 0x007f) {
+                    totalLength = totalLength + 1;
+                } else if ((0x0080 <= charCode) && (charCode <= 0x07ff)) {
+                    totalLength += 2;
+                } else if ((0x0800 <= charCode) && (charCode <= 0xffff)) {
+                    totalLength += 3;
+                }
+            }
+            //alert(totalLength);
+            return totalLength;
+        },
         isNumber : function(numStr){
             return !isNaN(numStr);
         },

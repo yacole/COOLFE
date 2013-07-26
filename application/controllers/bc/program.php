@@ -15,6 +15,7 @@ class Program extends CI_Controller {
         $this->load->model('bc/program_model','program');
         $this->load->model('bc/uifield_model','uifield');
         $this->load->model('bc/grid_layout_model','grid');
+        $this->load->model('bc/report_model','report');
     }
 
     //程序入口

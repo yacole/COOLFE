@@ -1,4 +1,4 @@
-define(["baf/config/Config"],function(Config){
+define([],function(){
     /*
      *   摘要:
      *       用于封装框架中使用的URL
@@ -107,6 +107,34 @@ define(["baf/config/Config"],function(Config){
         },
         saveLayoutTooltipDialog : function(){
             return url("bc/grid_layout","index");
+        },
+        //报表数据读取url
+        report_read_data_by_report_id : function(report_id){
+            return url("bc/report","read_data",{report_id : report_id});
+        },
+        //报表设置
+        report_setup_template : function(filename){
+            return this.localUrl("report/viewer/setup/_"+filename+".html");
+        },
+        //报表打印路径
+        report_printer_cssFile : function(){
+            return this.localUrl("report/viewer/printer/style.css");
+        },
+        report_printer_template : function(){
+            return this.localUrl("report/viewer/printer/printer.html");
+        },
+        //报表gird布局
+        report_layout_template : function(){
+            return this.localUrl("report/viewer/layout/_layout.html");
+        },
+        //报表过滤器筛选模版
+        report_filter_template : function(){
+            return this.localUrl("report/viewer/filter/_filter.html");
+        },
+        //报表生成器：base
+        report_builder_template : function(filename){
+            return this.localUrl("report/builder/_"+filename+".html");
         }
+
     }
  });

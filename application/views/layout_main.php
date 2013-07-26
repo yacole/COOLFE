@@ -27,10 +27,13 @@
     <script type="text/javascript">
         var dojoConfig = {
             packages: [
-                {
-                    name: "baf",
-                    location: "/public/scripts/baf"
-                }
+                { name: "baf", location: "/public/scripts/baf"},
+                { name: "layout",location: "/public/scripts/baf/dijit/layout"},
+                { name: "form",location: "/public/scripts/baf/dijit/form"},
+                { name: "grid",location: "/public/scripts/baf/dijit/grid"},
+                { name: "report",location: "/public/scripts/baf/report"},
+                { name: "base",location: "/public/scripts/baf/base"},
+                { name: "cmd",location: "/public/scripts/baf/command"}
 //                ,{
 //                    name: "gridx",
 //                    location: "/gridx-1.2beta"

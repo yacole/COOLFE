@@ -1,4 +1,4 @@
-define(["dojo/_base/declare","dijit/form/DateTextBox","baf/base/Util"],
+define(["dojo/_base/declare","dijit/form/DateTextBox","base/Util"],
     function(declare,DateTextBox,Util){
         /*
          *   摘要:

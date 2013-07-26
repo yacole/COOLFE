@@ -10,7 +10,7 @@ dojo.addOnLoad(function(){
         initial(program_name);
     }
     //初始化所有标签
-    require(["baf/base/Util","baf/base/Env"],function(Util,Env){
+    require(["base/Util","base/Env"],function(Util,Env){
 
         //设置工具栏
         Env.currentWso().toolBar.saveButton.set("disabled", true);
@@ -21,7 +21,7 @@ dojo.addOnLoad(function(){
 //初始化界面
 function initial(program_name){
     //界面
-    require(['dojo/request','baf/base/Util','baf/command/Command',"baf/base/Env"],
+    require(['dojo/request','base/Util','cmd/Command',"base/Env"],
         function(request,Util,Command,ENV){
             //验证输入有效性
             var currentWso = ENV.currentWso();
@@ -51,10 +51,7 @@ function initial(program_name){
 }
 
 function render_grid(program_name){
-    require(['baf/base/Util',
-        'dojo/data/ItemFileWriteStore',
-        'baf/dijit/grid/DataGrid',
-        "dojo/dom-construct"],
+    require(['base/Util','dojo/data/ItemFileWriteStore','grid/DataGrid',"dojo/dom-construct"],
         function(Util,ItemFileWriteStore,DataGrid,domConstruct){
             var grid;
             //载入data grid
@@ -105,7 +102,7 @@ function render_grid(program_name){
 }
 
 function btclick(){
-    require(['baf/base/Util'],function(Util){
+    require(['base/Util'],function(Util){
         var node = Util.dom_byId('program_name');
         //如果内容为空则重新聚焦
         if(node.value == ""){
@@ -124,7 +121,7 @@ function postCreate(){
 //提交更新
 function postEdit(){
 
-    require(["baf/base/Util"],function(Util){
+    require(["base/Util"],function(Util){
 
         var grid = Util.dijit_byId("mygrid");
         var items = grid.selection.getSelected();
@@ -143,21 +140,18 @@ function postEdit(){
 
 //提交更新
 function postDelete(){
-    require(["baf/base/Util","baf/command/Command"],function(Util,Command){
+    require(["base/Util","command/Command"],function(Util,Command){
         var grid = Util.dijit_byId("mygrid");
         var items = grid.selection.getSelected();
         if(items.length) {
             dojo.forEach(items, function(selectedItem){
                 //排除弹性域
-                if(selectedItem !== null && grid.store.getValues(selectedItem,"addfield_flag") != 1){
+                if(selectedItem !== null && grid.store.getValue(selectedItem,"addfield_flag") != 1){
 
                     if(confirm(Util.message.info_sureDelete)){
-                        var id = grid.store.getValues(selectedItem,"ui_field_id");
+                        var id = grid.store.getValue(selectedItem,"ui_field_id");
                         if(id){
-                            remoteAction({ui_field_id : id},"destroy",function(){
-                                //成功之后
-                                Util.dijit_byId("mygrid").store.deleteItem(selectedItem);
-                            });
+                            remoteAction({ui_field_id : id},"destroy");
                         }
 
                     }
@@ -174,7 +168,7 @@ function postDelete(){
 
 function update_grid(){
 
-    require(["dojo/dom-form","baf/command/Command","baf/base/Util","baf/base/Env"],
+    require(["dojo/dom-form","cmd/Command","base/Util","base/Env"],
         function(domForm,Command,Util,Env){
 
             var dialogForm = Util.dijit_byId("dialogForm");
@@ -194,7 +188,7 @@ function update_grid(){
                 //如果field_name不存在 store.newItem
                 if(data){
                     //获取helptext编辑框内容
-                    data["help_text"] = Util.trim(Util.dijit_byId("myEditor").value);
+                    data["help_text"] = Util.string.trim(Util.dijit_byId("myEditor").value);
 
                     //转换checkbox值
                     data["required_flag"] = Util.xchecked(data["required_flag"]);
@@ -216,15 +210,15 @@ function update_grid(){
                     var hasflag = false;
                     items.forEach(function(item){
 //                        console.info(store.getAttributes(item));
-                        if(item && store.getValues(item,"field_name") == data.field_name){
-                            data["ui_field_id"] = store.getValues(item,"ui_field_id");
+                        if(item && store.getValue(item,"field_name") == data.field_name){
+                            data["ui_field_id"] = store.getValue(item,"ui_field_id");
                             hasflag = true;
                             var attributes = store.getAttributes(item);
                             attributes.forEach(function(attribute){
                                 if(data[attribute] != undefined){
                                     //                                    console.info(attribute + ":" +data[attribute]);
-                                    if(data[attribute] != store.getValues(item,attribute)){
-                                        store.setValues(item,attribute,data[attribute]);
+                                    if(data[attribute] != store.getValue(item,attribute)){
+                                        store.setValue(item,attribute,data[attribute]);
                                     }
                                 }
                             });
@@ -240,10 +234,7 @@ function update_grid(){
                         Util.dijit_byId("program_name").key = p_program_id;
                         data["program_id"] = p_program_id;
 
-                        remoteAction(data,"create",function(){
-                            //成功之后新增grid条目
-                            Util.dijit_byId("mygrid").store.newItem(data);
-                        });
+                        remoteAction(data,"create");
                     }
 
                     hide_dialog();
@@ -259,7 +250,7 @@ function update_grid(){
 
 //隐藏dialog
 function hide_dialog(){
-    require(["baf/base/Util"],function(Util){
+    require(["base/Util"],function(Util){
         var formDialog = Util.dijit_byId("formDialog");
         formDialog.hide();
     });
@@ -267,7 +258,7 @@ function hide_dialog(){
 }//hide_dialog
 
 function show_dialog(title,item){
-    require(["baf/base/Util","baf/dijit/Dialog"],function(Util,Dialog){
+    require(["base/Util","baf/dijit/Dialog"],function(Util,Dialog){
 
         var formDialog = Util.dijit_byId("formDialog");
 
@@ -298,25 +289,27 @@ function show_dialog(title,item){
 
 //填充值
 function fillValue(formDialog,item){
-    require(["baf/base/Util"],function(Util){
+    require(["base/Util"],function(Util){
         if(item){
             var grid = Util.dijit_byId("mygrid");
             dojo.forEach(grid.store.getAttributes(item), function(attribute){
-                var value = grid.store.getValues(item, attribute).toString();
-                switch(attribute){
-                    case "help_text":
-                        //help_text
-                        var editor = Util.dijit_byId("myEditor");
-                        editor.setValue(value);
-                        break;
-                    case "validation_code":
-                        Util.fillValue(attribute,value,grid.store.getValues(item, "validation_desc").toString(),formDialog.domNode);
-                        break;
-                    case "valuelist_name" :
-                        Util.fillValue(attribute,value,grid.store.getValues(item, "valuelist_desc").toString(),formDialog.domNode);
-                        break;
-                    default:
-                        Util.fillValue(attribute,value,null,formDialog.domNode);
+                var value = grid.store.getValue(item, attribute);
+                if(value){
+                    switch(attribute){
+                        case "help_text":
+                            //help_text
+                            var editor = Util.dijit_byId("myEditor");
+                            editor.setValue(value);
+                            break;
+                        case "validation_code":
+                            Util.fillValue(attribute,value,grid.store.getValue(item, "validation_desc"),formDialog.domNode);
+                            break;
+                        case "valuelist_name" :
+                            Util.fillValue(attribute,value,grid.store.getValue(item, "valuelist_desc"),formDialog.domNode);
+                            break;
+                        default:
+                            Util.fillValue(attribute,value,null,formDialog.domNode);
+                    }
                 }
             }); /* end forEach */
         }
@@ -324,16 +317,19 @@ function fillValue(formDialog,item){
 }//fillValue
 
 //远程作业
-function remoteAction(data,type,successFun,errorFun){
-    require(["baf/base/Util"],function(Util){
-        Util.post(Util.url.safeurl("bc/uifield",type),data,successFun,errorFun);
+function remoteAction(data,type){
+    require(["base/Util"],function(Util){
+        Util.post(Util.url.safeurl("bc/uifield",type),data,function(){
+            //重新刷新
+            btclick();
+        });
     });
 }
 
 //当选择了值集之后，默认值的选框则可以选择
 function defaultValue_onFocus(){
     //动态获取验证码
-    require(["dojo/request","baf/base/Util"],function(request,Util){
+    require(["dojo/request","base/Util"],function(request,Util){
         //远程更新
         var valuelist_name = Util.dijit_byId("valuelist_name").value;
         request.get(Util.url.safeurl("bc/valuelist","find_by_name",{valuelist_name : valuelist_name}),{handleAs : "json"}).then(function(data){

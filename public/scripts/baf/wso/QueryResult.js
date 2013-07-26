@@ -1,6 +1,5 @@
-define(["dojo/_base/declare", "baf/dijit/Dialog", "baf/base/Util", "baf/dijit/grid/DataGrid",
-    "dojo/data/ItemFileReadStore", "dojo/dom-construct","dojox/grid/enhanced/plugins/IndirectSelection",
-    "baf/dijit/form/Button"],
+define(["dojo/_base/declare", "baf/dijit/Dialog", "base/Util", "grid/DataGrid","dojo/data/ItemFileReadStore",
+    "dojo/dom-construct","dojox/grid/enhanced/plugins/IndirectSelection","form/Button"],
     function(declare,Dialog,Util,DataGrid,ItemFileReadStore,construct,IndirectSelection,Button){
     /*
      *   摘要:

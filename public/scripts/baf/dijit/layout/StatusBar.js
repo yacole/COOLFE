@@ -1,6 +1,5 @@
-define(["dojo/_base/declare", "dojo/request", "dijit/layout/ContentPane",
-    "baf/dijit/layout/MessageBar", "dijit/Toolbar", "dijit/ToolbarSeparator",
-    "dijit/form/Button", "baf/base/Util" ],
+define(["dojo/_base/declare", "dojo/request", "dijit/layout/ContentPane","layout/MessageBar",
+    "dijit/Toolbar", "dijit/ToolbarSeparator","dijit/form/Button", "base/Util" ],
     function(declare,request,ContentPane,MessageBar,Toolbar,ToolbarSeparator,Button,Util){
         /*
          *   摘要:

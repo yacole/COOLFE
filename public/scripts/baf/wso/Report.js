@@ -1,5 +1,5 @@
-define(["dojo/_base/declare", "dijit/layout/ContentPane", "dojo/request", "baf/dijit/layout/MenuBar",
-    "baf/base/Util", "baf/command/Command","baf/dijit/layout/ToolBar","baf/reporter/viewer/Viewer"],
+define(["dojo/_base/declare", "dijit/layout/ContentPane", "dojo/request", "layout/MenuBar",
+    "base/Util", "cmd/Command","layout/ToolBar","report/viewer/Viewer"],
     function(declare,ContentPane,request,MenuBar,Util,Command,ToolBar,ReportGrid){
         /*
          *   摘要:
@@ -10,10 +10,7 @@ define(["dojo/_base/declare", "dijit/layout/ContentPane", "dojo/request", "baf/d
             program_id : null,
             //创建时间戳
             timestamp : null,
-            //控制器 ，与action组合获取服务端url
-            controller : null,
-            //动作
-            action : null,
+            report_id : null,
             //参数
             params : null,
             //字段列表
@@ -45,7 +42,7 @@ define(["dojo/_base/declare", "dijit/layout/ContentPane", "dojo/request", "baf/d
 
                 //内容包括在此面板中
                 this.gridPane = new ReportGrid({
-                    dataUrl : Util.url.safeurl(this.controller,this.action,this.params),
+                    dataUrl : Util.url.report_read_data_by_report_id(this.report_id),
                     program_id : this.program_id,
                     timestamp : this.timestamp,
                     id : Util.id.wso_GridPane + this.timestamp

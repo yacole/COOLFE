@@ -1,6 +1,5 @@
-define(["dojo/_base/declare", "dijit/layout/ContentPane", "dojo/request", "baf/dijit/layout/MenuBar",
-    "baf/base/Util", "baf/command/Command", "baf/dijit/layout/ToolBar", "dojox/layout/ContentPane",
-    "baf/wso/InnerForm", "dojo/dom-construct"],
+define(["dojo/_base/declare", "dijit/layout/ContentPane", "dojo/request", "layout/MenuBar",
+    "base/Util", "cmd/Command", "layout/ToolBar", "dojox/layout/ContentPane","./InnerForm", "dojo/dom-construct"],
     function(declare,ContentPane,request,MenuBar,Util,Command,ToolBar,ContentPaneX,InnerForm,construct){
         /*
          *   摘要:
@@ -31,12 +30,15 @@ define(["dojo/_base/declare", "dijit/layout/ContentPane", "dojo/request", "baf/d
             innerForm : null,
             //工作区对象：属于表单
             wsoType : Util.id.programTYPE_FORM,
+            //页面跳转历史
+            history : [],
 
             constructor : function(args){
                 this.inherited(arguments);
             },
 
             startup : function(){
+                var o = this;
                 //加载系统菜单栏和工具栏
                 this.addChild(this.menuBar);
                 this.addChild(this.toolBar);
@@ -56,6 +58,12 @@ define(["dojo/_base/declare", "dijit/layout/ContentPane", "dojo/request", "baf/d
                     onDownloadEnd : function(){
                         //字段标签赋值
                         Util.queryTofillLabel();
+                        //监控返回按钮
+                        if(o.history.length > 0){
+                            o.toolBar.backButton.set("disabled",false);
+                        }else{
+                            o.toolBar.backButton.set("disabled",true);
+                        }
                     }
                 });
 
@@ -78,6 +86,8 @@ define(["dojo/_base/declare", "dijit/layout/ContentPane", "dojo/request", "baf/d
             },
             //表单内容面板动态转向
             directedTo : function(url){
+                //记录页面url历史，便于返回
+                this.history.push(this.contentPane.href);
                 //当前页面跳转
                 this.contentPane.set("href",url);
             },
@@ -105,6 +115,26 @@ define(["dojo/_base/declare", "dijit/layout/ContentPane", "dojo/request", "baf/d
             //刷新
             refresh : function(){
                 this.contentPane.refresh();
+            },
+            //返回上一页跳转的页面
+            callback : function(){
+                if(this.isDirty()){
+                    if (confirm(Util.message.warnning_confirm_closeWso)){
+                        this._backHistory();
+                    }
+                }else{
+                    this._backHistory();
+                }
+            },
+            //返回
+            _backHistory : function(){
+                var lastPos = this.history.length - 1;
+                if(lastPos+1 > 0){
+                    var url = this.history[lastPos];
+                    this.contentPane.set("href",url);
+                    this.history.splice(lastPos,1);
+                }
             }
+
         });
     });

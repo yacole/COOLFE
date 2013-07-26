@@ -1,10 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * Created by JetBrains PhpStorm.
- * User: ybchenyy
- * Date: 13-5-30
- * Time: 上午9:01
- * To change this template use File | Settings | File Templates.
+ * 摘要：
+ * 由于前段布局无法保持，此控制器用于远程布局管理
  */
 class Grid_layout extends CI_Controller {
 
@@ -13,11 +10,7 @@ class Grid_layout extends CI_Controller {
         header('Content-Type: text/html; charset=utf-8');
         $this->load->model('bc/grid_layout_model','layout');
     }
-
-    function index(){
-        $this->load->view('bc/program/rpts/grid/layout_select');
-    }
-
+    //保持
     function save(){
         $messages = [];
         //判断是否为POST

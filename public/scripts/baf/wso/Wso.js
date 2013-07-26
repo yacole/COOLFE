@@ -1,6 +1,5 @@
-define(["dojo/_base/declare","baf/base/Util","dijit/layout/TabContainer","baf/wso/Form",
-    "dojo/request", "baf/dijit/layout/MenuBar", "baf/command/Command", "baf/wso/QueryForm",
-    "baf/wso/QueryResult","baf/wso/Report","baf/dijit/layout/ToolBar"],
+define(["dojo/_base/declare","base/Util","dijit/layout/TabContainer","./Form","dojo/request",
+    "layout/MenuBar","cmd/Command","./QueryForm","./QueryResult","./Report","layout/ToolBar"],
     function(declare,Util,TabContainer,Form,request,MenuBar,Command,QueryForm,QueryResult,Report,ToolBar){
         /*
          *   摘要:
@@ -12,9 +11,8 @@ define(["dojo/_base/declare","baf/base/Util","dijit/layout/TabContainer","baf/ws
             dndSource : null,
             //历史队列
             historyStack : null,
-
+            //最大开启页签数
             tabMaxOpen : Util.config.tabMaxOpen,
-
             startup : function(){
                 //初始化拖拽源
 //                this.dndSource = new AutoSource(this.tablist.containerNode,{autoSync: true,horizontal : true});
@@ -123,9 +121,6 @@ define(["dojo/_base/declare","baf/base/Util","dijit/layout/TabContainer","baf/ws
                         var wsoAtrributes = {
                             timestamp : timestamp,
                             program_id : data.program_id,
-                            controller : data.controller,
-                            action : data.action,
-                            params : params,
                             home_page : data.home_page,
                             title : data.title,
                             closable : true,
@@ -140,10 +135,14 @@ define(["dojo/_base/declare","baf/base/Util","dijit/layout/TabContainer","baf/ws
                         switch(data.program_type){
 
                             case Util.id.programTYPE_FORM:
+                                wsoAtrributes.action = data.action;
+                                wsoAtrributes.controller = data.controller;
+                                wsoAtrributes.params = data.params;
                                 //创建一个FORM工作区
                                 wso = new Form(wsoAtrributes);
                                 break;
                             case Util.id.programTYPE_REPORT:
+                                wsoAtrributes.report_id = data.report_id;
                                 //创建一个FORM工作区
                                 wso = new Report(wsoAtrributes);
                                 break;

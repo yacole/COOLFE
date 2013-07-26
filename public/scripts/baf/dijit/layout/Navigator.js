@@ -1,6 +1,5 @@
-define(["dojo/_base/declare", "baf/base/Util", "dijit/Tree",
-    "dojo/data/ItemFileReadStore", "dijit/tree/ForestStoreModel",
-    "dijit/layout/ContentPane", "baf/base/Env","dijit/form/TextBox"],
+define(["dojo/_base/declare", "base/Util", "dijit/Tree","dojo/data/ItemFileReadStore",
+    "dijit/tree/ForestStoreModel","dijit/layout/ContentPane", "base/Env","dijit/form/TextBox"],
     function(declare,Util,Tree, ItemFileReadStore,ForestStoreModel,ContentPane,Env,TextBox){
         /*
          *   摘要:

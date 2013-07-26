@@ -1,19 +1,11 @@
-/**
- * Created with JetBrains PhpStorm.
- * User: ybchenyy
- * Date: 13-3-28
- * Time: 下午2:51
- * To change this template use File | Settings | File Templates.
- */
-define(["dojo/_base/declare",
-    "dijit/layout/BorderContainer",
-    "dijit/layout/ContentPane",
-    "baf/wso/Wso",
-    "baf/dijit/layout/StatusBar",
-    "baf/dijit/layout/Navigator",
-    "baf/base/Util"],
+define(["dojo/_base/declare","dijit/layout/BorderContainer","dijit/layout/ContentPane",
+    "baf/wso/Wso","layout/StatusBar","layout/Navigator","base/Util"],
     function(declare,BorderContainer, ContentPane,Wso,StatusBar,Navigator,Util){
-        return  declare("baf.main",[BorderContainer],{
+        /*
+         *   摘要:
+         *       baf 入口
+         */
+        return  declare("",[BorderContainer],{
 
             TopPane : null,
             NavigatorPane : null,

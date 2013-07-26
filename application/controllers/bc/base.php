@@ -1,10 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * Created by JetBrains PhpStorm.
- * User: ybchenyy
- * Date: 13-5-30
- * Time: 上午9:01
- * To change this template use File | Settings | File Templates.
+ * 摘要：
+ *     用于存放一些基础函数
  */
 class Base extends CI_Controller {
 

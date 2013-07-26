@@ -1,4 +1,4 @@
-define(["dojo/_base/declare", "dijit/form/Select",  "baf/base/Util",  "dojo/request"],
+define(["dojo/_base/declare", "dijit/form/Select",  "base/Util",  "dojo/request"],
     function(declare,Select,Util,request){
         /*
          *   摘要:

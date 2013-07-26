@@ -1,5 +1,4 @@
-define([
-    "dojo/_base/declare", "dijit/MenuBar", "dijit/PopupMenuBarItem", "dijit/Menu",
+define(["dojo/_base/declare", "dijit/MenuBar", "dijit/PopupMenuBarItem", "dijit/Menu",
     "dijit/MenuItem", "dijit/DropDownMenu", "dijit/PopupMenuItem", "dijit/MenuSeparator",
     "dojo/data/ItemFileReadStore"],
     function(declare,MenuBar, PopupMenuBarItem, Menu, MenuItem, DropDownMenu, PopupMenuItem, MenuSeparator,ItemFileReadStore){

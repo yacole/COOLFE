@@ -1,11 +1,3 @@
-<!-- CSS渲染 -->
-<style>
-    .label{
-        text-align: left;
-        width: 80px;
-        height: 20px;
-    }
-</style>
 <table class="maintable">
     <tr>
         <td class="label"><label for="program_name"></label></td>

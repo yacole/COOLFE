@@ -12,11 +12,17 @@ define(function(){
         button_confirm : "确认",
         button_cancel : "取消",
         button_saveAs : "另存为",
+        button_default : "默认",
+        button_delete : "删除",
 
         column_value : "值",
         column_label : "描述",
 
         ALL : "全部",
+        created_by : "创建者",
+        created_date : "创建时间",
+        last_updated_by : "最后更新者",
+        last_update_date : "最后更新时间",
 
 
         //全局区
@@ -56,6 +62,13 @@ define(function(){
         grid_headerMenu_setFilter : "设置过滤器",
         grid_headerMenu_clearFilter : "清除过滤器",
         grid_layout : "布局",
+        grid_layout_description : "布局描述",
+        grid_layout_default_flag : "默认标识",
+        grid_layout_select : "选择布局",
+        grid_layout_type : "布局类型",
+        grid_layout_type_ALL : "全部",
+        grid_layout_type_01 : "全局",
+        grid_layout_type_02 : "私人",
         grid_layout_select : "选择布局",
         grid_layout_edit : "更改布局",
         grid_layout_save : "保存布局",

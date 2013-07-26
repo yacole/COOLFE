@@ -1,4 +1,4 @@
-define(["dojo/topic","baf/command/History","baf/config/IdList","baf/dijit/RightMenu"],
+define(["dojo/topic","cmd/History","baf/config/IdList","baf/dijit/RightMenu"],
     function(topic,cmdHistory,IdList,RightMenu){
     return {
         /*

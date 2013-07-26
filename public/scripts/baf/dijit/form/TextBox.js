@@ -1,5 +1,5 @@
-define(["dojo/_base/declare", "dijit/form/ValidationTextBox", "baf/base/Util",
-    "dijit/form/Button", "dojo/request", "baf/base/Env","baf/wso/QueryResult"],
+define(["dojo/_base/declare", "dijit/form/ValidationTextBox", "base/Util",
+    "dijit/form/Button", "dojo/request", "base/Env","baf/wso/QueryResult"],
     function(declare,ValidationTextBox,Util,Button,request,Env,QueryResult){
         /*
          *   摘要:

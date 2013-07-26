@@ -42,7 +42,7 @@ define(function(){
         wso_innerForm : "bafwsoForminnerForm_",
         wso_Content_class : "bafwsoFormContent",
         wso_FormContent_class : "bafwsoinnerFormContent",
-        wso_innerForm : "bafwsoinnerForm_",
+//        wso_innerForm : "bafwsoinnerForm_",
         wso_GridPane : "bafwsoRptGridPane_",
 
 

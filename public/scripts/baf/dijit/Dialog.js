@@ -1,4 +1,4 @@
-define(["dojo/_base/declare","dijit/Dialog","baf/base/Util","dojo/dom-geometry"],
+define(["dojo/_base/declare","dijit/Dialog","base/Util","dojo/dom-geometry"],
     function(declare,Dialog,Util,domGeometry){
     /*
      *   摘要:

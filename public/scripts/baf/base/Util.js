@@ -2,8 +2,8 @@ var language = "zh"; //全局变量：用于控制语言包,默认为"zh"
 
 define(["baf/config/Url", "baf/language/"+language+"/Label", "baf/language/"+language+"/Message",
     "baf/config/Idlist", "baf/config/Config", "dojo/dom-construct", "dijit/Dialog",
-    "dijit/form/Button","dojo/request","baf/command/Command","baf/base/string"],
-    function(url,label,message,id,config,domConstruct,Dialog,Button,request,Command,string){
+    "dijit/form/Button","dojo/request","cmd/Command","./string"],
+    function(url,label,message,id,config,domConstruct,Dialog,Button,request,Command,String){
         /*
          *   摘要:
          *       主要是存放一些公用的函数和工具，创建各种工具的快捷通道，比如，url,label,message,id,config等，
@@ -16,7 +16,7 @@ define(["baf/config/Url", "baf/language/"+language+"/Label", "baf/language/"+lan
             message : message,  //用于存放系统中提示框的内容
             id : id,    //用于封装程序中用到的ID
             config : config,    //配置文件
-            string : string , //字符串函数
+            string : String , //字符串函数
 
             /*
             * 公用函数：字符串处理，ui处理等等
@@ -78,21 +78,22 @@ define(["baf/config/Url", "baf/language/"+language+"/Label", "baf/language/"+lan
             },
             //远程提交post
             post : function(url,data,successFunc,failureFunc){
-              request.post(url,{
+                console.info(url);
+                request.post(url,{
                   data : data,
                   timeout : config.remote_timeout,
                   handleAs : "json"
-              }).then(function(response){
+                }).then(function(response){
                   Command.handleExport(response);
                   if(successFunc){
                       successFunc();
                   }
-              },function(error){
+                },function(error){
                   Command.show_dialog({content : error});
                   if(failureFunc){
                       failureFunc();
                   }
-              });
+                });
             },
             //输出报错到控制台
             postEcho : function(url,data){
@@ -220,7 +221,7 @@ define(["baf/config/Url", "baf/language/"+language+"/Label", "baf/language/"+lan
 //                console.info(target);
                 //赋值
                 if(target.length > 0){
-                    desc = this.trim(target[0].innerHTML);
+                    desc = this.string.trim(target[0].innerHTML);
                 }
                 return desc;
             },
@@ -238,39 +239,6 @@ define(["baf/config/Url", "baf/language/"+language+"/Label", "baf/language/"+lan
                 return rts;
             },
 
-            /*
-                字符串空格处理
-             */
-            //去左空格;
-            ltrim : function(string){
-                return string.replace(/^\s*/, "");
-            },
-            //去右空格;
-            rtrim : function(string){
-                return string.replace(/\s*$/, "");
-            },
-            //去左右空格
-            trim : function(string){
-                //s.replace(/(^s*)|(s*$)/g, "");
-                return this.rtrim(this.ltrim(string));
-            },
-            mbStringLength : function(s) {
-                var totalLength = 0;
-                var i;
-                var charCode;
-                for (i = 0; i < s.length; i++) {
-                    charCode = s.charCodeAt(i);
-                    if (charCode < 0x007f) {
-                        totalLength = totalLength + 1;
-                    } else if ((0x0080 <= charCode) && (charCode <= 0x07ff)) {
-                        totalLength += 2;
-                    } else if ((0x0800 <= charCode) && (charCode <= 0xffff)) {
-                        totalLength += 3;
-                    }
-                }
-                //alert(totalLength);
-                return totalLength;
-            },
             //数组排除重复项
             unique : function (array) {
                 var ret = [], done = {};
@@ -289,8 +257,8 @@ define(["baf/config/Url", "baf/language/"+language+"/Label", "baf/language/"+lan
             },
 
         /*
-           实用工具
-         */
+        *   实用工具
+        */
             //效果同js原先的confirm
             //content ：弹出框内容 ； callback ： 确认后要执行的内容
             confirm : function(content,callback){

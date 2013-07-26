@@ -1,4 +1,4 @@
-define(["dojo/_base/declare", "dijit/Editor", "baf/base/Util"],
+define(["dojo/_base/declare", "dijit/Editor", "base/Util"],
     function(declare,Editor,Util){
         /*
          *   摘要:

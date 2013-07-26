@@ -1,4 +1,4 @@
-define(["baf/base/Util","baf/base/Env"],function(Util,ENV){
+define(["base/Util","base/Env"],function(Util,ENV){
     /*
      *   摘要:
      *       处理服务端返回数据，包括处理：报错消息，数据包，运行程序等

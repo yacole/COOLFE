@@ -1,4 +1,4 @@
-define(["dojo/_base/declare","dijit/form/CheckBox","baf/base/Util"],
+define(["dojo/_base/declare","dijit/form/CheckBox","base/Util"],
     function(declare,CheckBox,Util){
         /*
          *   摘要:

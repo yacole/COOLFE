@@ -1,6 +1,5 @@
 define([ "dijit/Menu", "dijit/MenuItem", "dijit/CheckedMenuItem", "dijit/MenuSeparator",
-    "dijit/PopupMenuItem", "dojo/aspect", "baf/base/Util" , "baf/base/Env",
-    "baf/command/Command"],
+    "dijit/PopupMenuItem", "dojo/aspect", "base/Util" , "base/Env","cmd/Command"],
     function(Menu, MenuItem, CheckedMenuItem, MenuSeparator, PopupMenuItem,aspect,Util,ENV,Command){
     /*
      *   摘要:

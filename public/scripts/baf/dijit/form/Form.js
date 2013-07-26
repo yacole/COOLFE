@@ -1,5 +1,5 @@
-define(["dojo/_base/declare", "dijit/form/Form", "baf/base/Util", "baf/base/Env",
-    "baf/command/Command", "dojo/request", "dojo/dom-form"],
+define(["dojo/_base/declare", "dijit/form/Form", "base/Util", "base/Env",
+    "cmd/Command", "dojo/request", "dojo/dom-form"],
     function(declare,Form,Util,Env,Command,request,domForm){
         /*
          *   摘要:

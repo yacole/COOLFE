@@ -1,5 +1,5 @@
 define(["dojo/_base/declare","dijit/layout/ContentPane","dijit/form/Button",
-    "dojo/request","baf/base/Util","baf/dijit/Dialog","dojo/dom-construct"],
+    "dojo/request","base/Util","baf/dijit/Dialog","dojo/dom-construct"],
 function(declare,ContentPane,Button,request,Util,Dialog,construct){
     /*
      *   摘要:

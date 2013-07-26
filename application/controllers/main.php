@@ -20,7 +20,9 @@ class Main extends CI_Controller {
 
         $this->load->view('layout_main',$data);
     }
-
+     function php_info(){
+         echo phpinfo();
+     }
     /*
      * 首页界面配置 : 导航栏菜单栏
      */
@@ -96,7 +98,8 @@ class Main extends CI_Controller {
                 },
                 {"Menu_id": 4,"Description": "屏幕字段修改","F_TYPE":"program","program_id":3},
                 {"Menu_id": 24,"Description": "程序管理","F_TYPE":"program","program_id":1},
-                {"Menu_id": 25,"Description": "程序清单报表","F_TYPE":"report","program_id":5}
+                {"Menu_id": 25,"Description": "程序清单报表","F_TYPE":"report","program_id":5},
+                {"Menu_id": 26,"Description": "报表设计器","F_TYPE":"program","program_id":6}
             ]
         }';
 

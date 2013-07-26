@@ -82,6 +82,10 @@ hr.spacer {
     width: 50%;
 }
 
+.systemHelpDialog{
+    width : 40em;
+}
+
 /*图表工具栏图标*/
 .gridToolBarExport{
     background-image : url("/public/images/grid/export.jpg");
@@ -95,4 +99,10 @@ hr.spacer {
 .bafReporterViewerSetupDialog{
     width:45em;
     height:30em
+}
+
+.label {
+    text-align: left;
+    width:  6em;
+    height: 2em;
 }

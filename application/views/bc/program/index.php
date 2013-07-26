@@ -1,39 +1,31 @@
-<!-- CSS渲染 -->
-<style>
-    .label{
-        text-align: left;
-        width: 80px;
-        height: 20px;
-    }
-</style>
-    <table class="maintable">
-        <tr>
-            <td class="label"></td>
-            <td>
-                <button data-dojo-type="baf/dijit/form/Button" id="createButton" type="button" onclick="directedToAction('create');">
-                    <label for="createButton"></label>
-                </button>
-                <button data-dojo-type="baf/dijit/form/Button" id="editButton" type="button" onclick="directedToAction('edit');">
-                    <label for="editButton"></label>
-                </button>
-                <button data-dojo-type="baf/dijit/form/Button" id="showButton" type="button" onclick="directedToAction('show');">
-                    <label for="showButton"></label>
-                </button>
-                <button data-dojo-type="baf/dijit/form/Button" id="destroyButton" type="button" onclick="directedToAction('destroy');">
-                    <label for="destroyButton"></label>
-                </button>
-                <button data-dojo-type="baf/dijit/form/Button" id="executButton" type="button" onclick="directedToAction('execute');">
-                    <label for="executeButton"></label>
-                </button>
-            </td>
-            <td></td>
-        </tr>
-        <tr>
-            <td class="label"><label for="program_name"></label></td>
-            <td><input data-dojo-type="baf/dijit/form/TextBox" name="program_name" uppercase="true" trim="true"/></td>
-            <td></td>
-        </tr>
-    </table>
+<table class="maintable">
+    <tr>
+        <td class="label"></td>
+        <td>
+            <button data-dojo-type="baf/dijit/form/Button" id="createButton" type="button" onclick="directedToAction('create');">
+                <label for="createButton"></label>
+            </button>
+            <button data-dojo-type="baf/dijit/form/Button" id="editButton" type="button" onclick="directedToAction('edit');">
+                <label for="editButton"></label>
+            </button>
+            <button data-dojo-type="baf/dijit/form/Button" id="showButton" type="button" onclick="directedToAction('show');">
+                <label for="showButton"></label>
+            </button>
+            <button data-dojo-type="baf/dijit/form/Button" id="destroyButton" type="button" onclick="directedToAction('destroy');">
+                <label for="destroyButton"></label>
+            </button>
+            <button data-dojo-type="baf/dijit/form/Button" id="executButton" type="button" onclick="directedToAction('execute');">
+                <label for="executeButton"></label>
+            </button>
+        </td>
+        <td></td>
+    </tr>
+    <tr>
+        <td class="label"><label for="program_name"></label></td>
+        <td><input data-dojo-type="baf/dijit/form/TextBox" name="program_name" uppercase="true" trim="true"/></td>
+        <td></td>
+    </tr>
+</table>
 
 
 <script>
@@ -51,7 +43,8 @@
                 case "create":
                     innderForm.formValidate(
                         function(){
-                            wso.openProgram_byName("BC_PROGRAM_C","_self",{program_name : program_name});
+//                            wso.openProgram_byName("BC_PROGRAM_C","_self",{program_name : program_name});
+                            currentWso.directedTo("index.php/bc/report/builder");
                         }
                     );
                     break;
