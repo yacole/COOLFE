@@ -140,7 +140,7 @@ function postEdit(){
 
 //提交更新
 function postDelete(){
-    require(["base/Util","command/Command"],function(Util,Command){
+    require(["base/Util","cmd/Command"],function(Util,Command){
         var grid = Util.dijit_byId("mygrid");
         var items = grid.selection.getSelected();
         if(items.length) {
@@ -226,14 +226,13 @@ function update_grid(){
                         } //if
 
                     }); //forEach
+                    //程序ID
+                    data["program_id"] = p_program_id;
                     //不存在，则新增
                     if(hasflag){
                         //远程更新
                         remoteAction(data,"update");
                     } else{
-                        Util.dijit_byId("program_name").key = p_program_id;
-                        data["program_id"] = p_program_id;
-
                         remoteAction(data,"create");
                     }
 

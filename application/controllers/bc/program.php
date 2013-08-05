@@ -1,10 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * Created by JetBrains PhpStorm.
- * User: ybchenyy
- * Date: 13-4-9
- * Time: 上午11:19
- * To change this template use File | Settings | File Templates.
+ * 摘要：
+ *      程序管理
  */
 class Program extends CI_Controller {
 
@@ -165,30 +162,27 @@ class Program extends CI_Controller {
         }
     }
 
-    function workspace()
-    {
+    function workspace(){
         if(isset($_GET['id'])){
             $rs = $this->program->find($_GET['id']);
-            echo rs_to_json($rs);
+            export_to_json($rs);
         }
     }
 
     /*
      * 获取数据接口：给外部提供数据
      */
-    function find_by_name()
-    {
-        if(isset($_GET['program_name'])){
-            $rs = $this->program->find_by_name($_GET['program_name']);
-            echo rs_to_json($rs);
+    function find_by_name(){
+        if(get_parameter('program_name')){
+            $rs = $this->program->find_by_name(cftrim(get_parameter('program_name')));
+            export_to_json($rs);
         }
     }
 
-    function find()
-    {
-        if(isset($_GET['program_id'])){
-            $rs = $this->program->find($_GET['program_id']);
-            echo rs_to_json($rs);
+    function find(){
+        if(get_parameter('program_id')){
+            $rs = $this->program->find(get_parameter('program_id'));
+            export_to_json($rs);
         }
     }
 

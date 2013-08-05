@@ -79,17 +79,19 @@ define(["baf/config/Url", "baf/language/"+language+"/Label", "baf/language/"+lan
             //远程提交post
             post : function(url,data,successFunc,failureFunc){
                 console.info(url);
+                console.info(data);
                 request.post(url,{
                   data : data,
                   timeout : config.remote_timeout,
                   handleAs : "json"
                 }).then(function(response){
-                  Command.handleExport(response);
-                  if(successFunc){
-                      successFunc();
-                  }
-                },function(error){
-                  Command.show_dialog({content : error});
+                        console.info(response);
+                      Command.handleExport(response);
+                      if(successFunc){
+                          successFunc();
+                      }
+                },function(){
+//                  Command.show_dialog({content : });
                   if(failureFunc){
                       failureFunc();
                   }

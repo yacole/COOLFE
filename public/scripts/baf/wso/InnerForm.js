@@ -7,13 +7,15 @@ define(["dojo/_base/declare", "form/Form", "base/Util", "base/Env","cmd/Command"
         return declare("",[Form],{
 
             formType : Util.id.formType_innerForm,
+            //被指定的参数，忽略原有的参数获取方法
             parameter : null,
 
             // 重写了提交函数，改用AJAX提交
             onSubmit : function(){
+                var params = new Object();
                 var o = this;
                 if(!this.parameter){
-                    var params = domForm.toObject(this.id);
+                    params = domForm.toObject(this.id);
                     var wso = Env.currentWso();
                     var objlist = wso.contentPane.getChildren();
 
@@ -37,21 +39,18 @@ define(["dojo/_base/declare", "form/Form", "base/Util", "base/Env","cmd/Command"
                             }
                         })
                     }
-                    this.parameter = params;
+                }else{
+                    params = this.parameter;
                 }
                 this.formValidate(function(){
                     //如果已经通过验证，则直接提交表单
-                    Util.post(o.action,o.parameter,o.success,o.failure);
+                    Util.post(o.action,params,o.successFunc,o.failureFunc);
 
                 });
 
                 return false;
             },
-            success : function(){
-
-            },
-            failure : function(){
-
-            }
+            successFunc : function(){},
+            failureFunc : function(){}
         });
     });

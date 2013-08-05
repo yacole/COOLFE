@@ -1,6 +1,6 @@
 define(["dojo/_base/declare","dijit/layout/ContentPane","dijit/form/Button",
-    "dojo/request","base/Util","baf/dijit/Dialog","dojo/dom-construct"],
-function(declare,ContentPane,Button,request,Util,Dialog,construct){
+    "dojo/request","base/Util","baf/dijit/Dialog","base/Env"],
+function(declare,ContentPane,Button,request,Util,Dialog,Env){
     /*
      *   摘要:
      *       消息栏，位于框架底部，用于展示消息
@@ -8,6 +8,9 @@ function(declare,ContentPane,Button,request,Util,Dialog,construct){
     return declare("",[Button],{
         //详细信息
         detail : new Array(),
+        isError : false,
+        //归属工作区对象
+        timestamp : null,
 
         //显示单条消息
         //type ：类型 ; classCode :消息类 ; messageCode 消息编号
@@ -28,7 +31,6 @@ function(declare,ContentPane,Button,request,Util,Dialog,construct){
 
         //显示状态栏消息，并设置显示效果：高亮？动画？
         setMessage : function(message,length){
-
             if(!length){
                 length = Util.config.message_max_length;
             }
@@ -41,6 +43,7 @@ function(declare,ContentPane,Button,request,Util,Dialog,construct){
                     });
                     break;
                 case  Util.id.messageTYPE_ERROR :
+                    this.isError = true;
                     //错误信息效果
                     this.set({
                         style : "background-color:red;"
@@ -64,7 +67,8 @@ function(declare,ContentPane,Button,request,Util,Dialog,construct){
             }else{
                 this.set("label",message.content);
             }
-
+            //获取当前工作区
+            this.timestamp = Env.currentWso().timestamp;
         },
         //弹框显示消息具体内容
         onClick : function(){
@@ -85,8 +89,13 @@ function(declare,ContentPane,Button,request,Util,Dialog,construct){
             detailDialog.show();
         },
         //隐藏消息栏
-        clear : function(){
+        displayNone : function(){
             this.set("style","display:none");
+        },
+        clear : function(){
+            this.isError = false;
+            this.set("label","");
+            this.set("style","");
         }
 
     });

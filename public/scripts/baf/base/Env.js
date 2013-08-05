@@ -49,6 +49,23 @@ define(["dojo/topic","cmd/History","baf/config/IdList","baf/dijit/RightMenu"],
         },
         reportGrid : function(){
             return this.currentWso().gridPane;
+        },
+        //是否为当前工作区的信息
+        currentMessageBar : function(){
+            var mB = this.messageBar();
+            if(mB.timestamp == this.currentWso().timestamp){
+                return mB;
+            }else{
+                return null;
+            }
+        },
+        isError : function(){
+            var o = this.currentMessageBar();
+            if(o && o.isError){
+                return o.isError;
+            }else{
+                return false;
+            }
         }
 
     }

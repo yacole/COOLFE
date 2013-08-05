@@ -1,10 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-/**
- * Created by JetBrains PhpStorm.
- * User: ybchenyy
- * Date: 13-4-21
- * Time: 下午7:35
- * To change this template use File | Settings | File Templates.
+/*
+ * 摘要：
+ *       值集管理
  */
 class Valuelist extends CI_Controller {
 

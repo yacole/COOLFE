@@ -1,5 +1,8 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-
+/*
+ * 摘要：
+ *      系统入口
+ */
 class Main extends CI_Controller {
 
     function __construct(){

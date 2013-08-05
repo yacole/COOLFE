@@ -8,6 +8,7 @@ define(["base/Util","base/Env"],function(Util,ENV){
         handleExport : function(response){
             if(response){
                 var messages = response.messages;
+                console.info(messages);
                 //处理消息
                 if(messages){
                     this._handleMessage(messages);
@@ -24,6 +25,7 @@ define(["base/Util","base/Env"],function(Util,ENV){
             var mlen = messages.length;
             //获取messageBar
             var messageBar = ENV.messageBar();
+            messageBar.clear();
             //显示必须要截断，根据配置
             var messageLength = Util.config.message_max_length;
 

@@ -1,10 +1,7 @@
-<?php
-/**
- * Created by JetBrains PhpStorm.
- * User: ybchenyy
- * Date: 13-5-20
- * Time: 上午9:06
- * 系统校验字段用
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+/*
+ * 摘要：
+ *      系统校验字段用
  */
 class Validator extends CI_Controller {
     function __construct(){
@@ -84,7 +81,7 @@ class Validator extends CI_Controller {
     }
 
     function find_by_uifield_id(){
-        $rs = $this->uifield->find($_GET['field_id'])->result_array();
+        $rs = $this->uifield->find(get_parameter('field_id'))->result_array();
         if(count($rs) > 0){
             $row = $rs[0];
             if(!is_null($row['validation_id'])){
@@ -97,7 +94,7 @@ class Validator extends CI_Controller {
     }
 
     function find(){
-        echo rs_to_json($this->validator->find($_GET['validation_id']));
+        echo rs_to_json($this->validator->find(get_parameter('validation_id')));
     }
 
     function find_by_name(){

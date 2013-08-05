@@ -1,10 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-/**
- * Created by JetBrains PhpStorm.
- * User: ybchenyy
- * Date: 13-4-27
- * Time: 上午11:15
- * To change this template use File | Settings | File Templates.
+/*
+ * 摘要：
+ *      UI界面的字段属性配置，包括：名称，大小，值集，以及验证信息
  */
 class Uifield extends CI_Controller {
 
@@ -28,116 +25,60 @@ class Uifield extends CI_Controller {
      * CRUD操作
      */
     function create(){
-        $messages = [];
         //判断是否为POST
         if($_POST){
             //如果不存在则创建
-            if($this->uifield->find_field_by_program_id_and_name($_POST['program_id'],$_POST['field_name'])){
+            if($this->uifield->find_field_by_program_id_and_name($_POST['program_id'],cftrim($_POST['field_name']))){
+                $data = $this->_post_data($_POST);
                 $data['program_id'] = $_POST['program_id'];
-                $data['field_name'] =  cftrim($_POST['field_name']);
-                $data['label'] = $_POST['label'];
-                $data['field_size'] = $_POST['field_size'];
-                $data['required_flag'] = $_POST['required_flag'];
-                $data['hidden_flag'] = $_POST['hidden_flag'];
-                $data['disabled_flag'] = $_POST['disabled_flag'];
-                $data['help_text'] = $_POST['help_text'];
-                $data['default_value'] = $_POST['default_value'];
-                //处理验证码，转成id
-                $data['validation_id'] = $this->validator->get_id(cftrim($_POST['validation_code']));
-
-                //处理值集，转成id
-                $data['valuelist_id'] = $this->valuelist->get_id(cftrim($_POST['valuelist_name']));
-
-                //                echo date("Y-m-d H:i:s",$_POST['last_update_date']);
-                //                date_default_timezone_set("Asia/Shanghai");
 
                 if($this->uifield->create($data)){
-                    array_push($messages,message('I','DATABASE','01',[$data['field_name']]));
+                    message('I','DATABASE','01',[$data['field_name']]);
                 }else{
-                    array_push($messages,message('E','DATABASE','02'));
+                    message('E','DATABASE','02');
                 }
             }else{
-                array_push($messages,message('E','DATABASE','03'));
+                message('E','DATABASE','03');
             }
-
-
         }else{
-            array_push($messages,message('E','REQUEST','01'));
+            message('E','REQUEST','01');
         }
-        $response['messages'] = $messages;
-        //输出消息
-        echo json_encode($response);
-
     }
 
-    function show(){
+    //显示
+    function show(){}
 
-
-
-    }
-
+    //更新
     function update(){
-        $messages = [];
-        //判断是否为POST
         if($_POST){
-
             if($this->uifield->isexists($_POST['ui_field_id'])){
-
-                $data['label'] = $_POST['label'];
+                $data = $this->_post_data($_POST);
                 $data['ui_field_id'] = $_POST['ui_field_id'];
-                $data['field_size'] = $_POST['field_size'];
-                $data['required_flag'] = $_POST['required_flag'];
-                $data['hidden_flag'] = $_POST['hidden_flag'];
-                $data['disabled_flag'] = $_POST['disabled_flag'];
-                $data['help_text'] = $_POST['help_text'];
-                $data['default_value'] = $_POST['default_value'];
-
-                //处理验证码，转成id
-                $data['validation_id'] = $this->validator->get_id(cftrim($_POST['validation_code']));
-
-                //处理值集，转成id
-                $data['valuelist_id'] = $this->valuelist->get_id(cftrim($_POST['valuelist_name']));
-
                 if($this->uifield->update($data)){
-                    array_push($messages,message('I','DATABASE','01',[$_POST['field_name']]));
+                    message('I','DATABASE','01',[$data['field_name']]);
                 }else{
-                    array_push($messages,message('E','DATABASE','02'));
+                    message('E','DATABASE','02');
                 }
-
-
             }else{
-                array_push($messages,message('E','DATABASE','03'));
+                message('E','DATABASE','03');
             }
         }else{
-            array_push($messages,message('E','REQUEST','01'));
+            message('E','REQUEST','01');
         }
-        $response['messages'] = $messages;
-        //输出消息
-        echo json_encode($response);
     }
-
+    //销毁
     function destroy(){
-        $messages = [];
-        //判断是否为POST
         if($_POST){
-
             if($this->uifield->destroy($_POST['ui_field_id'])) {
                 //删除成功
-//                       $data = array("message_id" => 1);
-                array_push($messages,message('I','DATABASE','01'));
+                message('I','DATABASE','01');
             }else{
                 //删除失败
-//                       $data = array("message_id" => 1);
-                array_push($messages,message('E','DATABASE','02'));
-
+                message('E','DATABASE','02');
             }
         }else{
-            array_push($messages,message('E','REQUEST','01'));
+            message('E','REQUEST','01');
         }
-
-        $response['messages'] = $messages;
-        //输出消息
-        echo json_encode($response);
     }
 
     //编辑表单
@@ -145,29 +86,51 @@ class Uifield extends CI_Controller {
         $this->load->view("bc/uifield/_formDialog");
     }
 
+
     /*
      * 获取数据接口：给外部提供数据
      */
 
     function find_field_by_program_id_and_name(){
-        if(isset($_GET['program_id']) && isset($_GET['field_name'])){
-            $rs = $this->uifield->find_field_by_program_id_and_name($_GET['program_id'],$_GET['field_name']);
-            echo rs_to_json($rs);
+        if(get_parameter('program_id') && get_parameter('field_name')){
+            $rs = $this->uifield->find_field_by_program_id_and_name(get_parameter('program_id'),cftrim(get_parameter('field_name')));
+            export_to_json($rs);
         }
     }
 
     function find_fields_by_program_name(){
-        if(isset($_GET['program_name'])){
-            $rs = $this->uifield->find_fields_by_program_name($_GET['program_name']);
+        if(get_parameter('program_name')){
+            $rs = $this->uifield->find_fields_by_program_name(cftrim(get_parameter('program_name')));
             export_to_itemStore($rs,'field_name','label');
         }
     }
 
     function find_fields_by_program_id(){
         if(isset($_GET['program_id'])){
-            $rs = $this->uifield->find_fields_by_program_id($_GET['program_id']);
+            $rs = $this->uifield->find_fields_by_program_id(get_parameter('program_id'));
             export_to_itemStore($rs,'field_name','label');
         }
+    }
+
+    //内部函数
+    protected function _post_data($post){
+        //数据处理
+        $data['field_name'] =  cftrim($post['field_name']);
+        $data['label'] = $post['label'];
+        $data['field_size'] = $post['field_size'];
+        $data['required_flag'] = $post['required_flag'];
+        $data['hidden_flag'] = $post['hidden_flag'];
+        $data['disabled_flag'] = $post['disabled_flag'];
+        $data['help_text'] = $post['help_text'];
+        $data['default_value'] = $post['default_value'];
+        //处理验证码，转成id
+        $data['validation_id'] = $this->validator->get_id(cftrim($post['validation_code']));
+        //处理值集，转成id
+        $data['valuelist_id'] = $this->valuelist->get_id(cftrim($post['valuelist_name']));
+
+        //                echo date("Y-m-d H:i:s",$_POST['last_update_date']);
+        //                date_default_timezone_set("Asia/Shanghai");
+        return $data;
     }
 
 }

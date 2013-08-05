@@ -1,11 +1,5 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-/**
- * Created by JetBrains PhpStorm.
- * User: ybchenyy
- * Date: 13-4-21
- * Time: 下午7:56
- * 值集数据库操作
- */
+
 class Valuelist_model extends CI_Model{
 
     function __construct(){

@@ -1,12 +1,4 @@
 <?php  if (!defined('BASEPATH')) exit('No direct script access allowed');
-/**
- * Created by JetBrains PhpStorm.
- * User: ybchenyy
- * Date: 13-4-8
- * Time: 下午4:52
- * To change this template use File | Settings | File Templates.
- */
-
 @date_default_timezone_set('Asia/Shanghai');
 
 //获取对应的url
@@ -37,6 +29,12 @@ function set_sess($key,$value = NULL)
     }
     $CI->session->set_userdata($newdata);
 }
+
+//返回信息操作
+function initial_message(){
+    set_sess('message',[]);
+}
+
 //是否登录
 function is_login()
 {
@@ -60,12 +58,16 @@ function redirect_to_login(){
 
 //将结果集装换成JSON
 function rs_to_json($rs){
-    $row = $rs->result_array();
-    if(count($row) > 0){
-        return json_encode($row[0]);
+    $rows = cf_format($rs->result_array());
+    if(count($rows) > 0){
+        return json_encode($rows[0]);
     }else{
         return null;
     }
+}
+//直接输出json字符串
+function export_to_json($rs){
+    echo rs_to_json($rs);
 }
 
 //将结果集装换成JSON
@@ -194,20 +196,27 @@ function set_creation_date($data){
     return $data;
 }
 //转换数据库的时间和操作者为系统使用格式
-function cf_format($rows){
-    for($i = 0; $i < count($rows);$i++){
-        foreach ($rows[$i] as $key => $value) {
-            if(strpos($key,'_flag') > 0 && !strpos($key,'_flag_')) {
-                $rows[$i][$key] = ( $rows[$i][$key] == 1 ? "X" : "" );
-            }
-            if(strpos($key,'_date') > 0 && !strpos($key,'_flag_')) {
-                $rows[$i][$key] = date('Y-m-d H:i:s',$rows[$i]["$key"]);
-            }
+function cf_format($rows,$is_rs_array = true){
+    if($is_rs_array){
+        for($i = 0; $i < count($rows);$i++){
+            _format_row($rows[$i]);
         }
+    }else{
+        _format_row($rows);
     }
     return $rows;
 }
-
+//格式化函数
+function _format_row($row){
+    foreach ($row as $key => $value) {
+        if(strpos($key,'_flag') > 0 && !strpos($key,'_flag_')) {
+            $row[$key] = ( $row[$key] == 1 ? "X" : "" );
+        }
+        if(strpos($key,'_date') > 0 && !strpos($key,'_flag_')) {
+            $row[$key] = date('Y-m-d H:i:s',$row["$key"]);
+        }
+    }
+}
 //判断是否被设置
 function set_value($name){
     if(isset($name)){
@@ -254,5 +263,8 @@ function message($type,$class,$line,$args = []){
 
     }
     $message['content'] = str_replace("&","",$message['content']);
-    return $message;
+    //刷新message会话数据
+    $messages = _sess('message');
+    array_push($messages,$message);
+    set_sess('message',$messages);
 }

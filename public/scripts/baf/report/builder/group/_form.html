@@ -1,0 +1,31 @@
+<style>
+    td {
+        height: 2em;
+    }
+    .label{
+        width: 3em;
+    }
+</style>
+<form data-dojo-type="baf/dijit/form/Form" id="dialogForm" unsubmit=true>
+
+    <table class="maintable">
+        <tr>
+            <td class="label"><label for="name">报表组</label></td>
+            <td><input id="name" /></td>
+        </tr>
+        <tr>
+            <td class="label"><label for="description">描述</label></td>
+            <td>
+                <input id="description" />
+            </td>
+        </tr>
+    </table>
+
+    <hr class="spacer"/>
+
+    <div class="buttongroup">
+        <button id="confirmButton" type="button"></button>
+        <button id="cancelButton" type="button"></button>
+    </div>
+
+</form>

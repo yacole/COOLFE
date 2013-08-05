@@ -33,7 +33,7 @@
             var currentWso = Env.currentWso();
             var innderForm = currentWso.innerForm;
 
-            var program_name = Util.dijit_byId("report_name").value;
+            var report_name = Util.dijit_byId("report_name").value;
 
 
             switch (type)
@@ -41,22 +41,21 @@
                 case "create":
                     innderForm.formValidate(
                         function(){
-//                            wso.openProgram_byName("BC_PROGRAM_C","_self",{program_name : program_name});
-                            currentWso.directedTo("index.php/bc/report/create");
+                            currentWso.directedTo(Util.url.safeurl("bc/report","create",{report_name : report_name}));
                         }
                     );
                     break;
                 case "edit" :
                     innderForm.formValidate(null,
                         function(){
-                            wso.openProgram_byName("BC_PROGRAM_U","_self",{program_name : program_name});
+                            currentWso.directedTo(Util.url.safeurl("bc/report","edit",{report_name : report_name}));
                         },true
                     );
                     break;
                 case "show" :
                     innderForm.formValidate(null,
                         function(){
-                            wso.openProgram_byName("BC_PROGRAM_R","_self",{program_name : program_name});
+                            currentWso.directedTo(Util.url.safeurl("bc/report","show",{report_name : report_name}));
                         },true
                     );
                     break;
@@ -66,7 +65,7 @@
                             //需要判断一下，程序是否为系统自带程序，系统自带程序不允许删除
                             if(confirm("确定删除此程序？")){
                                 //删除程序逻辑
-                                request.get(Util.url.safeurl("bc/program","destroy",{program_name : program_name}),
+                                request.get(Util.url.safeurl("bc/program","destroy",{program_name : report_name}),
                                     {handleAs : "json"}).then(function(response){
                                         if(response){
 
@@ -80,7 +79,7 @@
                 case "execute" :
                     innderForm.formValidate(null,
                         function(){
-                            currentWso.directedTo(Util.url.safeurl("bc/program","execute",{program_name : program_name}));
+                            currentWso.directedTo(Util.url.safeurl("bc/program","execute",{program_name : report_name}));
                         },true
                     );
                     break;

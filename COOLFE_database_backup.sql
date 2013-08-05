@@ -624,11 +624,11 @@ INSERT INTO `bc_report_groups_tl` (`report_group_id`,`name`,`description`,`creat
 
 
 --
--- Definition of table `bc_report_parameters`
+-- Definition of table `bc_report_parameters_tl`
 --
 
-DROP TABLE IF EXISTS `bc_report_parameters`;
-CREATE TABLE `bc_report_parameters` (
+DROP TABLE IF EXISTS `bc_report_parameters_tl`;
+CREATE TABLE `bc_report_parameters_tl` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `report_id` int(10) unsigned NOT NULL COMMENT '报表ID',
   `field` varchar(45) NOT NULL COMMENT '字段名',
@@ -646,11 +646,11 @@ CREATE TABLE `bc_report_parameters` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='报表参数列表';
 
 --
--- Dumping data for table `bc_report_parameters`
+-- Dumping data for table `bc_report_parameters_tl`
 --
 
-/*!40000 ALTER TABLE `bc_report_parameters` DISABLE KEYS */;
-/*!40000 ALTER TABLE `bc_report_parameters` ENABLE KEYS */;
+/*!40000 ALTER TABLE `bc_report_parameters_tl` DISABLE KEYS */;
+/*!40000 ALTER TABLE `bc_report_parameters_tl` ENABLE KEYS */;
 
 
 --
@@ -704,7 +704,7 @@ CREATE TABLE `bc_reports_tl` (
   PRIMARY KEY (`report_id`),
   UNIQUE KEY `bc_reports_u01` (`name`),
   KEY `bc_reports_n01` (`name`,`description`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='报表信息表';
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COMMENT='报表信息表';
 
 --
 -- Dumping data for table `bc_reports_tl`
@@ -712,7 +712,9 @@ CREATE TABLE `bc_reports_tl` (
 
 /*!40000 ALTER TABLE `bc_reports_tl` DISABLE KEYS */;
 INSERT INTO `bc_reports_tl` (`report_id`,`name`,`description`,`report_group_id`,`creation_date`,`created_by`,`last_update_date`,`last_updated_by`,`structure`,`grid_type`) VALUES 
- (1,'BC_FIELD_LIST','字段清单',1,NULL,NULL,NULL,NULL,'','02');
+ (1,'BC_FIELD_LIST','字段清单',1,NULL,NULL,NULL,NULL,'','02'),
+ (12,'sd','sd',1,1375661573,1,1375661573,1,'',''),
+ (13,'sds','sds',1,1375661710,1,1375661710,1,'','');
 /*!40000 ALTER TABLE `bc_reports_tl` ENABLE KEYS */;
 
 
@@ -883,7 +885,7 @@ CREATE TABLE `bc_ui_fields_tl` (
   `last_updated_by` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`ui_field_id`),
   UNIQUE KEY `BC_ui_fields_U01` (`program_id`,`field_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=utf8 COMMENT='界面字段信息表';
+) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=utf8 COMMENT='界面字段信息表';
 
 --
 -- Dumping data for table `bc_ui_fields_tl`
@@ -910,7 +912,11 @@ INSERT INTO `bc_ui_fields_tl` (`ui_field_id`,`program_id`,`field_name`,`field_si
  (47,6,'report_name','14',0,'报表','',1,0,0,'',NULL,NULL,1374801193,1,1374801604,1),
  (48,6,'description','20',0,'描述','',1,0,0,'',NULL,NULL,1374801897,1,1374801897,1),
  (49,6,'report_type','8',0,'报表类型','',0,0,0,'',7,NULL,1374801998,1,1374802705,1),
- (50,6,'source_text','40',0,'数据来源','',1,1,0,'',NULL,NULL,1374802067,1,1374820754,1);
+ (50,6,'source_text','40',0,'数据来源','',1,1,0,'',NULL,NULL,1374802067,1,1374820754,1),
+ (51,6,'report_group','10',0,'报表组','',1,0,0,'',8,NULL,1375148390,1,1375148390,1),
+ (52,2,'a','10',0,'a','',0,0,0,'',NULL,NULL,1375689663,1,1375691858,1),
+ (54,2,'c','1',0,'dd','',0,0,0,'',NULL,NULL,1375689996,1,1375691662,1),
+ (55,2,'d','1',0,'e','',0,0,0,'',NULL,NULL,1375690039,1,1375691365,1);
 /*!40000 ALTER TABLE `bc_ui_fields_tl` ENABLE KEYS */;
 
 
@@ -1190,7 +1196,7 @@ CREATE TABLE `bc_valuelists_tl` (
   PRIMARY KEY (`valuelist_id`) USING BTREE,
   UNIQUE KEY `BC_VALUELIST_N02` (`valuelist_name`) USING BTREE,
   KEY `BC_VALUELIST_N01` (`valuelist_name`,`description`,`source_view`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COMMENT='值集表';
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COMMENT='值集表';
 
 --
 -- Dumping data for table `bc_valuelists_tl`
@@ -1204,7 +1210,8 @@ INSERT INTO `bc_valuelists_tl` (`valuelist_id`,`valuelist_name`,`description`,`f
  (4,'BC_VALIDATOR','验证码',1,'description','validation_code','bc_validator_tl',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
  (5,'BC_VALUELIST','值集',1,'description','valuelist_name','bc_valuelists_tl',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
  (6,'BC_GRID_LAYOUT_TYPE','布局类型',0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
- (7,'BC_REPORT_TYPE','报表类型',0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+ (7,'BC_REPORT_TYPE','报表类型',0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+ (8,'BC_REPORT_GROUP','报表组',1,'description','name','bc_report_groups_tl',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `bc_valuelists_tl` ENABLE KEYS */;
 
 
