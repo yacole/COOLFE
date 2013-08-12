@@ -45,13 +45,13 @@ class Valuelist extends CI_Controller {
     /*
      * 获取数据接口：给外部提供数据
      */
-    function selectOptions(){
-        $rs = $this->vl->selectOptions($_GET['valuelist_id']);
+    function select_options(){
+        $rs = $this->vl->selectOptions(get_parameter('valuelist_id'));
         echo rs_to_itemStore($rs);
     }
 
     function find(){
-        $rs = $this->vl->find($_GET['valuelist_id']);
+        $rs = $this->vl->find(get_parameter('valuelist_id'));
         echo rs_to_json($rs);
     }
 

@@ -52,7 +52,7 @@ define(["dojo/_base/declare", "dijit/form/ValidationTextBox", "base/Util",
 
                 //设置验证规则
                 if(entry.validation_id){
-                    request.get(Util.url.find_validator_byId({validation_id : entry.validation_id}),{handleAs : "json"}).then(function(data){
+                    request.get(Util.url.find_validator(entry.validation_id),{handleAs : "json"}).then(function(data){
                         if(data){
                             //函数验证
                             textbox.remoteValidator = data;

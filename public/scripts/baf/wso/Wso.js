@@ -23,10 +23,8 @@ define(["dojo/_base/declare","base/Util","dijit/layout/TabContainer","./Form","d
             //打开程序
             //program_id : 程序id ； timestamp ： 时间戳 ；params ： 参数 ；pos ： 打开的位置；
             _openProgram : function(program_id,timestamp,params,pos){
-
                 var tabpane = this;
-
-                request.get(Util.url.find_program_byId({program_id : program_id}),{handleAs:"json"}).then(function(data){
+                request.get(Util.url.find_program(program_id),{handleAs:"json"}).then(function(data){
 
                     //判断是否存在查询主页界面
                     if(data.home_page){
@@ -34,7 +32,7 @@ define(["dojo/_base/declare","base/Util","dijit/layout/TabContainer","./Form","d
                         if(params){
 //                            console.info(params);
                             //则判断必输项参数是否填写，验证参数合法性过程
-                            request.get( Util.url.ui_fieldlist_byid({program_id : data.home_page}),{handleAs: "json"}).then(function(response){
+                            tabpane.setFields(data.home_page,function(response){
                                 var fields = response.items;
                                 var skipable = true;
                                 if(fields){
@@ -57,9 +55,7 @@ define(["dojo/_base/declare","base/Util","dijit/layout/TabContainer","./Form","d
                                         tabpane._openProgram(data.home_page,timestamp,params,pos);
                                     }
                                 }
-
                             });
-
                         }else{
                             //有主页无参数情况下，先打开主页
                             tabpane._openProgram(data.home_page,timestamp,params,pos);
@@ -164,7 +160,7 @@ define(["dojo/_base/declare","base/Util","dijit/layout/TabContainer","./Form","d
             //program_name ：程序名 ;target : "_self" | "_blank" ；params ： 参数；pos ： 打开位置
             openProgram_byName : function(program_name,target,params,pos){
                 var wso = this;
-                request.get(Util.url.find_program_byName({program_name : program_name}),{handleAs:"json"}).then(function(program){
+                request.get(Util.url.find_program_by_name(program_name),{handleAs:"json"}).then(function(program){
 //                    console.info(program);
                     wso.openProgram_byId(program.program_id,target,params,pos);
                 },function(){
@@ -351,7 +347,7 @@ define(["dojo/_base/declare","base/Util","dijit/layout/TabContainer","./Form","d
             //根据值列表打开查询界面
             openQForm : function(obj){
 
-                request.get(Util.url.find_valuelist_byId({valuelist_id : obj.valuelist_id}),{handleAs:"json"}).then(function(data){
+                request.get(Util.url.find_valuelist(obj.valuelist_id),{handleAs:"json"}).then(function(data){
                     //如果存在则先销毁
                     var oldqform = dijit.byId(Util.id.queryform);
                     if(oldqform){
@@ -396,7 +392,7 @@ define(["dojo/_base/declare","base/Util","dijit/layout/TabContainer","./Form","d
                     }else{
                         //不存在,直接出列表
                         var rs = new QueryResult({
-                            url : Util.url.valuelist_selectOptions({valuelist_id : obj.valuelist_id}),
+                            url : Util.url.options(obj.valuelist_id),
                             id : Util.id.queryresult,
                             sourceObj : obj
                         });
@@ -413,7 +409,7 @@ define(["dojo/_base/declare","base/Util","dijit/layout/TabContainer","./Form","d
             //设置wso的字段属性
             //program_id ： 程序id；func ：设置成功之后执行的函数
             setFields : function(program_id,func){
-                request.get( Util.url.ui_fieldlist_byid({program_id : program_id}),{handleAs: "json"}).then(function(data){
+                request.get( Util.url.find_fields_by_program_id(program_id),{handleAs: "json"}).then(function(data){
 //                    wso.fields = data.items;
                     if(func){
                         func(data);

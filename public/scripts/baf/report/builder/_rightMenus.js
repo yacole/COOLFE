@@ -1,6 +1,6 @@
 define([ "dijit/Menu", "dijit/MenuItem", "dijit/CheckedMenuItem", "dijit/MenuSeparator",
     "dijit/PopupMenuItem", "dojo/aspect", "base/Util" , "base/Env","cmd/Command","report/builder/group/_reportGroup"],
-    function(Menu, MenuItem, CheckedMenuItem, MenuSeparator, PopupMenuItem,aspect,Util,ENV,Command,reportGroup){
+    function(Menu, MenuItem, CheckedMenuItem, MenuSeparator, PopupMenuItem,aspect,Util,Env,Command,reportGroup){
         return {
             startup : function(tree){
                 if(tree){
@@ -15,6 +15,12 @@ define([ "dijit/Menu", "dijit/MenuItem", "dijit/CheckedMenuItem", "dijit/MenuSep
 
                         var node = dijit.getEnclosingWidget(e.target); /*node就是节点对象*/
                         var item = node.item;
+                        //设置选择路径
+                        var buildme = [];
+                        var result = Util.recursiveHunt(item.id.toString(), tree.model, buildme, tree.model.root);
+                        if(result && result.length > 0){
+                            tree.set('path', result);
+                        }
 
                         //重新设置菜单项
                         dojo.forEach(treeMenu.getChildren(),function(entry){
@@ -27,6 +33,7 @@ define([ "dijit/Menu", "dijit/MenuItem", "dijit/CheckedMenuItem", "dijit/MenuSep
                                 label: "新建报表组",
                                 onClick : function(){
                                     var rptgrp = new reportGroup({});
+                                    rptgrp.tree = tree;
                                     rptgrp.create();
                                 }
                             }));
@@ -45,7 +52,10 @@ define([ "dijit/Menu", "dijit/MenuItem", "dijit/CheckedMenuItem", "dijit/MenuSep
 
                             treeMenu.addChild(new MenuSeparator());
                             treeMenu.addChild(new MenuItem({
-                                label: "刷新"
+                                label: "刷新",
+                                onClick : function(){
+                                    Env.currentWso().refresh();
+                                }
                             }));
 
                         }else{
@@ -57,7 +67,11 @@ define([ "dijit/Menu", "dijit/MenuItem", "dijit/CheckedMenuItem", "dijit/MenuSep
                                 }));
                                 treeMenu.addChild(new MenuItem({
                                     label: "重命名报表组",
-                                    onClick : function(){}
+                                    onClick : function(){
+                                        var rptgrp = new reportGroup({});
+                                        rptgrp.tree = tree;
+                                        rptgrp.rename(item);
+                                    }
                                 }));
                                 treeMenu.addChild(new MenuItem({
                                     label: "删除报表组",
@@ -68,12 +82,20 @@ define([ "dijit/Menu", "dijit/MenuItem", "dijit/CheckedMenuItem", "dijit/MenuSep
                                 treeMenu.addChild(new MenuSeparator());
                                 treeMenu.addChild(new MenuItem({
                                     label: "属性",
-                                    onClick : function(){}
+                                    onClick : function(){
+                                        var rptgrp = new reportGroup({});
+                                        rptgrp.show(item.report_group_id.toString());
+                                    }
                                 }));
                             }else{
                                 //叶子节点，报表节点
                                 treeMenu.addChild(new MenuItem({
                                     label: "运行",
+                                    onClick : function(){}
+                                }));
+
+                                treeMenu.addChild(new MenuItem({
+                                    label: "拷贝",
                                     onClick : function(){}
                                 }));
 

@@ -62,7 +62,7 @@ define(["dojo/_base/declare","dojox/layout/ContentPane","base/Util","dojo/reques
                 request.get(o.dataUrl,{handleAs : "json"}).then(function(data){
 //                    console.info(Util.url.find_default_layout_for_rpt({program_id : o.program_id}));
                     //先判断是否存在默认布局
-                    request.get(Util.url.find_default_layout_for_rpt({program_id : o.program_id}),{handleAs : "json"}).then(function(layout){
+                    request.get(Util.url.rpt_default_layout(o.program_id),{handleAs : "json"}).then(function(layout){
 //                        console.info(layout);
                         var column = [];
                         var store = new ItemFileWriteStore({
@@ -156,7 +156,7 @@ define(["dojo/_base/declare","dojox/layout/ContentPane","base/Util","dojo/reques
             //选择布局，并变更
             selectLayout : function(layout_id){
                 var o = this;
-                request.get(Util.url.find_layout_for_rpt({layout_id : layout_id}),{handleAs : "json"}).then(function(data){
+                request.get(Util.url.rpt_layout(layout_id),{handleAs : "json"}).then(function(data){
                     o.layout = layout_id;
                     o.grid.setStructure(o._constructStructure(data.structure));
                 });

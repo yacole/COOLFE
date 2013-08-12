@@ -611,7 +611,7 @@ CREATE TABLE `bc_report_groups_tl` (
   PRIMARY KEY (`report_group_id`),
   UNIQUE KEY `bc_report_groups_u01` (`name`),
   KEY `bc_report_groups_n01` (`name`,`description`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='报表组信息表';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='报表组信息表';
 
 --
 -- Dumping data for table `bc_report_groups_tl`
@@ -619,7 +619,8 @@ CREATE TABLE `bc_report_groups_tl` (
 
 /*!40000 ALTER TABLE `bc_report_groups_tl` DISABLE KEYS */;
 INSERT INTO `bc_report_groups_tl` (`report_group_id`,`name`,`description`,`creation_date`,`created_by`,`last_update_date`,`last_updated_by`) VALUES 
- (1,'DEFAULT','系统默认报表组',NULL,NULL,NULL,NULL);
+ (1,'DEFAULT','系统默认报表组1',NULL,NULL,1376035732,1),
+ (2,'new','new',1376026075,1,1376026075,1);
 /*!40000 ALTER TABLE `bc_report_groups_tl` ENABLE KEYS */;
 
 
@@ -704,7 +705,7 @@ CREATE TABLE `bc_reports_tl` (
   PRIMARY KEY (`report_id`),
   UNIQUE KEY `bc_reports_u01` (`name`),
   KEY `bc_reports_n01` (`name`,`description`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COMMENT='报表信息表';
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COMMENT='报表信息表';
 
 --
 -- Dumping data for table `bc_reports_tl`
@@ -714,7 +715,8 @@ CREATE TABLE `bc_reports_tl` (
 INSERT INTO `bc_reports_tl` (`report_id`,`name`,`description`,`report_group_id`,`creation_date`,`created_by`,`last_update_date`,`last_updated_by`,`structure`,`grid_type`) VALUES 
  (1,'BC_FIELD_LIST','字段清单',1,NULL,NULL,NULL,NULL,'','02'),
  (12,'sd','sd',1,1375661573,1,1375661573,1,'',''),
- (13,'sds','sds',1,1375661710,1,1375661710,1,'','');
+ (13,'sds','sds',1,1375661710,1,1375661710,1,'',''),
+ (14,'new','新建',0,1376025966,1,1376025966,1,'','');
 /*!40000 ALTER TABLE `bc_reports_tl` ENABLE KEYS */;
 
 

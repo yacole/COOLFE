@@ -34,6 +34,21 @@ class Report_model extends CI_Model{
         return $this->db->get_where('bc_report_groups_tl',array('name' => $name));
     }
 
+    function find_group($report_group_id){
+        return $this->db->get_where('bc_report_groups_tl',array('report_group_id' => $report_group_id));
+    }
+
+    function create_group($data){
+        $data = set_creation_date($data);
+        return $this->db->insert('bc_report_groups_tl',$data);
+    }
+
+    function update_group($data){
+        $data = set_last_update($data);
+        $this->db->where('report_group_id', $data['report_group_id']);
+        return $this->db->update('bc_report_groups_tl', $data);
+    }
+
     function builder(){
         //builder可以做license控制
 
@@ -48,10 +63,6 @@ class Report_model extends CI_Model{
         }else{
             return false;
         }
-    }
-
-    function find_group_by_name($group_name){
-        return $this->db->get_where('bc_report_groups_tl',array('name' => $group_name));
     }
 
     function create_base_data($data){

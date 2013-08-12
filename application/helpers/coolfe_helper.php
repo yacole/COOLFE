@@ -5,6 +5,16 @@
 function url($controller,$action){
     return 'index.php'.'/' . $controller.'/' . $action ;
 }
+//渲染函数
+function render($view = NULL){
+    $CI =  &get_instance();
+    //判断是否存在view同名模版
+    if(is_null($view)){
+        $CI->load->view($CI->router->fetch_directory().'/'.$CI->router->fetch_class().'/'.$CI->router->fetch_method());
+    }else{
+        $CI->load->view($view);
+    }
+}
 
 //获取session值
 function _sess($key)
@@ -199,10 +209,10 @@ function set_creation_date($data){
 function cf_format($rows,$is_rs_array = true){
     if($is_rs_array){
         for($i = 0; $i < count($rows);$i++){
-            _format_row($rows[$i]);
+            $rows[$i] = _format_row($rows[$i]);
         }
     }else{
-        _format_row($rows);
+        $rows = _format_row($rows);
     }
     return $rows;
 }
@@ -212,10 +222,11 @@ function _format_row($row){
         if(strpos($key,'_flag') > 0 && !strpos($key,'_flag_')) {
             $row[$key] = ( $row[$key] == 1 ? "X" : "" );
         }
-        if(strpos($key,'_date') > 0 && !strpos($key,'_flag_')) {
-            $row[$key] = date('Y-m-d H:i:s',$row["$key"]);
+        if(strpos($key,'_date') > 0 && !strpos($key,'_date_')) {
+            $row[$key] = date('Y-m-d H:i:s',$row[$key]);
         }
     }
+    return $row;
 }
 //判断是否被设置
 function set_value($name){

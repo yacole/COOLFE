@@ -26,88 +26,90 @@ define([],function(){
 
     return {
         safeurl : url,
-        withParameters : function(uri,params){
-            if(params == undefined){
-                return "index.php/"+ uri;
-            }else{
-                var paramstr = "";
-                var i = 0;
-                for(key in params){
-                    if(i == 0){
-                        paramstr = paramstr + "?" +key + "=" + params[key];
-                    } else{
-                        paramstr = paramstr + "&" + key + "=" + params[key];
-                    }
-                    i = i + 1;
-                }
-                return "index.php/"+ uri + paramstr;
-            }
-        },
         //框架内部模版
         localUrl : function(uri){
            return dojo.config.bafBaseUrl +  uri;
         },
+        /*布局*/
         navigator : url("main","navigator"),
         //获取工作区数据
         workspace : function(params){
             return url("bc/program","workspace",params);
         },
-        //根据程序名查找程序
-        find_program_byName : function(params){
-            return url("bc/program","find_by_name",params);
-        },
-        //根据程序id查找程序
-        find_program_byId : function(params){
-            return url("bc/program","find",params);
-        },
         //获取菜单栏数据
         menubar : function(params){
             return url("bc/program","menubar",params);
         },
-        //根据程序和字段名查找字段数据
-        ui_field :function(params){
-            return url("bc/uifield","find_field_by_program_id_and_name",params);
+
+        /*程序管理*/
+        program : function(action,params){
+            return url("bc/program",action,params);
+        },
+        //根据程序名查找程序
+        find_program_by_name : function(program_name){
+            return this.program("find_by_name",{program_name : program_name});
+        },
+        //根据程序id查找程序
+        find_program : function(program_id){
+            return this.program("find",{program_id : program_id});
+        },
+        //报表默认布局
+        rpt_default_layout : function(program_id){
+            return this.program("rpt_default_layout",{program_id : program_id});
+        },
+        //根据布局id获取布局
+        rpt_layout : function(layout_id){
+            return this.program("rpt_find_layout",{layout_id : layout_id});
+        },
+        //获取报表所有布局
+        rpt_layouts : function(program_id){
+            return this.program("rpt_layouts",{program_id : program_id});
+        },
+
+        /*UI字段*/
+        uifield : function(action,params){
+            return url("bc/uifield",action,params);
         },
         //根据程序id查找字段列表
-        ui_fieldlist_byid :function(params){
-            return url("bc/uifield","find_fields_by_program_id",params);
+        find_fields_by_program_id :function(program_id){
+           return  this.uifield("find_fields_by_program_id",{program_id : program_id});
         },
-        //字段管理首页
-        ui_field_manager : function(params){
-            return url("bc/uifield","index",params);
+
+        /*值集管理*/
+        valuelist : function(action,params){
+            return url("bc/valuelist",action,params);
         },
         //获取值集列表（下拉菜单）
-        valuelist_selectOptions : function(params){
-            return url("bc/valuelist","selectOptions",params);
+        options : function(valuelist_id){
+            return this.valuelist("select_options",{valuelist_id : valuelist_id});
         },
         //根据值集id查找值列表
-        find_valuelist_byId : function(params){
-            return url("bc/valuelist","find",params);
+        find_valuelist : function(valuelist_id){
+            return this.valuelist("find",{valuelist_id : valuelist_id});
+        },
+
+        /*验证码*/
+        validator : function(action,params){
+            return url("bc/validator",action,params);
         },
         //根据验证码id查找验证码
-        find_validator_byId : function(params){
-            return url("bc/validator","find",params);
+        find_validator : function(validation_id){
+            return this.validator("find",{validation_id : validation_id});
+        },
+
+        /*消息管理*/
+        message : function(action,params){
+            return url("bc/message",action,params);
         },
         //根据消息类和消息编码查找消息
-        find_message : function(params){
-            return url("bc/message","find_by_class_and_code",params);
+        find_message : function(classCode,messageCode){
+            return this.message("find_by_class_and_code",{class_code : classCode,message_code : messageCode});
         },
         //消息详细信息
-        find_message_detail : function(params){
-            return url("bc/message","show_detail",params);
+        find_message_detail : function(message_id,content,code){
+            return this.message("show_detail",{message_id : message_id,content : content,code : code});
         },
-        find_default_layout_for_rpt : function(params){
-            return url("bc/program","rpt_default_layout",params);
-        },
-        find_layout_for_rpt : function(params){
-            return url("bc/program","rpt_find_layout",params);
-        },
-        find_layouts_for_rpt : function(params){
-            return url("bc/program","rpt_layouts",params);
-        },
-        saveLayoutTooltipDialog : function(){
-            return url("bc/grid_layout","index");
-        },
+
         //报表数据读取url
         report_read_data_by_report_id : function(report_id){
             return url("bc/report","read_data",{report_id : report_id});

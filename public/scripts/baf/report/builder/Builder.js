@@ -1,6 +1,6 @@
 define(["dojo/_base/declare","dojo/request","base/Util","base/Env","dijit/layout/ContentPane",
-    "./_toolBar", "dijit/Tree","dojo/data/ItemFileReadStore","dijit/tree/ForestStoreModel","./_rightMenus"],
-    function(declare,request,Util,Env,ContentPane,toolBar,Tree,ItemFileReadStore,ForestStoreModel,rightMenus){
+    "./_toolBar", "dijit/Tree","dojo/data/ItemFileWriteStore","dijit/tree/ForestStoreModel","./_rightMenus"],
+    function(declare,request,Util,Env,ContentPane,toolBar,Tree,ItemFileWriteStore,ForestStoreModel,rightMenus){
         /**
          * 摘要:
          *      报表设计器
@@ -17,9 +17,8 @@ define(["dojo/_base/declare","dojo/request","base/Util","base/Env","dijit/layout
             startup : function(){
                 this.toolBar = toolBar();
 
-
                 //获取导航栏数据
-                var treeStore = new ItemFileReadStore({
+                var treeStore = new ItemFileWriteStore({
                     url : "index.php/bc/report/find_all"
                 });
 
@@ -47,6 +46,8 @@ define(["dojo/_base/declare","dojo/request","base/Util","base/Env","dijit/layout
 
                 //激活右键菜单
                 rightMenus.startup(this.groupTree);
+
+                console.info(this.groupTree);
 
                 this.inherited(arguments);
             }

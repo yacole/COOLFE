@@ -297,7 +297,24 @@ define(["baf/config/Url", "baf/language/"+language+"/Label", "baf/language/"+lan
                 cancelbotton.placeAt(util.id.confirmDialog);
 
                 confirmDialog.show();
-            } //confirm
+            }, //confirm
+            //遍历树，获取路径
+            recursiveHunt:function(lookfor, model, buildme, item){
+                var id = model.getIdentity(item);//得到item的id
+                buildme.push(id);//放到数组中
+                if(id == lookfor){
+                    return buildme;//如果id符合条件，返回数组
+                }
+                for(var idx in item.children){
+                    //slice()是用来截取数组中的一部分，用它来复制数组，如果省略了end参数，则切分的数组包含从start开始到数组结束的所有元素。
+                    //现在要用它来复制数组
+                    var buildmebuildmebranch = buildme.slice(0);
+                    //递归
+                    var r = this.recursiveHunt(lookfor, model, buildmebuildmebranch, item.children[idx]);
+                    if(r){ return r; }
+                }
+                return undefined;
+            }
         }
     }
 );

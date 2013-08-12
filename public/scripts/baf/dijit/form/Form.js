@@ -66,7 +66,7 @@ define(["dojo/_base/declare", "dijit/form/Form", "base/Util", "base/Env",
                     var form = this;
 
                     //提交远程验证
-                    request.post(Util.url.safeurl("bc/validator","validate"),{
+                    request.post(Util.url.validator("validate"),{
                         data : validObj,
                         timeout : 2000,
                         handleAs : "json"

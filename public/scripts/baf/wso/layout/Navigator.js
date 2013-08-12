@@ -55,7 +55,6 @@ define(["dojo/_base/declare", "base/Util", "dijit/Tree","dojo/data/ItemFileReadS
                         //展示工作区
 //                        Command.show_workspace(item["program_id"]);
                         Env.wso().openProgram_byId(item["program_id"]);
-
                     }
                 });
 

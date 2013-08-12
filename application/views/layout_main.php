@@ -28,7 +28,7 @@
         var dojoConfig = {
             packages: [
                 { name: "baf", location: "/public/scripts/baf"},
-                { name: "layout",location: "/public/scripts/baf/dijit/layout"},
+                { name: "layout",location: "/public/scripts/baf/wso/layout"},
                 { name: "form",location: "/public/scripts/baf/dijit/form"},
                 { name: "grid",location: "/public/scripts/baf/dijit/grid"},
                 { name: "report",location: "/public/scripts/baf/report"},

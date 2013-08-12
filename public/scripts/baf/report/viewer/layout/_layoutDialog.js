@@ -21,7 +21,7 @@ define(["baf/dijit/Dialog","base/Util","base/Env","dojo/request","grid/DataGrid"
 
                     var selectDialog = this;
 
-                    request.get(Util.url.find_layouts_for_rpt({program_id : o.program_id}),{handleAs : "json"}).then(function(data){
+                    request.get(Util.url.rpt_layouts(o.program_id),{handleAs : "json"}).then(function(data){
 
                         //插入选择列表
                         var store = new ItemFileReadStore({

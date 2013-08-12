@@ -32,7 +32,7 @@ define(["dojo/_base/declare", "dijit/form/Select",  "base/Util",  "dojo/request"
                     //是否存在值集ID
                     if(field.valuelist_id){
 
-                        request.get(Util.url.valuelist_selectOptions({valuelist_id : field.valuelist_id}),{handleAs: "json"}).then(function(data){
+                        request.get(Util.url.options(field.valuelist_id),{handleAs: "json"}).then(function(data){
                             if(data.items){
                                 var optionsArr = [];
                                 data.items.forEach(function(option){

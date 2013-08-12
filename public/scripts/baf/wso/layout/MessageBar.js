@@ -16,7 +16,7 @@ function(declare,ContentPane,Button,request,Util,Dialog,Env){
         //type ：类型 ; classCode :消息类 ; messageCode 消息编号
         showMessage : function(type,classCode,messageCode){
             var messageBar = this;
-            request.get(Util.url.find_message({class_code : classCode,message_code : messageCode}),{handleAs : "json"}).then(
+            request.get(Util.url.find_message(classCode, messageCode),{handleAs : "json"}).then(
                 function(message){
 
                     if(message){
@@ -84,7 +84,7 @@ function(declare,ContentPane,Button,request,Util,Dialog,Env){
             console.info(message);
             var detailDialog = new Dialog({
                 //消息id；客户端反馈的内容；消息代码
-                href : Util.url.find_message_detail({message_id : message.message_id,content : message.content,code : message.code})
+                href : Util.url.find_message_detail(message.message_id,message.content,message.code)
             });
             detailDialog.show();
         },
