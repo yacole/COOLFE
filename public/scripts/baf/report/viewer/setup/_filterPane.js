@@ -1,13 +1,12 @@
-define(["dojo/_base/declare","base/Util","base/Env","dojo/request","grid/DataGrid",
-    "dojo/data/ItemFileWriteStore","dojo/json","dojo/dom-form","dijit/layout/ContentPane",
-    "dijit/form/Button","./_util","../filter/_parameter","dojox/grid/cells/dijit"],
-    function(declare,Util,Env,request,DataGrid,ItemFileWriteStore,JSON,domForm,ContentPane,Button,u,parameter){
+define(["dojo/_base/declare","base/Util","base/Env","grid/DataGrid","dojo/data/ItemFileWriteStore",
+    "dijit/layout/ContentPane","dijit/form/Button","./_util","../filter/_parameter","dojox/grid/cells/dijit"],
+    function(declare,Util,Env,DataGrid,ItemFileWriteStore,ContentPane,Button,u,parameter){
         return declare("",[ContentPane],{
             srcObj : null,
 
             constructor : function(args){
                 args.title = Util.label.grid_filter;
-                args.href = Util.url.report_setup_template("filter");
+                args.href = Util.url.report_viewer_setup_template("filter");
                 this.inherited(arguments);
             },
 

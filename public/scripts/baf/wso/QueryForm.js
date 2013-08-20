@@ -52,7 +52,6 @@ define(["dojo/_base/declare", "dojo/_base/lang", "baf/dijit/Dialog", "base/Util"
                 onClick: lang.hitch(this, function() {
                     this.hide();
                     this.dfd.cancel();
-
                 })
             }, construct.create('div'));
             div.appendChild(this.cancelButton.domNode);

@@ -76,26 +76,34 @@ define(["baf/config/Url", "baf/language/"+language+"/Label", "baf/language/"+lan
                     return false;
                 }
             },
+
+            //替换系统远程请求：GET/POST
             //远程提交post
             post : function(url,data,successFunc,failureFunc){
-                console.info(url);
+                var o = this;
+                console.info("url:"+url);
                 console.info(data);
-                request.post(url,{
-                  data : data,
-                  timeout : config.remote_timeout,
-                  handleAs : "json"
-                }).then(function(response){
-                        console.info(response);
+                request.post(url,{data : data,timeout : config.remote_timeout,handleAs : "json"}).then(
+                    function(response){
+                      console.info(response);
                       Command.handleExport(response);
                       if(successFunc){
                           successFunc();
                       }
                 },function(){
-//                  Command.show_dialog({content : });
-                  if(failureFunc){
-                      failureFunc();
-                  }
+                        o.publish_error_xhr_notreach(failureFunc);
                 });
+            },
+            get : function(url,successFunc,failureFunc){
+                var o = this;
+                request.get(url,{handleAs : "json"}).then(
+                    function(response){
+                        if(successFunc){
+                            successFunc(response);
+                        }
+                    },function(){
+                        o.publish_error_xhr_notreach(failureFunc);
+                    });
             },
             //输出报错到控制台
             postEcho : function(url,data){
@@ -263,7 +271,7 @@ define(["baf/config/Url", "baf/language/"+language+"/Label", "baf/language/"+lan
         */
             //效果同js原先的confirm
             //content ：弹出框内容 ； callback ： 确认后要执行的内容
-            confirm : function(content,callback){
+            confirm : function(content,callback,noback){
                 var util = this;
                 //检查如果存在则销毁
                 var di = dijit.byId(util.id.confirmDialog);
@@ -280,7 +288,9 @@ define(["baf/config/Url", "baf/language/"+language+"/Label", "baf/language/"+lan
                 var okbotton = new Button({
                     label : "确认",
                     onClick : function(){
-                        callback();
+                        if(callback){
+                            callback();
+                        }
                         var di =  dijit.byId(util.id.confirmDialog);
                         di.hide();
                     }
@@ -290,6 +300,9 @@ define(["baf/config/Url", "baf/language/"+language+"/Label", "baf/language/"+lan
                 var cancelbotton = new Button({
                     label : "取消",
                     onClick : function(){
+                        if(noback){
+                            noback();
+                        }
                         var di =  dijit.byId(util.id.confirmDialog);
                         di.hide();
                     }
@@ -299,10 +312,10 @@ define(["baf/config/Url", "baf/language/"+language+"/Label", "baf/language/"+lan
                 confirmDialog.show();
             }, //confirm
             //遍历树，获取路径
-            recursiveHunt:function(lookfor, model, buildme, item){
+            recursiveHunt:function(key,value, model, buildme, item){
                 var id = model.getIdentity(item);//得到item的id
                 buildme.push(id);//放到数组中
-                if(id == lookfor){
+                if(item[key] == value){
                     return buildme;//如果id符合条件，返回数组
                 }
                 for(var idx in item.children){
@@ -310,10 +323,32 @@ define(["baf/config/Url", "baf/language/"+language+"/Label", "baf/language/"+lan
                     //现在要用它来复制数组
                     var buildmebuildmebranch = buildme.slice(0);
                     //递归
-                    var r = this.recursiveHunt(lookfor, model, buildmebuildmebranch, item.children[idx]);
+                    var r = this.recursiveHunt(key,value, model, buildmebuildmebranch, item.children[idx]);
                     if(r){ return r; }
                 }
                 return undefined;
+            },
+            pathByKey : function(key,value,tree){
+                //设置选择路径
+                var buildme = [];
+                var result = this.recursiveHunt(key,value, tree.model, buildme, tree.model.root);
+                console.info(result);
+                if(result && result.length > 0){
+                    tree.set('path', result);
+                }
+            },
+
+            //提示获取远程信息失败
+            publish_error_xhr_notreach : function(callback){
+                var o = this;
+                if(callback == undefined){
+                    this.confirm(this.message.error_xhr_notreach,function(){
+                        var wso = dijit.byId(o.id.WorkspacePane);
+                        wso.closeProgram(wso.currentChild());
+                    });
+                }else{
+                    this.confirm(this.message.error_xhr_notreach,callback);
+                }
             }
         }
     }

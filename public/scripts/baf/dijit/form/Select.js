@@ -1,5 +1,5 @@
-define(["dojo/_base/declare", "dijit/form/Select",  "base/Util",  "dojo/request"],
-    function(declare,Select,Util,request){
+define(["dojo/_base/declare", "dijit/form/Select",  "base/Util"],
+    function(declare,Select,Util){
         /*
          *   摘要:
          *       选择下拉菜单组件
@@ -26,13 +26,12 @@ define(["dojo/_base/declare", "dijit/form/Select",  "base/Util",  "dojo/request"
 
                 var select = this;
 
-                var field = Util.field(select.name);
-                if(field){
+                var field = Util.field(this.name);
 
+                if(field){
                     //是否存在值集ID
                     if(field.valuelist_id){
-
-                        request.get(Util.url.options(field.valuelist_id),{handleAs: "json"}).then(function(data){
+                        Util.get(Util.url.options(field.valuelist_id),function(data){
                             if(data.items){
                                 var optionsArr = [];
                                 data.items.forEach(function(option){
@@ -51,12 +50,15 @@ define(["dojo/_base/declare", "dijit/form/Select",  "base/Util",  "dojo/request"
 
                     //初始化值
                     if(field.field_size){
-                        select.set("style" , "width : "+field.field_size+"em;");
+                        this.set("style" , "width : "+field.field_size+"em;");
                     }
 
-                    select.set("required",Util.xflag(field.required_flag));
-                    select.set("disabled",Util.xflag(field.disabled_flag));
-
+                    if(this.required == undefined){
+                        this.set("required",Util.xflag(field.required_flag));
+                    }
+                    if(this.disabled == undefined){
+                        this.set("disabled",Util.xflag(field.disabled_flag));
+                    }
 
                 } //if
 

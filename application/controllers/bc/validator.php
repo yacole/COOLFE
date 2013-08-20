@@ -9,6 +9,7 @@ class Validator extends CI_Controller {
         header('Content-Type: text/html; charset=utf-8');
         $this->load->model('bc/validator_model','validator');
         $this->load->model('bc/uifield_model','uifield');
+        $this->load->model('bc/valuelist_model','valuelist');
     }
 
     //验证函数：先验证正则表达式，后验证数据库查询
@@ -66,7 +67,15 @@ class Validator extends CI_Controller {
 
                                     }//if
                                 }//if
-                            }//if
+                            }elseif(!is_null($row['valuelist_id'])){
+                                //没有验证码，可是有值集的，验证是否在值集中
+                                if($this->valuelist->validate_value($value,$row['valuelist_id'])){
+                                    //通过
+                                    array_push($data['valid'],$key);
+                                }else{
+                                    array_push($data['inValid'],$key);
+                                }
+                            }
 
                     }//if
                 }//foreach

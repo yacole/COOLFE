@@ -1,6 +1,5 @@
-define(["dojo/_base/declare", "dojo/request", "dijit/Toolbar","dijit/ToolbarSeparator",
-    "dijit/form/Button", "base/Util","base/Env"],
-    function(declare,request,Toolbar,ToolbarSeparator,Button,Util,Env){
+define(["dojo/_base/declare", "dijit/Toolbar","dijit/ToolbarSeparator","dijit/form/Button", "base/Util","base/Env"],
+    function(declare,Toolbar,ToolbarSeparator,Button,Util,Env){
         /*
          *   摘要:
          *       工具栏：存放各类自定义的工具按钮组件

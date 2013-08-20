@@ -22,17 +22,11 @@ CREATE DATABASE IF NOT EXISTS coolfe;
 USE coolfe;
 
 --
--- Temporary table structure for view `bc_grid_layouts_v`
+-- Temporary table structure for view `bc_reports_h_v`
 --
-DROP TABLE IF EXISTS `bc_grid_layouts_v`;
-DROP VIEW IF EXISTS `bc_grid_layouts_v`;
-
---
--- Temporary table structure for view `bc_reports_v`
---
-DROP TABLE IF EXISTS `bc_reports_v`;
-DROP VIEW IF EXISTS `bc_reports_v`;
-CREATE TABLE `bc_reports_v` (
+DROP TABLE IF EXISTS `bc_reports_h_v`;
+DROP VIEW IF EXISTS `bc_reports_h_v`;
+CREATE TABLE `bc_reports_h_v` (
   `report_id` int(10) unsigned,
   `name` varchar(45),
   `description` varchar(45),
@@ -43,11 +37,7 @@ CREATE TABLE `bc_reports_v` (
   `last_updated_by` int(10) unsigned,
   `structure` text,
   `grid_type` varchar(45),
-  `release_date` int(10) unsigned,
-  `release_flag` tinyint(1),
-  `last_version_flag` tinyint(1),
-  `source_text` text,
-  `source_type` varchar(45)
+  `report_group` varchar(45)
 );
 
 --
@@ -611,7 +601,7 @@ CREATE TABLE `bc_report_groups_tl` (
   PRIMARY KEY (`report_group_id`),
   UNIQUE KEY `bc_report_groups_u01` (`name`),
   KEY `bc_report_groups_n01` (`name`,`description`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='报表组信息表';
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='报表组信息表';
 
 --
 -- Dumping data for table `bc_report_groups_tl`
@@ -619,8 +609,8 @@ CREATE TABLE `bc_report_groups_tl` (
 
 /*!40000 ALTER TABLE `bc_report_groups_tl` DISABLE KEYS */;
 INSERT INTO `bc_report_groups_tl` (`report_group_id`,`name`,`description`,`creation_date`,`created_by`,`last_update_date`,`last_updated_by`) VALUES 
- (1,'DEFAULT','系统默认报表组1',NULL,NULL,1376035732,1),
- (2,'new','new',1376026075,1,1376026075,1);
+ (1,'DEFAULT','系统默认报表组',NULL,NULL,1376974711,1),
+ (7,'CUSTOMEZ','客制化报表组',1376550139,1,1376550150,1);
 /*!40000 ALTER TABLE `bc_report_groups_tl` ENABLE KEYS */;
 
 
@@ -662,27 +652,27 @@ DROP TABLE IF EXISTS `bc_report_source_tl`;
 CREATE TABLE `bc_report_source_tl` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `source_text` text NOT NULL,
-  `release_flag` tinyint(1) NOT NULL COMMENT '释放标识',
   `report_id` int(10) unsigned NOT NULL COMMENT '报表id',
   `created_by` int(10) unsigned DEFAULT NULL,
   `last_version_flag` tinyint(1) NOT NULL COMMENT '最终版本标识',
   `creation_date` int(10) unsigned DEFAULT NULL,
   `last_update_date` int(10) unsigned DEFAULT NULL,
   `last_updated_by` int(10) unsigned DEFAULT NULL,
-  `release_date` int(10) unsigned DEFAULT NULL COMMENT '释放日期',
   `source_type` varchar(45) NOT NULL COMMENT '类型',
   PRIMARY KEY (`id`),
-  KEY `bc_report_source_n01` (`release_flag`,`report_id`,`last_version_flag`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='报表语句表';
+  KEY `bc_report_source_n01` (`report_id`,`last_version_flag`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='报表语句表';
 
 --
 -- Dumping data for table `bc_report_source_tl`
 --
 
 /*!40000 ALTER TABLE `bc_report_source_tl` DISABLE KEYS */;
-INSERT INTO `bc_report_source_tl` (`id`,`source_text`,`release_flag`,`report_id`,`created_by`,`last_version_flag`,`creation_date`,`last_update_date`,`last_updated_by`,`release_date`,`source_type`) VALUES 
- (1,'bc/program/rpt_program_list',1,1,NULL,0,NULL,NULL,NULL,NULL,'02'),
- (2,'select*from bc_uifields_v',1,1,NULL,1,NULL,NULL,NULL,NULL,'01');
+INSERT INTO `bc_report_source_tl` (`id`,`source_text`,`report_id`,`created_by`,`last_version_flag`,`creation_date`,`last_update_date`,`last_updated_by`,`source_type`) VALUES 
+ (1,'bc/program/rpt_program_list',1,NULL,0,NULL,NULL,NULL,'02'),
+ (2,'select*from bc_uifields_v',1,NULL,0,NULL,NULL,NULL,'01'),
+ (5,'select * from bc_programs_tl',22,1,1,1376639108,1376639108,1,'01'),
+ (6,'select * from bc_uifields_v',1,1,1,1376967953,1376967953,1,'01');
 /*!40000 ALTER TABLE `bc_report_source_tl` ENABLE KEYS */;
 
 
@@ -705,7 +695,7 @@ CREATE TABLE `bc_reports_tl` (
   PRIMARY KEY (`report_id`),
   UNIQUE KEY `bc_reports_u01` (`name`),
   KEY `bc_reports_n01` (`name`,`description`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COMMENT='报表信息表';
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8 COMMENT='报表信息表';
 
 --
 -- Dumping data for table `bc_reports_tl`
@@ -713,10 +703,10 @@ CREATE TABLE `bc_reports_tl` (
 
 /*!40000 ALTER TABLE `bc_reports_tl` DISABLE KEYS */;
 INSERT INTO `bc_reports_tl` (`report_id`,`name`,`description`,`report_group_id`,`creation_date`,`created_by`,`last_update_date`,`last_updated_by`,`structure`,`grid_type`) VALUES 
- (1,'BC_FIELD_LIST','字段清单',1,NULL,NULL,NULL,NULL,'','02'),
- (12,'sd','sd',1,1375661573,1,1375661573,1,'',''),
- (13,'sds','sds',1,1375661710,1,1375661710,1,'',''),
- (14,'new','新建',0,1376025966,1,1376025966,1,'','');
+ (1,'BC_FIELD_LIST','字段清单',1,NULL,NULL,1376638392,1,'','02'),
+ (14,'new','新建',0,1376025966,1,1376025966,1,'',''),
+ (22,'rpt_good','好报表',7,1376639071,1,1376639071,1,'',''),
+ (23,'sgf','sdfg',1,1376974695,1,1376974695,1,'','');
 /*!40000 ALTER TABLE `bc_reports_tl` ENABLE KEYS */;
 
 
@@ -887,7 +877,7 @@ CREATE TABLE `bc_ui_fields_tl` (
   `last_updated_by` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`ui_field_id`),
   UNIQUE KEY `BC_ui_fields_U01` (`program_id`,`field_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=utf8 COMMENT='界面字段信息表';
+) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8 COMMENT='界面字段信息表';
 
 --
 -- Dumping data for table `bc_ui_fields_tl`
@@ -913,12 +903,12 @@ INSERT INTO `bc_ui_fields_tl` (`ui_field_id`,`program_id`,`field_name`,`field_si
  (46,5,'field_name','6',0,'字段','帮助文档<b>测试</b><br /><ul><li><i>test1</i></li><li><i><u>test2</u></i></li><li><strike>test3 </strike><br /></li></ul>',0,0,0,'',NULL,NULL,1374718126,1,1374722716,1),
  (47,6,'report_name','14',0,'报表','',1,0,0,'',NULL,NULL,1374801193,1,1374801604,1),
  (48,6,'description','20',0,'描述','',1,0,0,'',NULL,NULL,1374801897,1,1374801897,1),
- (49,6,'report_type','8',0,'报表类型','',0,0,0,'',7,NULL,1374801998,1,1374802705,1),
- (50,6,'source_text','40',0,'数据来源','',1,1,0,'',NULL,NULL,1374802067,1,1374820754,1),
+ (50,6,'source_text','50',0,'数据来源','',1,0,0,'',NULL,NULL,1374802067,1,1376630418,1),
  (51,6,'report_group','10',0,'报表组','',1,0,0,'',8,NULL,1375148390,1,1375148390,1),
  (52,2,'a','10',0,'a','',0,0,0,'',NULL,NULL,1375689663,1,1375691858,1),
  (54,2,'c','1',0,'dd','',0,0,0,'',NULL,NULL,1375689996,1,1375691662,1),
- (55,2,'d','1',0,'e','',0,0,0,'',NULL,NULL,1375690039,1,1375691365,1);
+ (55,2,'d','1',0,'e','',0,0,0,'',NULL,NULL,1375690039,1,1375691365,1),
+ (56,6,'source_type','6',0,'来源类型','',1,0,0,'',7,NULL,1376629422,1,1376629422,1);
 /*!40000 ALTER TABLE `bc_ui_fields_tl` ENABLE KEYS */;
 
 
@@ -1168,8 +1158,8 @@ INSERT INTO `bc_valuelist_lines_tl` (`line_id`,`valuelist_id`,`segment`,`descrip
  (20,1,'15','标准',0,NULL,NULL,NULL,NULL,''),
  (21,6,'01','全局',0,NULL,NULL,NULL,NULL,''),
  (22,6,'02','私人',0,NULL,NULL,NULL,NULL,''),
- (23,7,'01','SQL',0,NULL,NULL,NULL,NULL,''),
- (26,7,'02','FUN',0,NULL,NULL,NULL,NULL,'');
+ (23,7,'01','SQL语句',0,NULL,NULL,NULL,NULL,''),
+ (26,7,'02','URL接口',0,NULL,NULL,NULL,NULL,'');
 /*!40000 ALTER TABLE `bc_valuelist_lines_tl` ENABLE KEYS */;
 
 
@@ -1212,26 +1202,18 @@ INSERT INTO `bc_valuelists_tl` (`valuelist_id`,`valuelist_name`,`description`,`f
  (4,'BC_VALIDATOR','验证码',1,'description','validation_code','bc_validator_tl',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
  (5,'BC_VALUELIST','值集',1,'description','valuelist_name','bc_valuelists_tl',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
  (6,'BC_GRID_LAYOUT_TYPE','布局类型',0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
- (7,'BC_REPORT_TYPE','报表类型',0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
+ (7,'BC_REPORT_SOURCE_TYPE','报表类型',0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),
  (8,'BC_REPORT_GROUP','报表组',1,'description','name','bc_report_groups_tl',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `bc_valuelists_tl` ENABLE KEYS */;
 
 
 --
--- Definition of view `bc_grid_layouts_v`
+-- Definition of view `bc_reports_h_v`
 --
 
-DROP TABLE IF EXISTS `bc_grid_layouts_v`;
-DROP VIEW IF EXISTS `bc_grid_layouts_v`;
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `bc_grid_layouts_v` AS select `h`.`layout_id` AS `layout_id`,`h`.`program_id` AS `program_id`,`h`.`layout_name` AS `layout_name`,`h`.`description` AS `description`,`h`.`creation_date` AS `creation_date`,`h`.`created_by` AS `created_by`,`h`.`last_update_date` AS `last_update_date`,`h`.`last_updated_by` AS `last_updated_by`,`h`.`default_flag` AS `default_flag`,`l`.`field` AS `field`,`l`.`label` AS `label`,`l`.`pos` AS `pos`,`l`.`size` AS `size` from (`bc_grid_layouts_tl` `h` join `bc_glayout_columns_tl` `l`) where (`h`.`layout_id` = `l`.`layout_id`);
-
---
--- Definition of view `bc_reports_v`
---
-
-DROP TABLE IF EXISTS `bc_reports_v`;
-DROP VIEW IF EXISTS `bc_reports_v`;
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `bc_reports_v` AS select `h`.`report_id` AS `report_id`,`h`.`name` AS `name`,`h`.`description` AS `description`,`h`.`report_group_id` AS `report_group_id`,`h`.`creation_date` AS `creation_date`,`h`.`created_by` AS `created_by`,`h`.`last_update_date` AS `last_update_date`,`h`.`last_updated_by` AS `last_updated_by`,`h`.`structure` AS `structure`,`h`.`grid_type` AS `grid_type`,`l`.`release_date` AS `release_date`,`l`.`release_flag` AS `release_flag`,`l`.`last_version_flag` AS `last_version_flag`,`l`.`source_text` AS `source_text`,`l`.`source_type` AS `source_type` from (`bc_reports_tl` `h` join `bc_report_source_tl` `l`) where (`h`.`report_id` = `l`.`report_id`);
+DROP TABLE IF EXISTS `bc_reports_h_v`;
+DROP VIEW IF EXISTS `bc_reports_h_v`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `bc_reports_h_v` AS select `a`.`report_id` AS `report_id`,`a`.`name` AS `name`,`a`.`description` AS `description`,`a`.`report_group_id` AS `report_group_id`,`a`.`creation_date` AS `creation_date`,`a`.`created_by` AS `created_by`,`a`.`last_update_date` AS `last_update_date`,`a`.`last_updated_by` AS `last_updated_by`,`a`.`structure` AS `structure`,`a`.`grid_type` AS `grid_type`,`b`.`name` AS `report_group` from (`bc_reports_tl` `a` join `bc_report_groups_tl` `b`) where (`a`.`report_group_id` = `b`.`report_group_id`);
 
 --
 -- Definition of view `bc_uifields_v`

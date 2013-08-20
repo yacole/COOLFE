@@ -279,3 +279,12 @@ function message($type,$class,$line,$args = []){
     array_push($messages,$message);
     set_sess('message',$messages);
 }
+//临时使用的输出
+function custz_message($type,$content){
+    $message['type'] = $type;
+    $message['content'] = $content;
+    //刷新message会话数据
+    $messages = _sess('message');
+    array_push($messages,$message);
+    set_sess('message',$messages);
+}

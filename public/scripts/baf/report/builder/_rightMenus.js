@@ -1,6 +1,8 @@
 define([ "dijit/Menu", "dijit/MenuItem", "dijit/CheckedMenuItem", "dijit/MenuSeparator",
-    "dijit/PopupMenuItem", "dojo/aspect", "base/Util" , "base/Env","cmd/Command","report/builder/group/_reportGroup"],
-    function(Menu, MenuItem, CheckedMenuItem, MenuSeparator, PopupMenuItem,aspect,Util,Env,Command,reportGroup){
+    "dijit/PopupMenuItem", "dojo/aspect", "base/Util" , "base/Env",
+    "./group/_reportGroup","./setup/_showDialog","./_util"],
+    function(Menu, MenuItem, CheckedMenuItem, MenuSeparator, PopupMenuItem,aspect,Util,Env,
+             reportGroup,showDialog,u){
         return {
             startup : function(tree){
                 if(tree){
@@ -15,12 +17,7 @@ define([ "dijit/Menu", "dijit/MenuItem", "dijit/CheckedMenuItem", "dijit/MenuSep
 
                         var node = dijit.getEnclosingWidget(e.target); /*node就是节点对象*/
                         var item = node.item;
-                        //设置选择路径
-                        var buildme = [];
-                        var result = Util.recursiveHunt(item.id.toString(), tree.model, buildme, tree.model.root);
-                        if(result && result.length > 0){
-                            tree.set('path', result);
-                        }
+                        Util.pathByKey('id',item.id.toString(),tree);
 
                         //重新设置菜单项
                         dojo.forEach(treeMenu.getChildren(),function(entry){
@@ -30,7 +27,7 @@ define([ "dijit/Menu", "dijit/MenuItem", "dijit/CheckedMenuItem", "dijit/MenuSep
                         //如果是ROOT节点
                         if(item.root){
                             treeMenu.addChild(new MenuItem({
-                                label: "新建报表组",
+                                label: Util.label.report_group_create,
                                 onClick : function(){
                                     var rptgrp = new reportGroup({});
                                     rptgrp.tree = tree;
@@ -41,32 +38,34 @@ define([ "dijit/Menu", "dijit/MenuItem", "dijit/CheckedMenuItem", "dijit/MenuSep
                             treeMenu.addChild(new MenuSeparator());
 
                             treeMenu.addChild(new MenuItem({
-                                label: "打开全部",
+                                label: Util.label.rightmenu_openALL,
                                 onClick : function(){tree.expandAll(); }
                             }));
 
                             treeMenu.addChild(new MenuItem({
-                                label: "折叠全部",
+                                label: Util.label.rightmenu_closeALL,
                                 onClick: function(){tree.collapseAll();}
                             }));
 
                             treeMenu.addChild(new MenuSeparator());
                             treeMenu.addChild(new MenuItem({
-                                label: "刷新",
+                                label: Util.label.rightmenu_tab_reflash,
                                 onClick : function(){
                                     Env.currentWso().refresh();
                                 }
                             }));
 
                         }else{
-                            if(item.reports){
+                            if(item.children){
                                 //报表组节点
                                 treeMenu.addChild(new MenuItem({
-                                    label: "新建报表",
-                                    onClick : function(){}
+                                    label: Util.label.report_group_create,
+                                    onClick : function(){
+                                        u.createBase(item,tree);
+                                    }
                                 }));
                                 treeMenu.addChild(new MenuItem({
-                                    label: "重命名报表组",
+                                    label: Util.label.report_group_rename,
                                     onClick : function(){
                                         var rptgrp = new reportGroup({});
                                         rptgrp.tree = tree;
@@ -74,14 +73,17 @@ define([ "dijit/Menu", "dijit/MenuItem", "dijit/CheckedMenuItem", "dijit/MenuSep
                                     }
                                 }));
                                 treeMenu.addChild(new MenuItem({
-                                    label: "删除报表组",
+                                    label:  Util.label.report_group_destroy,
                                     onClick : function(){
                                         //验证报表组下是否包含报表
+                                        var rptgrp = new reportGroup({});
+                                        rptgrp.tree = tree;
+                                        rptgrp.destroySelf(item);
                                     }
                                 }));
                                 treeMenu.addChild(new MenuSeparator());
                                 treeMenu.addChild(new MenuItem({
-                                    label: "属性",
+                                    label: Util.lable.report_group_show,
                                     onClick : function(){
                                         var rptgrp = new reportGroup({});
                                         rptgrp.show(item.report_group_id.toString());
@@ -90,50 +92,67 @@ define([ "dijit/Menu", "dijit/MenuItem", "dijit/CheckedMenuItem", "dijit/MenuSep
                             }else{
                                 //叶子节点，报表节点
                                 treeMenu.addChild(new MenuItem({
-                                    label: "运行",
+                                    label: Util.label.report_execute,
                                     onClick : function(){}
                                 }));
 
                                 treeMenu.addChild(new MenuItem({
-                                    label: "拷贝",
+                                    label: Util.label.report_copy,
                                     onClick : function(){}
+                                }));
+
+                                treeMenu.addChild(new MenuItem({
+                                    label: Util.label.report_destroy,
+                                    onClick : function(){
+                                        u.destroyReport(item,tree);
+                                    }
                                 }));
 
                                 var pMenu = new Menu();
 
                                 pMenu.addChild(new MenuItem({
-                                    label : "重命名",
-                                    onClick : function(){}
+                                    label : Util.label.report_base,
+                                    onClick : function(){
+                                        u.updateBase(item,tree);
+                                    }
                                 }));
 
                                 pMenu.addChild(new MenuItem({
-                                    label : "数据来源",
-                                    onClick : function(){}
+                                    label : Util.label.report_data_source,
+                                    onClick : function(){
+                                        u.createSource(item);
+                                    }
                                 }));
 
                                 pMenu.addChild(new MenuItem({
-                                    label : "参数",
-                                    onClick : function(){}
+                                    label : Util.label.report_parameter,
+                                    onClick : function(){
+                                        u.createParam(item);
+                                    }
                                 }));
 
                                 pMenu.addChild(new MenuItem({
-                                    label : "布局",
+                                    label : Util.label.report_structure,
                                     onClick : function(){}
                                 }));
 
                                 treeMenu.addChild(new PopupMenuItem({
-                                    label: "修改",
+                                    label: Util.label.report_setup,
                                     popup : pMenu
                                 }));
                                 treeMenu.addChild(new MenuItem({
-                                    label: "生成程序",
+                                    label: Util.label.report_to_program,
                                     onClick : function(){}
                                 }));
                                 treeMenu.addChild(new MenuSeparator());
                                 treeMenu.addChild(new MenuItem({
-                                    label: "属性",
+                                    label: Util.label.report_show,
                                     onClick : function(){
                                         //包含所对应的程序信息
+                                        var sDialog = new showDialog({
+                                            title : this.label
+                                        });
+                                        sDialog.showAll(item.report_id.toString());
                                     }
                                 }));
                             }

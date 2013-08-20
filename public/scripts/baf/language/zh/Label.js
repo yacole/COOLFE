@@ -113,7 +113,26 @@ define(function(){
         filter_action_TE : "结尾是",
         filter_action_TNE : "结尾不是",
         filter_action_LIKE : "包含",
-        filter_action_NOT_LIKE : "不包含"
+        filter_action_NOT_LIKE : "不包含",
 
+        //报表
+        report_builder : "报表设计器",
+        report_create : "新建报表",
+        report_base : "基础",
+        report_data_source : "数据源",
+        report_parameter : "参数",
+        report_structure : "布局",
+        report_execute : "运行",
+        report_copy : "复制",
+        report_destroy : "删除",
+        report_setup : "设置",
+        report_show : "属性",
+        report_to_program : "生成程序",
+
+        //报表组
+        report_group_create : "新建报表组",
+        report_group_show : "报表组属性",
+        report_group_rename : "重命名报表组",
+        report_group_destroy : "删除报表组"
     }
 });

@@ -1,9 +1,6 @@
-define(["dojo/_base/declare","baf/dijit/Dialog","base/Util","base/Env","dojo/request","grid/DataGrid",
-    "dojo/data/ItemFileWriteStore","dojo/json","dojo/dom-form","cmd/Command","dijit/layout/TabContainer",
-    "dijit/layout/ContentPane","dijit/form/Button","./_structurePane","./_sortPane",
-    "./_filterPane","../_config"],
-    function(declare,Dialog,Util,Env,request,DataGrid,ItemFileWriteStore,JSON,domForm,
-             Command,TabContainer,ContentPane,Button,structurePane,sortPane,filterPane,config){
+define(["dojo/_base/declare","baf/dijit/Dialog","base/Util","dijit/layout/TabContainer",
+    "./_structurePane","./_sortPane","./_filterPane","../_config"],
+    function(declare,Dialog,Util,TabContainer,structurePane,sortPane,filterPane,config){
         return declare ("",[Dialog],{
             paneContainer : null,
             //设置列

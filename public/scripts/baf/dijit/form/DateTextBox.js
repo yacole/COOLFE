@@ -6,7 +6,7 @@ define(["dojo/_base/declare","dijit/form/DateTextBox","base/Util"],
          *             */
         return declare("",[DateTextBox],{
 
-            startup : function(){
+            startup : function(args){
 //                this.constraints = { datePattern : 'yyyy-MM-dd' };
 //                this.promptMessage = "yyyy-MM-dd";
 //                this.invalidMessage =  "Invalid date format. Use yyyy-MM-dd";

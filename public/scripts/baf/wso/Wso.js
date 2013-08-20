@@ -1,6 +1,6 @@
-define(["dojo/_base/declare","base/Util","dijit/layout/TabContainer","./Form","dojo/request",
+define(["dojo/_base/declare","base/Util","dijit/layout/TabContainer","./Form",
     "layout/MenuBar","cmd/Command","./QueryForm","./QueryResult","./Report","layout/ToolBar"],
-    function(declare,Util,TabContainer,Form,request,MenuBar,Command,QueryForm,QueryResult,Report,ToolBar){
+    function(declare,Util,TabContainer,Form,MenuBar,Command,QueryForm,QueryResult,Report,ToolBar){
         /*
          *   摘要:
          *       查询表单，用于对字段的查询，关联值列表
@@ -24,7 +24,7 @@ define(["dojo/_base/declare","base/Util","dijit/layout/TabContainer","./Form","d
             //program_id : 程序id ； timestamp ： 时间戳 ；params ： 参数 ；pos ： 打开的位置；
             _openProgram : function(program_id,timestamp,params,pos){
                 var tabpane = this;
-                request.get(Util.url.find_program(program_id),{handleAs:"json"}).then(function(data){
+                Util.get(Util.url.find_program(program_id),function(data){
 
                     //判断是否存在查询主页界面
                     if(data.home_page){
@@ -66,9 +66,7 @@ define(["dojo/_base/declare","base/Util","dijit/layout/TabContainer","./Form","d
                         tabpane._openWso(timestamp,data,params,pos);
                     }
 
-                },function(){
-                    Command.show_dialog({content: Util.message.error_xhr_notreach});
-                }); //request.get(Url.wor
+                });
 
             },
 
@@ -152,7 +150,7 @@ define(["dojo/_base/declare","base/Util","dijit/layout/TabContainer","./Form","d
                     });
 
                 }else{
-                    Command.show_dialog({content : Util.message.error_wsotab_openMax});
+                    Util.confirm(Util.message.error_wsotab_openMax);
                 }
             },
 
@@ -160,11 +158,9 @@ define(["dojo/_base/declare","base/Util","dijit/layout/TabContainer","./Form","d
             //program_name ：程序名 ;target : "_self" | "_blank" ；params ： 参数；pos ： 打开位置
             openProgram_byName : function(program_name,target,params,pos){
                 var wso = this;
-                request.get(Util.url.find_program_by_name(program_name),{handleAs:"json"}).then(function(program){
+                Util.get(Util.url.find_program_by_name(program_name),function(program){
 //                    console.info(program);
                     wso.openProgram_byId(program.program_id,target,params,pos);
-                },function(){
-                    Command.show_dialog({content: Util.message.error_xhr_notreach});
                 });
             },
 
@@ -347,7 +343,7 @@ define(["dojo/_base/declare","base/Util","dijit/layout/TabContainer","./Form","d
             //根据值列表打开查询界面
             openQForm : function(obj){
 
-                request.get(Util.url.find_valuelist(obj.valuelist_id),{handleAs:"json"}).then(function(data){
+                Util.get(Util.url.find_valuelist(obj.valuelist_id),function(data){
                     //如果存在则先销毁
                     var oldqform = dijit.byId(Util.id.queryform);
                     if(oldqform){
@@ -401,21 +397,17 @@ define(["dojo/_base/declare","base/Util","dijit/layout/TabContainer","./Form","d
 
 
 
-                },function(){
-                    Command.show_dialog({content: Util.message.error_xhr_notreach});
                 });
             },
 
             //设置wso的字段属性
             //program_id ： 程序id；func ：设置成功之后执行的函数
             setFields : function(program_id,func){
-                request.get( Util.url.find_fields_by_program_id(program_id),{handleAs: "json"}).then(function(data){
+                Util.get( Util.url.find_fields_by_program_id(program_id),function(data){
 //                    wso.fields = data.items;
                     if(func){
                         func(data);
                     }
-                },function(){
-                    Command.show_dialog({content: Util.message.error_xhr_notreach});
                 });
 
             },

@@ -18,7 +18,23 @@ define(["dojo/_base/declare","dijit/form/SimpleTextarea","base/Util"],
                 }
                 this.inherited(arguments);
 
-            }
+            },
+            startup : function(){
+                var field = Util.field(this.name);
+                if(field){
+                    //初始化值
+                    if(this.cols == undefined){
+                        this.set("cols" , field.field_size);
+                    }
+                    if(this.required == undefined){
+                        this.set("required",Util.xflag(field.required_flag));
+                    }
+                    if(this.disabled == undefined){
+                        this.set("disabled",Util.xflag(field.disabled_flag));
+                    }
+                } //if
+
+            }//startup
 
         });
     });

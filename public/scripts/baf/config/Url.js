@@ -110,20 +110,29 @@ define([],function(){
             return this.message("show_detail",{message_id : message_id,content : content,code : code});
         },
 
+        //报表
+        report : function(action,params){
+            return url("bc/report",action,params);
+        },
+
         //报表数据读取url
         report_read_data_by_report_id : function(report_id){
-            return url("bc/report","read_data",{report_id : report_id});
+            return this.report("read_data",{report_id : report_id});
         },
         //报表设置
-        report_setup_template : function(filename){
+        report_viewer_setup_template : function(filename){
             return this.localUrl("report/viewer/setup/_"+filename+".html");
         },
+        report_builder_setup_template : function(filename){
+            return this.localUrl("report/builder/setup/"+filename+".html");
+        },
+
         //报表打印路径
         report_printer_cssFile : function(){
             return this.localUrl("report/viewer/printer/style.css");
         },
         report_printer_template : function(){
-            return this.localUrl("report/viewer/printer/printer.html");
+            return this.localUrl("report/viewer/printer/_printer.html");
         },
         //报表gird布局
         report_layout_template : function(){
@@ -133,10 +142,13 @@ define([],function(){
         report_filter_template : function(){
             return this.localUrl("report/viewer/filter/_filter.html");
         },
-        //报表生成器：base
-        report_builder_template : function(filename){
-            return this.localUrl("report/builder/_"+filename+".html");
-        }
 
+        //报表组
+        report_group_template : function(file_name){
+            return this.localUrl("report/builder/group/_"+file_name+".html");
+        },
+        report_group : function(report_group_id){
+            return this.report("find_group",{report_group_id : report_group_id});
+        }
     }
  });

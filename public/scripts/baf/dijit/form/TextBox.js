@@ -1,6 +1,6 @@
 define(["dojo/_base/declare", "dijit/form/ValidationTextBox", "base/Util",
-    "dijit/form/Button", "dojo/request", "base/Env","baf/wso/QueryResult"],
-    function(declare,ValidationTextBox,Util,Button,request,Env,QueryResult){
+        "dijit/form/Button", "base/Env","baf/wso/QueryResult"],
+    function(declare,ValidationTextBox,Util,Button,Env,QueryResult){
         /*
          *   摘要:
          *       输入框组件
@@ -52,7 +52,7 @@ define(["dojo/_base/declare", "dijit/form/ValidationTextBox", "base/Util",
 
                 //设置验证规则
                 if(entry.validation_id){
-                    request.get(Util.url.find_validator(entry.validation_id),{handleAs : "json"}).then(function(data){
+                    Util.get(Util.url.find_validator(entry.validation_id),function(data){
                         if(data){
                             //函数验证
                             textbox.remoteValidator = data;
@@ -66,15 +66,17 @@ define(["dojo/_base/declare", "dijit/form/ValidationTextBox", "base/Util",
                 }
 
                 //设置失效标识
-                this.set("disabled" , Util.xflag(entry.disabled_flag));
+                if(this.disabled == undefined){
+                    this.set("disabled" , Util.xflag(entry.disabled_flag));
+                }
 
                 //设置默认值
-                if(!this.value){
+                if(this.value == undefined){
                     this.set("value",entry.default_value);
                 }
 
                 //设置必须属性
-                if(!this.required){
+                if(this.required == undefined){
                     this.set("required",Util.xflag(entry.required_flag));
                 }
 

@@ -1,6 +1,5 @@
-define(["dojo/_base/declare","dijit/layout/ContentPane","dijit/form/Button",
-    "dojo/request","base/Util","baf/dijit/Dialog","base/Env"],
-function(declare,ContentPane,Button,request,Util,Dialog,Env){
+define(["dojo/_base/declare","dijit/form/Button","base/Util","baf/dijit/Dialog","base/Env"],
+function(declare,Button,Util,Dialog,Env){
     /*
      *   摘要:
      *       消息栏，位于框架底部，用于展示消息
@@ -16,16 +15,13 @@ function(declare,ContentPane,Button,request,Util,Dialog,Env){
         //type ：类型 ; classCode :消息类 ; messageCode 消息编号
         showMessage : function(type,classCode,messageCode){
             var messageBar = this;
-            request.get(Util.url.find_message(classCode, messageCode),{handleAs : "json"}).then(
-                function(message){
-
-                    if(message){
-                        //设置详细信息
-                        messageBar.detail = [];
-                        messageBar.detail.push(message);
-                        messageBar.setMessage(message);
-                    }
-
+            Util.get(Util.url.find_message(classCode, messageCode),function(message){
+                if(message){
+                    //设置详细信息
+                    messageBar.detail = [];
+                    messageBar.detail.push(message);
+                    messageBar.setMessage(message);
+                }
             });
         },
 

@@ -1,6 +1,5 @@
-define(["dojo/_base/declare", "dijit/layout/ContentPane", "dojo/request", "layout/MenuBar",
-    "base/Util", "cmd/Command","layout/ToolBar","report/viewer/Viewer"],
-    function(declare,ContentPane,request,MenuBar,Util,Command,ToolBar,ReportGrid){
+define(["dojo/_base/declare", "dijit/layout/ContentPane","base/Util","cmd/Command","report/viewer/Viewer"],
+    function(declare,ContentPane,Util,Command,ReportGrid){
         /*
          *   摘要:
          *       工作区对象：表单

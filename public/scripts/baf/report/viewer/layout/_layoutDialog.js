@@ -1,6 +1,6 @@
-define(["baf/dijit/Dialog","base/Util","base/Env","dojo/request","grid/DataGrid",
+define(["baf/dijit/Dialog","base/Util","base/Env","grid/DataGrid",
     "dojo/data/ItemFileReadStore","dojo/json","dojo/dom-form"],
-    function(Dialog,Util,Env,request,DataGrid,ItemFileReadStore,JSON,domForm){
+    function(Dialog,Util,Env,DataGrid,ItemFileReadStore,JSON,domForm){
     return {
         //展示布局选择和保持界面
         show : function(type){
@@ -21,7 +21,7 @@ define(["baf/dijit/Dialog","base/Util","base/Env","dojo/request","grid/DataGrid"
 
                     var selectDialog = this;
 
-                    request.get(Util.url.rpt_layouts(o.program_id),{handleAs : "json"}).then(function(data){
+                     Util.get(Util.url.rpt_layouts(o.program_id),function(data){
 
                         //插入选择列表
                         var store = new ItemFileReadStore({

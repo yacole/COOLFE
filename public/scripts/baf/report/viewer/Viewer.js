@@ -1,4 +1,4 @@
-define(["dojo/_base/declare","dojox/layout/ContentPane","base/Util","dojo/request",
+define(["dojo/_base/declare","dojox/layout/ContentPane","base/Util",
     "dojox/grid/enhanced/plugins/exporter/CSVWriter","dojox/grid/enhanced/plugins/Selector",
     "dojox/grid/enhanced/plugins/Menu","grid/MenusObject","./_toolBar","./layout/_layoutDialog",
     "dojo/data/ItemFileWriteStore","grid/DataGrid","./setup/_setupDialog",
@@ -6,7 +6,7 @@ define(["dojo/_base/declare","dojox/layout/ContentPane","base/Util","dojo/reques
     "dojox/grid/enhanced/plugins/NestedSorting", "./_detailDialog","./_config","./setup/_util",
     "./filter/Filter","dojox/grid/enhanced/plugins/IndirectSelection","dojox/grid/enhanced/plugins/Printer",
     "./printer/_printerDialog", "./_header","./_footer"],
-    function (declare,ContentPane,Util,request,gridCSVWriter,gridSelector,gridMenu,MenusObject,ToolBarForReport,
+    function (declare,ContentPane,Util,gridCSVWriter,gridSelector,gridMenu,MenusObject,ToolBarForReport,
               layoutDialog,ItemFileWriteStore,DataGrid,setupDialog,DnD,JSON,Pagination,NestedSorting,detailDialog,
               Config,u,Filter,IndirectSelection,Printer,printerDialog,header,footer){
         /*
@@ -36,13 +36,6 @@ define(["dojo/_base/declare","dojox/layout/ContentPane","base/Util","dojo/reques
                 });
                 this.addChild(this.header);
 
-                this.toolBar = new ToolBarForReport({
-                    id : Util.id.wso_ToolBarForReport + this.timestamp,
-                    style : "",
-                    program_id : this.program_id
-                });
-                this.addChild(this.toolBar);
-
                 //加载布局
                 this._loadDefaultLayout();
 
@@ -59,10 +52,18 @@ define(["dojo/_base/declare","dojox/layout/ContentPane","base/Util","dojo/reques
             _loadDefaultLayout : function(type){
                 var o = this;
                 //获取数据
-                request.get(o.dataUrl,{handleAs : "json"}).then(function(data){
+                Util.get(o.dataUrl,function(data){
+
+                    o.toolBar = new ToolBarForReport({
+                        id : Util.id.wso_ToolBarForReport + this.timestamp,
+                        style : "",
+                        program_id : this.program_id
+                    });
+                    o.addChild(o.toolBar);
+
 //                    console.info(Util.url.find_default_layout_for_rpt({program_id : o.program_id}));
                     //先判断是否存在默认布局
-                    request.get(Util.url.rpt_default_layout(o.program_id),{handleAs : "json"}).then(function(layout){
+                    Util.get(Util.url.rpt_default_layout(o.program_id),function(layout){
 //                        console.info(layout);
                         var column = [];
                         var store = new ItemFileWriteStore({
@@ -147,7 +148,7 @@ define(["dojo/_base/declare","dojox/layout/ContentPane","base/Util","dojo/reques
             //清除样式恢复到初始状态
             clearLayout : function(){
                 var o = this;
-                request.get(o.dataUrl,{handleAs : "json"}).then(function(data){
+                Util.get(o.dataUrl,function(data){
                     o.layout = null;
                     o.grid.setStructure(u.constructColumn(data.items));
                 });
@@ -156,7 +157,7 @@ define(["dojo/_base/declare","dojox/layout/ContentPane","base/Util","dojo/reques
             //选择布局，并变更
             selectLayout : function(layout_id){
                 var o = this;
-                request.get(Util.url.rpt_layout(layout_id),{handleAs : "json"}).then(function(data){
+                Util.get(Util.url.rpt_layout(layout_id),function(data){
                     o.layout = layout_id;
                     o.grid.setStructure(o._constructStructure(data.structure));
                 });

@@ -1,6 +1,6 @@
-define(["dojo/_base/declare", "dojo/request", "dijit/layout/ContentPane","layout/MessageBar",
-    "dijit/Toolbar", "dijit/ToolbarSeparator","dijit/form/Button", "base/Util" ],
-    function(declare,request,ContentPane,MessageBar,Toolbar,ToolbarSeparator,Button,Util){
+define(["dojo/_base/declare","layout/MessageBar","dijit/Toolbar",
+    "dijit/ToolbarSeparator","dijit/form/Button", "base/Util" ],
+    function(declare,MessageBar,Toolbar,ToolbarSeparator,Button,Util){
         /*
          *   摘要:
          *       状态栏，位于框架底部，用于显示系统状态、消息、用户环境

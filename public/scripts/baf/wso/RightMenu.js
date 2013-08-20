@@ -1,6 +1,6 @@
-define([ "dijit/Menu", "dijit/MenuItem", "dijit/CheckedMenuItem", "dijit/MenuSeparator",
-    "dijit/PopupMenuItem", "dojo/aspect", "base/Util" , "base/Env","cmd/Command"],
-    function(Menu, MenuItem, CheckedMenuItem, MenuSeparator, PopupMenuItem,aspect,Util,ENV,Command){
+define([ "dijit/Menu", "dijit/MenuItem", "dijit/MenuSeparator","dijit/PopupMenuItem",
+    "dojo/aspect", "base/Util" , "base/Env","cmd/Command"],
+    function(Menu, MenuItem, MenuSeparator, PopupMenuItem,aspect,Util,Env,Command){
     /*
      *   摘要:
      *       系统右键菜单管理，全局，根据不同的对象，菜单展示可自定义
@@ -71,20 +71,19 @@ define([ "dijit/Menu", "dijit/MenuItem", "dijit/CheckedMenuItem", "dijit/MenuSep
                 dojo.forEach(navigatorMenu.getChildren(),function(entry){
                     entry.destroyRecursive();
                 });
-
                 //如果有类型则不是文件夹
                 if(item.children == undefined){
 
                     navigatorMenu.addChild(new MenuItem({
                         label: Util.label.rightmenu_target_self,
                         onClick : function(){
-                            ENV.wso().openProgram_byId(item.program_id,"_self");
+                            dijit.byId(Util.id.WorkspacePane).openProgram_byId(item.program_id,"_self");
                         }
                     }));
                     navigatorMenu.addChild(new MenuItem({
                         label: Util.label.rightmenu_target_blank,
                         onClick: function(){
-                            ENV.wso().openProgram_byId(item.program_id);
+                            dijit.byId(Util.id.WorkspacePane).openProgram_byId(item.program_id);
                         }
                     }));
                     navigatorMenu.addChild(new MenuSeparator());

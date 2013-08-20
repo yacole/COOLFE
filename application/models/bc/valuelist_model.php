@@ -44,6 +44,36 @@ class Valuelist_model extends CI_Model{
         return $rs;
     }
 
+    function validate_value($value,$id){
+        $header = firstRow($this->db->get_where('bc_valuelists_tl',array('valuelist_id'=>$id)));
+        $rs = null;
+        if(!is_null($header)){
+            if($header['from_obj'] == 1){
+                //由对象创建
+                $this->db->select($header['value_fieldname'].' as value,'.$header['label_fieldname'].' as label ');
+                $this->db->from($header['source_view']);
+                //如果条件不为空
+                if($header['condition'] != ""){
+                    $this->db->where($header['condition']);
+                }
+                $this->db->where($header['value_fieldname'],$value);
+                $rs = $this->db->get();
+
+            }else{
+                //由值列表创建
+                $this->db->select('segment as value,description as label');
+                $this->db->from('bc_valuelist_lines_tl');
+                $this->db->where(array('valuelist_id'=>$header['valuelist_id'],'segment' => $value));
+                $rs = $this->db->get();
+            }
+        }
+        if(count($rs->result_array()) > 0){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
 //    function  find_by_vlname($vlname,$inactive = 0){
 //        $this->db->select('*');
 //        $this->db->from('bc_valuelists_tl as h');

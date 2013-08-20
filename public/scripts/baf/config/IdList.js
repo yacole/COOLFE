@@ -59,6 +59,7 @@ define(function(){
         messageTYPE_ERROR : "E",
         messageTYPE_WARNNING : "W",
         messageTYPE_INFO : "I",
+        messageTYPE_ALERT : "A",
 
         //FORM表单类型
         formType_innerForm : "innerForm",

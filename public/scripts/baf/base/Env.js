@@ -35,6 +35,10 @@ define(["dojo/topic","cmd/History","baf/config/IdList","baf/wso/RightMenu"],
         currentWso : function(){
             return this.wso().currentChild();
         },
+        closeCurrentWso : function(){
+            var c = this.currentWso();
+            this.wso().closeProgram(c);
+        },
         //当前的工作区
         wso : function(){
             return dijit.byId(IdList.WorkspacePane);

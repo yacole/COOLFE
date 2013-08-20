@@ -1,4 +1,4 @@
-define(["../../../../../../dojo1.8.3/dojo/_base/declare","dijit/layout/ContentPane","dojo/request","base/Util","base/Env",
+define(["dojo/_base/declare","dijit/layout/ContentPane","dojo/request","base/Util","base/Env",
     "form/TextBox","form/Select"],
     function(declare,ContentPane,request,Util,Env,TextBox,Select){
         /**
@@ -10,7 +10,7 @@ define(["../../../../../../dojo1.8.3/dojo/_base/declare","dijit/layout/ContentPa
             ready : false,
 
             constructor : function(args){
-                args.href = Util.url.report_builder_template("base");
+                args.href = Util.url.report_builder_setup_template("_base");
             },
 
             onDownloadEnd : function(){

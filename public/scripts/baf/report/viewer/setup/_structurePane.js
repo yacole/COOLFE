@@ -1,13 +1,12 @@
-define(["dojo/_base/declare","base/Util","base/Env","dojo/request","grid/DataGrid",
-    "dojo/data/ItemFileWriteStore","dojo/json","dojo/dom-form","dijit/layout/ContentPane",
-    "dijit/form/Button","./_util"],
-    function(declare,Util,Env,request,DataGrid,ItemFileWriteStore,JSON,domForm,ContentPane,Button,u){
+define(["dojo/_base/declare","base/Util","base/Env","grid/DataGrid","dojo/data/ItemFileWriteStore",
+    "dijit/layout/ContentPane","dijit/form/Button","./_util"],
+    function(declare,Util,Env,DataGrid,ItemFileWriteStore,ContentPane,Button,u){
         return declare("",[ContentPane],{
             srcObj : null,
 
             constructor : function(args){
                 args.title = Util.label.grid_setup_column;
-                args.href = Util.url.report_setup_template("structure");
+                args.href = Util.url.report_viewer_setup_template("structure");
                 this.inherited(arguments);
             },
 

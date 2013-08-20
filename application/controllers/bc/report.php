@@ -26,7 +26,7 @@ class Report extends CI_Controller {
     //报表数据的统一出口
     function read_data(){
         $report_id = get_parameter("report_id");
-        $row = firstRow($this->report->find_last_version($report_id));
+        $row = firstRow($this->report->find_last_version_source($report_id));
         if(!is_null($row)){
             //判断数据来源
             switch($row['source_type']){
@@ -88,29 +88,27 @@ class Report extends CI_Controller {
         }
     }
 
-    function create(){
-        $data['type'] = 'create';
-        $data['report_name'] = get_parameter('report_name');
-        $this->load->view('bc/report/builder',$data);
-    }
-
-    function edit(){
-        $data = $this->_hasData(get_parameter('report_name'));
-        $data['type'] = 'edit';
-        $data['report_name'] = get_parameter('report_name');;
-        $this->load->view('bc/report/builder',$data);
-    }
-
-    function show(){
-        $data = $this->_hasData(get_parameter('report_name'));
-        $data['type'] = 'show';
-        $data['report_name'] = get_parameter('report_name');;
-        $this->load->view('bc/report/builder',$data);
+    function destroy_group(){
+        if($_POST){
+            //是否拥有报表
+            $rpts = $this->report->find_all_by_group_id($_POST['report_group_id'])->result_array();
+            if(count($rpts) > 0){
+                message('E','DATABASE','02');
+            }else{
+                //报表已被清空时
+                if($this->report->destroy_group($_POST['report_group_id'])){
+                    message('I','DATABASE','01');
+                }else{
+                    message('E','DATABASE','02');
+                }
+            }
+        }else{
+            message('E','DATABASE','03');
+        }
     }
 
     //保存基础数据
     function create_base_data(){
-        $messages = [];
         //判断是否为POST
         if($_POST){
             //如果不存在则创建
@@ -131,23 +129,112 @@ class Report extends CI_Controller {
             message('E','REQUEST','01');
         }
     }
-    //保存数据来源
-    function create_source_data(){
-        if($_POST){
 
+    //保存基础数据
+    function update_base_data(){
+        //判断是否为POST
+        if($_POST){
+            //如果不存在则创建
+            if($this->report->isexists(cftrim($_POST['report_name']))){
+                $data['report_id'] =  $_POST['report_id'];
+                $data['description'] =  cftrim($_POST['description']);
+                $data['report_group_id'] = firstRow($this->report->find_group_by_name(cftrim($_POST['report_group'])))['report_group_id'] ;
+
+                if($this->report->update_base_data($data)){
+                    message('I','DATABASE','01');
+                }else{
+                    message('E','DATABASE','02');
+                }
+            }else{
+                message('E','DATABASE','03');
+            }
+        }else{
+            message('E','REQUEST','01');
         }
     }
 
+    //保存数据来源
+    function create_source_data(){
+        if($_POST){
+            //需检测输入源是否合法
+            if(isset($_POST['source_type']) and isset($_POST['source_text'])){
+                $flag = true;
+                //判断数据来源
+                switch($_POST['source_type']){
+                    case '02' :
+                        $url = $_POST['source_text'];
+                        $ch = curl_init();
+                        $timeout = 10;
+                        curl_setopt($ch, CURLOPT_URL, $url);
+                        curl_setopt($ch, CURLOPT_HEADER, 1);
+                        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+                        if(curl_getinfo($ch, CURLINFO_HTTP_CODE) <> 200){
+                            custz_message('E','无法访问此数据接口');
+                            $flag = false;
+                        }
+                        break;
+                    case '01' :
+                        if(!mysql_query($_POST['source_text']) ){
+                            custz_message('E','SQL语句非法');
+                            $flag = false;
+                        }
+                        break;
+                }
+                //数据库操作
+                if($flag){
+                    $data['source_type'] = $_POST['source_type'];
+                    $data['source_text'] = $_POST['source_text'];
+                    $data['report_id'] = $_POST['report_id'];
+                    if($this->report->create_source_data($data)){
+                        message('I','DATABASE','01');
+                    }else{
+                        message('E','DATABASE','02');
+                    }
+                }
+            }
+       }
+    }
+
+    //删除报表
+    function destroy_report(){
+        if($_POST && isset($_POST['report_id'])){
+            if(count($this->report->find($_POST['report_id'])) > 0){
+                if($this->report->destroy_report($_POST['report_id'])){
+                    message('I','DATABASE','01');
+                }else{
+                    message('E','DATABASE','02');
+                }
+            }
+        }
+    }
+    //获取最新版本数据源
+    function find_last_version_source(){
+        export_to_json($this->report->find_last_version_source(get_parameter('report_id')));
+    }
+
     //根据报表名获取rs
-    function find_base_by_name(){
-        export_to_json($this->report->find_base_by_name(get_parameter('report_name')));
+    function find_base(){
+        export_to_json($this->report->find(get_parameter('report_id')));
+    }
+
+    function find_by_name(){
+        export_to_json($this->report->find_by_name(get_parameter('report_name')));
     }
 
     //根据sql获取列的list
     function column_list(){
-        $sql = get_parameter("sql");
-        $sql = "select * from ("+$sql+") limit 1";
-        echo json_encode(firstRow($this->db->query($sql)));
+        $id = get_parameter("id");
+        $rs = $this->report->column_list_by_source_id($id);
+        $num = mysql_num_fields($rs);
+        $rows =  [];
+        if($num > 0){
+            for($i=0;$i<$num;$i++){
+                $rows[$i]['field'] = mysql_field_name($rs,$i);
+            }
+        }
+        $data['items'] = $rows;
+        echo json_encode($data);
     }
 
     //报表管理器，树状结构
@@ -167,7 +254,7 @@ class Report extends CI_Controller {
                 $id ++;
                 $reports = $this->report->find_all_by_group_id($groups[$i]['report_group_id'])->result_array();
                 //插入子节点
-                $row['reports'] = [];
+                $row['children'] = [];
                 for($y = 0 ; $y < count($reports) ; $y++){
                     $row_r = null;
                     $row_r['description'] = $reports[$y]['description'];
@@ -177,7 +264,7 @@ class Report extends CI_Controller {
                     //唯一性标识
                     $row_r['id'] = strval($id);
                     $id ++;
-                    array_push($row['reports'],$row_r);
+                    array_push($row['children'],$row_r);
                 }
                 array_push($rows,$row);
             }
@@ -193,11 +280,11 @@ class Report extends CI_Controller {
     }
 
     //报表状态
-    protected function _hasData($report_name){
-        $data['hasBase'] = $this->report->has_data($report_name,'base');
-        $data['hasParameter'] = $this->report->has_data($report_name,'parameter');
-        $data['hasSource'] = $this->report->has_data($report_name,'source');
-        $data['hasStructure'] = $this->report->has_data($report_name,'structure');
-        return $data;
+    function hasData(){
+        $data['hasBase'] = $this->report->has_data(get_parameter('report_id'),'base');
+        $data['hasParameter'] = $this->report->has_data(get_parameter('report_id'),'parameter');
+        $data['hasSource'] = $this->report->has_data(get_parameter('report_id'),'source');
+        $data['hasStructure'] = $this->report->has_data(get_parameter('report_id'),'structure');
+        echo json_encode($data);
     }
 }

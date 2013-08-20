@@ -1,6 +1,6 @@
-define(["dojo/_base/declare","dojo/request","base/Util","base/Env","dijit/layout/ContentPane",
-    "./_toolBar", "dijit/Tree","dojo/data/ItemFileWriteStore","dijit/tree/ForestStoreModel","./_rightMenus"],
-    function(declare,request,Util,Env,ContentPane,toolBar,Tree,ItemFileWriteStore,ForestStoreModel,rightMenus){
+define(["dojo/_base/declare","base/Util","dijit/layout/ContentPane","./_toolBar",
+    "dijit/Tree","dojo/data/ItemFileWriteStore","dijit/tree/ForestStoreModel","./_rightMenus"],
+    function(declare,Util,ContentPane,toolBar,Tree,ItemFileWriteStore,ForestStoreModel,rightMenus){
         /**
          * 摘要:
          *      报表设计器
@@ -19,7 +19,7 @@ define(["dojo/_base/declare","dojo/request","base/Util","base/Env","dijit/layout
 
                 //获取导航栏数据
                 var treeStore = new ItemFileWriteStore({
-                    url : "index.php/bc/report/find_all"
+                    url : Util.url.report("find_all")
                 });
 
                 //存储模块
@@ -27,12 +27,14 @@ define(["dojo/_base/declare","dojo/request","base/Util","base/Env","dijit/layout
                     store: treeStore,
                     root : true,
                     rootId : '',
-                    rootLabel : "报表设计器",
-                    childrenAttrs : ["reports"]
+                    rootLabel : Util.label.report_builder,
+                    childrenAttrs : ["children"]
                 });
 
                 this.groupTree = new Tree({
                     model: treeModel,
+                    id : Util.xId("reportBuilderTree"),
+                    persist:true,
                     //双击打开
                     openOnDblClick : true,
                     //双击导航栏项目
@@ -46,8 +48,6 @@ define(["dojo/_base/declare","dojo/request","base/Util","base/Env","dijit/layout
 
                 //激活右键菜单
                 rightMenus.startup(this.groupTree);
-
-                console.info(this.groupTree);
 
                 this.inherited(arguments);
             }

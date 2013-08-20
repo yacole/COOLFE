@@ -1,6 +1,6 @@
-define(["dojo/_base/declare", "dijit/layout/ContentPane", "dojo/request", "layout/MenuBar",
-    "base/Util", "cmd/Command", "layout/ToolBar", "dojox/layout/ContentPane","./InnerForm", "dojo/dom-construct"],
-    function(declare,ContentPane,request,MenuBar,Util,Command,ToolBar,ContentPaneX,InnerForm,construct){
+define(["dojo/_base/declare", "dijit/layout/ContentPane", "layout/MenuBar","base/Util",
+        "dojox/layout/ContentPane","./InnerForm", "dojo/dom-construct"],
+    function(declare,ContentPane,MenuBar,Util,ContentPaneX,InnerForm,construct){
         /*
          *   摘要:
          *       工作区对象：表单

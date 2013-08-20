@@ -1,5 +1,5 @@
-define(["dojo/_base/declare", "form/Form", "base/Util", "base/Env","cmd/Command", "dojo/request", "dojo/dom-form"],
-    function(declare,Form,Util,Env,Command,request,domForm){
+define(["dojo/_base/declare", "form/Form", "base/Util", "base/Env", "dojo/dom-form"],
+    function(declare,Form,Util,Env,domForm){
         /*
          *   摘要:
          *       表单组件，用于提交数据到服务端
@@ -54,3 +54,16 @@ define(["dojo/_base/declare", "form/Form", "base/Util", "base/Env","cmd/Command"
             failureFunc : function(){}
         });
     });
+
+////替换工具栏的提交按钮
+//_submit : function(){
+//    var o = this;
+//    var innerForm = Env.currentWso().innerForm;
+//    innerForm.set("action","index.php/bc/report/create_base_data");
+////                dojo.connect(innerForm,"successFunc",this._activeSourcePane2);
+//    innerForm.successFunc = function(){
+//        var basePane = Util.dijit_byId("reportBuilderBasePane");
+//        basePane._activeSourcePane();
+//    };
+//    innerForm.submit();
+//},

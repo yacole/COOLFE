@@ -1,7 +1,7 @@
-define(["dojo/_base/declare", "dojo/request", "dijit/Toolbar","dijit/MenuSeparator",
-    "dijit/form/Button", "base/Util","base/Env","dijit/form/DropDownButton", "dijit/DropDownMenu",
+define(["dojo/_base/declare", "dijit/Toolbar","dijit/MenuSeparator","dijit/form/Button",
+    "base/Util","base/Env","dijit/form/DropDownButton", "dijit/DropDownMenu",
     "dijit/MenuItem", "dijit/ToolbarSeparator","./_config","dijit/TooltipDialog"],
-    function(declare,request,Toolbar,MenuSeparator,Button,Util,Env,DropDownButton,
+    function(declare,Toolbar,MenuSeparator,Button,Util,Env,DropDownButton,
              DropDownMenu,MenuItem,ToolbarSeparator,Config,TooltipDialog){
         /*
          *   摘要:

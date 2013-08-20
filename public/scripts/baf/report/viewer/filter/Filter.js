@@ -1,7 +1,7 @@
-define(["dojo/_base/declare","dojo/request","baf/dijit/Dialog","./_parameter",
-    "form/TextBox","form/Button","base/Util","dojo/data/ItemFileWriteStore","form/Select",
-    "./_action","../setup/_util","./_validator","form/DateTextBox"],
-    function(declare,request,Dialog,Parameter,TextBox,Button,Util,ItemFileWriteStore,Select,action,u,validator,DateTextBox){
+define(["dojo/_base/declare","baf/dijit/Dialog","./_parameter","form/TextBox","form/Button",
+    "base/Util","dojo/data/ItemFileWriteStore","form/Select","./_action","../setup/_util",
+    "./_validator","form/DateTextBox"],
+    function(declare,Dialog,Parameter,TextBox,Button,Util,ItemFileWriteStore,Select,action,u,validator,DateTextBox){
         /*
          *   摘要:
          *             过滤器，参数列表，用于viewer
