@@ -22,6 +22,27 @@ CREATE DATABASE IF NOT EXISTS coolfe;
 USE coolfe;
 
 --
+-- Temporary table structure for view `bc_report_parameters_v`
+--
+DROP TABLE IF EXISTS `bc_report_parameters_v`;
+DROP VIEW IF EXISTS `bc_report_parameters_v`;
+CREATE TABLE `bc_report_parameters_v` (
+  `id` int(10) unsigned,
+  `report_id` int(10) unsigned,
+  `field` varchar(45),
+  `action` varchar(45),
+  `default_value` varchar(2000),
+  `creation_date` int(10) unsigned,
+  `created_by` int(10) unsigned,
+  `last_updated_by` int(10) unsigned,
+  `last_update_date` int(10) unsigned,
+  `valuelist_id` int(10) unsigned,
+  `required_flag` tinyint(1),
+  `valuelist_name` varchar(45),
+  `valuelist_desc` varchar(45)
+);
+
+--
 -- Temporary table structure for view `bc_reports_h_v`
 --
 DROP TABLE IF EXISTS `bc_reports_h_v`;
@@ -601,7 +622,7 @@ CREATE TABLE `bc_report_groups_tl` (
   PRIMARY KEY (`report_group_id`),
   UNIQUE KEY `bc_report_groups_u01` (`name`),
   KEY `bc_report_groups_n01` (`name`,`description`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='报表组信息表';
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COMMENT='报表组信息表';
 
 --
 -- Dumping data for table `bc_report_groups_tl`
@@ -624,7 +645,7 @@ CREATE TABLE `bc_report_parameters_tl` (
   `report_id` int(10) unsigned NOT NULL COMMENT '报表ID',
   `field` varchar(45) NOT NULL COMMENT '字段名',
   `action` varchar(45) NOT NULL COMMENT '判断类型',
-  `default_value` varchar(2000) NOT NULL COMMENT '默认值',
+  `default_value` varchar(2000) DEFAULT NULL COMMENT '默认值',
   `creation_date` int(10) unsigned DEFAULT NULL,
   `created_by` int(10) unsigned DEFAULT NULL,
   `last_updated_by` int(10) unsigned DEFAULT NULL,
@@ -634,13 +655,15 @@ CREATE TABLE `bc_report_parameters_tl` (
   PRIMARY KEY (`id`),
   KEY `bc_report_parameters_n01` (`report_id`) USING BTREE,
   KEY `bc_report_parameters_u01` (`report_id`,`field`,`action`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='报表参数列表';
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8 COMMENT='报表参数列表';
 
 --
 -- Dumping data for table `bc_report_parameters_tl`
 --
 
 /*!40000 ALTER TABLE `bc_report_parameters_tl` DISABLE KEYS */;
+INSERT INTO `bc_report_parameters_tl` (`id`,`report_id`,`field`,`action`,`default_value`,`creation_date`,`created_by`,`last_updated_by`,`last_update_date`,`valuelist_id`,`required_flag`) VALUES 
+ (31,22,'program_name','IN','',1377571692,1,1,1377571692,NULL,1);
 /*!40000 ALTER TABLE `bc_report_parameters_tl` ENABLE KEYS */;
 
 
@@ -695,7 +718,7 @@ CREATE TABLE `bc_reports_tl` (
   PRIMARY KEY (`report_id`),
   UNIQUE KEY `bc_reports_u01` (`name`),
   KEY `bc_reports_n01` (`name`,`description`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8 COMMENT='报表信息表';
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8 COMMENT='报表信息表';
 
 --
 -- Dumping data for table `bc_reports_tl`
@@ -705,8 +728,7 @@ CREATE TABLE `bc_reports_tl` (
 INSERT INTO `bc_reports_tl` (`report_id`,`name`,`description`,`report_group_id`,`creation_date`,`created_by`,`last_update_date`,`last_updated_by`,`structure`,`grid_type`) VALUES 
  (1,'BC_FIELD_LIST','字段清单',1,NULL,NULL,1376638392,1,'','02'),
  (14,'new','新建',0,1376025966,1,1376025966,1,'',''),
- (22,'rpt_good','好报表',7,1376639071,1,1376639071,1,'',''),
- (23,'sgf','sdfg',1,1376974695,1,1376974695,1,'','');
+ (22,'rpt_good','好报表',7,1376639071,1,1376639071,1,'','');
 /*!40000 ALTER TABLE `bc_reports_tl` ENABLE KEYS */;
 
 
@@ -1206,6 +1228,14 @@ INSERT INTO `bc_valuelists_tl` (`valuelist_id`,`valuelist_name`,`description`,`f
  (8,'BC_REPORT_GROUP','报表组',1,'description','name','bc_report_groups_tl',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `bc_valuelists_tl` ENABLE KEYS */;
 
+
+--
+-- Definition of view `bc_report_parameters_v`
+--
+
+DROP TABLE IF EXISTS `bc_report_parameters_v`;
+DROP VIEW IF EXISTS `bc_report_parameters_v`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `bc_report_parameters_v` AS select `b`.`id` AS `id`,`b`.`report_id` AS `report_id`,`b`.`field` AS `field`,`b`.`action` AS `action`,`b`.`default_value` AS `default_value`,`b`.`creation_date` AS `creation_date`,`b`.`created_by` AS `created_by`,`b`.`last_updated_by` AS `last_updated_by`,`b`.`last_update_date` AS `last_update_date`,`b`.`valuelist_id` AS `valuelist_id`,`b`.`required_flag` AS `required_flag`,`c`.`valuelist_name` AS `valuelist_name`,`c`.`description` AS `valuelist_desc` from (`bc_report_parameters_tl` `b` left join `bc_valuelists_tl` `c` on((`b`.`valuelist_id` = `c`.`valuelist_id`)));
 
 --
 -- Definition of view `bc_reports_h_v`

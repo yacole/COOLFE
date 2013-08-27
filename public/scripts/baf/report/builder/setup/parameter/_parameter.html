@@ -1,14 +1,27 @@
 <style>
     #columnList{
-        height:25em;
-        width:14em;
+        height:30em;
+        width:15em;
+    }
+    #buttonGroup{
+        width: 4em;
+        text-align: center;
+    }
+    #paramSetup{
+        height:30em;
+        width:51em;
     }
 </style>
 <form data-dojo-type="form/Form" id="reportSetupParameter" unsubmit=true>
     <table>
         <tr>
             <td><div id="columnList"></div></td>
-            <td><div id="action"></div></td>
+            <td>
+                <div id="buttonGroup">
+                    <div id="btToLeft"></div>
+                    <div id="btToright"></div>
+                </div>
+            </td>
             <td><div id="paramSetup"></div></td>
         </tr>
     </table>

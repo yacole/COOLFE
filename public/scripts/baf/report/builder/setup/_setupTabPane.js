@@ -1,5 +1,6 @@
-define(["dojo/_base/declare","base/Util","dijit/layout/TabContainer","./_basePane","./_sourcePane"],
-    function(declare,Util,TabContainer,bp,sp){
+define(["dojo/_base/declare","base/Util","dijit/layout/TabContainer","./_basePane",
+    "./_sourcePane","./parameter/_showPane"],
+    function(declare,Util,TabContainer,bp,sp,pp){
         /**
          * 摘要:
          *      报表设计器
@@ -31,12 +32,12 @@ define(["dojo/_base/declare","base/Util","dijit/layout/TabContainer","./_basePan
                     });
                     this.addChild(this.sourcePane);
 
-//                    this.paramPane = new pp({
-//                        title : "参数",
-//                        disabled : !this.parameterDataReady,
-//                        report_id : this.report_id
-//                    });
-//                    this.addChild(this.paramPane);
+                    this.paramPane = new pp({
+                        title : "参数",
+                        disabled : !this.parameterDataReady,
+                        report_id : this.report_id
+                    });
+                    this.addChild(this.paramPane);
 
                     this.inherited(arguments);
                 }

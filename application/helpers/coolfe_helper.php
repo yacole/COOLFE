@@ -225,6 +225,10 @@ function _format_row($row){
         if(strpos($key,'_date') > 0 && !strpos($key,'_date_')) {
             $row[$key] = date('Y-m-d H:i:s',$row[$key]);
         }
+        //处理null
+        if(is_null($row[$key])){
+            $row[$key] = "";
+        }
     }
     return $row;
 }

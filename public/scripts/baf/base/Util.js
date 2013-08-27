@@ -342,10 +342,12 @@ define(["baf/config/Url", "baf/language/"+language+"/Label", "baf/language/"+lan
             publish_error_xhr_notreach : function(callback){
                 var o = this;
                 if(callback == undefined){
-                    this.confirm(this.message.error_xhr_notreach,function(){
-                        var wso = dijit.byId(o.id.WorkspacePane);
-                        wso.closeProgram(wso.currentChild());
-                    });
+                    this.confirm(this.message.error_xhr_notreach
+//                        ,function(){
+//                        var wso = dijit.byId(o.id.WorkspacePane);
+//                        wso.closeProgram(wso.currentChild());
+//                    }
+                    );
                 }else{
                     this.confirm(this.message.error_xhr_notreach,callback);
                 }

@@ -154,4 +154,36 @@ class Report_model extends CI_Model{
 //        return mysql_query($row['source_text']);
         return mysql_query($sql);
     }
+    //获取现有参数列表
+    function find_parameters_by_report_id($report_id){
+        return $this->db->get_where('bc_report_parameters_v',array('report_id'=>$report_id));
+    }
+    //刷新参数
+    function update_parameters($report_id,$rows){
+        $this->db->trans_start();
+        $this->db->delete('bc_report_parameters_tl', array('report_id' => $report_id));
+        if(count($rows) > 0){
+            for($i=0;$i<count($rows);$i++){
+                $data['report_id'] = $report_id;
+                $data['field'] = $rows[$i]['field'];
+                $data['action'] = $rows[$i]['action'];
+                $data['default_value'] = $rows[$i]['default_value'];
+                $data['required_flag'] = $rows[$i]['required_flag'];
+                if(isset($rows[$i]['valuelist_id'])){
+                    $data['valuelist_id'] = $rows[$i]['valuelist_id'];
+                }
+                $data = set_creation_date($data);
+                $this->db->insert('bc_report_parameters_tl',$data);
+            }
+        }
+        $this->db->trans_complete();
+
+        if ($this->db->trans_status() === FALSE)
+        {
+            return false;
+        }else{
+            return true;
+        }
+    }
+
 }

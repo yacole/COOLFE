@@ -1,6 +1,7 @@
 define(["dojo/_base/declare","base/Util","base/Env","./_setupTabPane",
-    "baf/dijit/Dialog","./_basePane","./_sourcePane","form/Button","./parameter/_setupPane"],
-    function(declare,Util,Env,setupTabPane,Dialog,basePane,sourcePane,Button,paramPane){
+    "baf/dijit/Dialog","./_basePane","./_sourcePane","form/Button",
+    "./parameter/_setupPane","dojo/json"],
+    function(declare,Util,Env,setupTabPane,Dialog,basePane,sourcePane,Button,paramPane,json){
         /**
          * 摘要:
          *      报表设计器
@@ -116,16 +117,53 @@ define(["dojo/_base/declare","base/Util","base/Env","./_setupTabPane",
                 var pp = new paramPane({
                     isEdit : true,
                     report_id : this.report_id,
-                    style : "width:50em;height:30em"
+                    style : "width:70em;height:30em"
                 });
                 this.addChild(pp);
                 var confirmButton = new Button({
                     label : Util.label.button_confirm,
                     onClick : function(){
-
+                        if(pp.rightGrid){
+                            var items = pp.rightGrid.getALLItems();
+                            var data = new Object();
+                            var arr = [];
+                            if(items.length > 0){
+                                for(var i = 0;i < items.length ;i++){
+                                    arr.push(o._postItem(items[i]));
+                                }
+                            }
+                            data.data = json.stringify(arr);
+                            data.report_id = o.report_id;
+                            Util.post(Util.url.report("update_parameters"),data,function(){
+                                if(!Env.isError()){
+                                    o.hide();
+                                }
+                            });
+                        }
                     }
                 });
                 this.addChild(confirmButton);
+            },
+            _postItem : function(item){
+                var newItem = new Object();
+                newItem.field = item.field.toString();
+                newItem.action = item.action.toString();
+                if(item.valuelist_name){
+                    newItem.valuelist_name = item.valuelist_name.toString();
+                }else{
+                    newItem.valuelist_name = "";
+                }
+                if(item.default_value){
+                    newItem.default_value = item.default_value.toString();
+                }else{
+                    newItem.default_value = "";
+                }
+                if(item.required_flag && item.required_flag.toString() == "true"){
+                    newItem.required_flag = "1";
+                }else{
+                    newItem.required_flag = "0";
+                }
+                return newItem;
             }
         });
     });

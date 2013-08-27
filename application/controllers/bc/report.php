@@ -237,6 +237,44 @@ class Report extends CI_Controller {
         echo json_encode($data);
     }
 
+    //现有的参数列表
+    function parameter_list(){
+        $report_id = get_parameter("report_id");
+        $rs = $this->report->find_parameters_by_report_id($report_id);
+        export_to_itemStore($rs);
+    }
+
+    //更新参数
+    function update_parameters(){
+        //判断是否为POST
+        if($_POST && isset($_POST['data']) && isset($_POST['report_id'])){
+            $rows = json_decode($_POST['data'],true);
+            $valuelist_flag = false;
+            if(count($rows) > 0){
+                for($i=0;$i<count($rows);$i++){
+                    if($rows[$i]['valuelist_name'] != ""){
+                        $r = firstRow($this->db->get_where('bc_valuelists_tl',array('valuelist_name'=>$rows[$i]['valuelist_name'])));
+                        if(is_null($r)){
+                            $valuelist_flag = true;
+                            custz_message("E","字段". $rows[$i]['field']."值集无效！");
+                        }else{
+                            $rows[$i]['valuelist_id'] = $r['valuelist_id'];
+                        }
+                    }
+                }
+            }
+            if(!$valuelist_flag){
+                if($this->report->update_parameters($_POST['report_id'],$rows)){
+                    custz_message("I","参数更新成功");
+                }else{
+                    custz_message("E","参数更新失败");
+                }
+            }
+        }else{
+            message('E','REQUEST','01');
+        }
+    }
+
     //报表管理器，树状结构
     function find_all(){
         $rows = [];
