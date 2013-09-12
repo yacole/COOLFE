@@ -1,7 +1,7 @@
 define(["dojo/_base/declare","base/Util","base/Env","./_setupTabPane",
     "baf/dijit/Dialog","./_basePane","./_sourcePane","form/Button",
-    "./parameter/_setupPane","dojo/json"],
-    function(declare,Util,Env,setupTabPane,Dialog,basePane,sourcePane,Button,paramPane,json){
+    "./parameter/_setupPane","./_structurePane","dojo/json","../_util"],
+    function(declare,Util,Env,setupTabPane,Dialog,basePane,sourcePane,Button,paramPane,structurePane,json,u){
         /**
          * 摘要:
          *      报表设计器
@@ -30,7 +30,7 @@ define(["dojo/_base/declare","base/Util","base/Env","./_setupTabPane",
                         this._buildParamPane();
                         break;
                     case "structure" :
-
+                        this._buildStructurePane();
                         break;
                     default :
                         this._buildBasePane();
@@ -63,7 +63,7 @@ define(["dojo/_base/declare","base/Util","base/Env","./_setupTabPane",
                         data.description = bp.description.value;
                         data.report_group = bp.report_group.value;
                         var url = "";
-                        if(o.report_id){
+                        if("report_id" in o){
                             //修改动作
                             data.report_id = o.report_id;
                             url = Util.url.report("update_base_data");
@@ -144,6 +144,38 @@ define(["dojo/_base/declare","base/Util","base/Env","./_setupTabPane",
                 });
                 this.addChild(confirmButton);
             },
+            _buildStructurePane : function(){
+                var o = this;
+                var pp = new structurePane({
+                    isEdit : true,
+                    report_id : this.report_id,
+                    style : "width:70em;height:30em"
+                });
+                this.addChild(pp);
+                var confirmButton = new Button({
+                    label : Util.label.button_confirm,
+                    onClick : function(){
+                        if(pp.rightGrid){
+                            var items = pp.rightGrid.getALLItems();
+                            var data = new Object();
+                            var arr = [];
+                            if(items.length > 0){
+                                for(var i = 0;i < items.length ;i++){
+                                    arr.push(o._postItem(items[i]));
+                                }
+                            }
+                            data.data = json.stringify(arr);
+                            data.report_id = o.report_id;
+                            Util.post(Util.url.report("update_parameters"),data,function(){
+                                if(!Env.isError()){
+                                    o.hide();
+                                }
+                            });
+                        }
+                    }
+                });
+                this.addChild(confirmButton);
+            },
             _postItem : function(item){
                 var newItem = new Object();
                 newItem.field = item.field.toString();
@@ -162,6 +194,11 @@ define(["dojo/_base/declare","base/Util","base/Env","./_setupTabPane",
                     newItem.required_flag = "1";
                 }else{
                     newItem.required_flag = "0";
+                }
+                if(item.input_type){
+                    newItem.input_type = item.input_type.toString();
+                }else{
+                    newItem.input_type = "文本框";
                 }
                 return newItem;
             }

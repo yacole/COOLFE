@@ -105,6 +105,13 @@ define(["dojo/_base/declare", "dijit/form/Form", "base/Util", "base/Env", "dojo/
                     }
                 }
                 obj.displayMessage(errorMessage);
+            },
+            onSubmit : function(){
+                if(this.unsubmit){
+                    return false;
+                }else{
+                    return true;
+                }
             }
 
         });

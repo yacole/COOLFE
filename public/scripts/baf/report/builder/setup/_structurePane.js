@@ -16,6 +16,7 @@ define(["dojo/_base/declare","dijit/layout/ContentPane","dojo/request","base/Uti
             onDownloadEnd : function(){
                 var o = this;
                 Util.queryTofillLabel();
+
             }
         });
     });

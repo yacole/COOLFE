@@ -6,12 +6,11 @@ define(["base/Util","base/Env"],function(Util,ENV){
     return {
         //处理
         handleExport : function(response){
-            if(response){
-                var messages = response.messages;
-                console.info(messages);
+            if(response && "handle" in response){
+                console.info(response.messages);
                 //处理消息
-                if(messages){
-                    this._handleMessage(messages);
+                if("messages" in response){
+                    this._handleMessage(response.messages);
                 }
 
                 //处理javascript代码

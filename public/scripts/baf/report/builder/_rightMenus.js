@@ -59,7 +59,7 @@ define([ "dijit/Menu", "dijit/MenuItem", "dijit/CheckedMenuItem", "dijit/MenuSep
                             if(item.children){
                                 //报表组节点
                                 treeMenu.addChild(new MenuItem({
-                                    label: Util.label.report_group_create,
+                                    label: Util.label.report_create,
                                     onClick : function(){
                                         u.createBase(item,tree);
                                     }
@@ -83,7 +83,7 @@ define([ "dijit/Menu", "dijit/MenuItem", "dijit/CheckedMenuItem", "dijit/MenuSep
                                 }));
                                 treeMenu.addChild(new MenuSeparator());
                                 treeMenu.addChild(new MenuItem({
-                                    label: Util.lable.report_group_show,
+                                    label: Util.label.report_group_show,
                                     onClick : function(){
                                         var rptgrp = new reportGroup({});
                                         rptgrp.show(item.report_group_id.toString());
@@ -120,20 +120,22 @@ define([ "dijit/Menu", "dijit/MenuItem", "dijit/CheckedMenuItem", "dijit/MenuSep
                                 pMenu.addChild(new MenuItem({
                                     label : Util.label.report_data_source,
                                     onClick : function(){
-                                        u.createSource(item);
+                                        u.createSource(item,tree);
                                     }
                                 }));
 
                                 pMenu.addChild(new MenuItem({
                                     label : Util.label.report_parameter,
                                     onClick : function(){
-                                        u.createParam(item);
+                                        u.createParam(item,tree);
                                     }
                                 }));
 
                                 pMenu.addChild(new MenuItem({
                                     label : Util.label.report_structure,
-                                    onClick : function(){}
+                                    onClick : function(){
+                                        u.createStructure(item,tree);
+                                    }
                                 }));
 
                                 treeMenu.addChild(new PopupMenuItem({

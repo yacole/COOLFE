@@ -43,6 +43,7 @@ define(["dojo/_base/declare", "dijit/layout/ContentPane","base/Util","cmd/Comman
                 this.gridPane = new ReportGrid({
                     dataUrl : Util.url.report_read_data_by_report_id(this.report_id),
                     program_id : this.program_id,
+                    report_id : this.report_id,
                     timestamp : this.timestamp,
                     id : Util.id.wso_GridPane + this.timestamp
                 });

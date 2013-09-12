@@ -41,6 +41,57 @@ class Report extends CI_Controller {
             }
         }
     }
+    //含有的参数处理
+    function preview_data(){
+        if($_POST && $_POST['report_id']){
+            $report_id = $_POST['report_id'];
+            $r = firstRow($this->report->find_last_version_source($report_id));
+            if(!is_null($r)){
+                //获取参数列表
+                $rs = $this->report->find_parameters_by_report_id($report_id);
+                $rows = $rs->result_array();
+                if(count($rows) > 0){
+                    //判断数据来源
+                    switch($r['source_type']){
+                        //如果为function提取，则转至
+                        case '02' :
+                            redirect($r['source_text']);
+                            break;
+                        case '01' :
+                            $error = false;
+                            //验证必输字段
+                            for($i = 0;$i < count($rows) ; $i++){
+                                $row = $rows[$i];
+                                if($row['required_flag'] == 1){
+                                    if(!isset($_POST[$row['field']]) || $_POST[$row['field']] == ""){
+                                        $error = true;
+                                        break;
+                                    }
+                                }
+                            }
+                            if($error){
+                                custz_message('A','参数输入有误(必输项)！');
+                            }else{
+                                //组织查询语句
+                                $this->db->select('*');
+                                $this->db->from("(".$r['source_text'].") as v");
+                                for($i = 0;$i < count($rows) ; $i++){
+                                    $row = $rows[$i];
+                                    if(isset($_POST[$row['field']])){
+                                        $this->_build_condition($row,$_POST[$row['field']]);
+                                    }
+                                }
+                                export_to_itemStore($this->db->get());
+                            }
+                            break;
+                        }
+                    }else{
+                        //无参数直接转向
+                        redirect("index.php/bc/report/read_data?report_id=".$_POST['report_id']);
+                    }
+                }
+        }
+    }
 
     //创建报表组
     function create_group(){
@@ -241,7 +292,22 @@ class Report extends CI_Controller {
     function parameter_list(){
         $report_id = get_parameter("report_id");
         $rs = $this->report->find_parameters_by_report_id($report_id);
-        export_to_itemStore($rs);
+        $rows = $rs->result_array();
+        if(count($rows) > 0){
+            $options = get_options("BC_RPT_INPUT_TYPE");
+            //获取输入框类型值集
+            for($i=0;$i<count($rows) && count($options) > 0;$i++){
+                $rows[$i] = _format_row($rows[$i]);
+                for($y=0;$y<count($options);$y++){
+                    if($options[$y]["value"] == $rows[$i]["input_type"]){
+                        $rows[$i]["input_type"] = $options[$y]["label"];
+                        break;
+                    }
+                }
+            }
+        }
+        $data['items'] = $rows;
+        echo json_encode($data);
     }
 
     //更新参数
@@ -251,7 +317,21 @@ class Report extends CI_Controller {
             $rows = json_decode($_POST['data'],true);
             $valuelist_flag = false;
             if(count($rows) > 0){
-                for($i=0;$i<count($rows);$i++){
+                $options = get_options("BC_RPT_INPUT_TYPE");
+                $value = null;
+                for($i=0;$i<count($rows) && count($options) > 0;$i++){
+                    //获取输入框value
+                    for($y=0;$y<count($options);$y++){
+                        if($options[$y]["label"] == $rows[$i]["input_type"]){
+                            $value = $options[$y]["value"];
+                            break;
+                        }
+                    }
+                    //如果找不到就用默认值：输入框
+                    if(is_null($value)){
+                        $rows[$i]["input_type"] = '01';
+                    }
+
                     if($rows[$i]['valuelist_name'] != ""){
                         $r = firstRow($this->db->get_where('bc_valuelists_tl',array('valuelist_name'=>$rows[$i]['valuelist_name'])));
                         if(is_null($r)){
@@ -324,5 +404,17 @@ class Report extends CI_Controller {
         $data['hasSource'] = $this->report->has_data(get_parameter('report_id'),'source');
         $data['hasStructure'] = $this->report->has_data(get_parameter('report_id'),'structure');
         echo json_encode($data);
+    }
+    
+    //转义封装conditions
+    protected function _build_condition($row,$value){
+        switch($row['action']){
+            case 'IN':
+                if($value != ""){
+                    $this->db->where_in($row['field'],explode(",",$_POST[$row['field']]));
+                }
+                break;
+        }
+
     }
 }

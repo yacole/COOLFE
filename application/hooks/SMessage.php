@@ -13,6 +13,7 @@ class SMessage {
     //返回结果可能存在多样，以后考虑
     function response(){
         if(_sess('message') != []){
+            $response['handle'] = 'message';
             $response['messages'] = _sess('message');
             echo json_encode($response);
         }

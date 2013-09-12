@@ -169,6 +169,7 @@ class Report_model extends CI_Model{
                 $data['action'] = $rows[$i]['action'];
                 $data['default_value'] = $rows[$i]['default_value'];
                 $data['required_flag'] = $rows[$i]['required_flag'];
+                $data['input_type'] = $rows[$i]['input_type'];
                 if(isset($rows[$i]['valuelist_id'])){
                     $data['valuelist_id'] = $rows[$i]['valuelist_id'];
                 }

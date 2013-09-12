@@ -103,7 +103,7 @@ define(["dojo/_base/declare", "baf/dijit/Dialog", "base/Util", "grid/DataGrid","
                             }
                         });
                         d.sourceObj.set("value",values.join(","));
-                        if(labels.length > 0){
+                        if(labels.length > 0 && "name" in d.sourceObj){
                             //填充说明栏，如果存在
                             var qrs = dojo.query("span[for="+d.sourceObj.name+"]", d.sourceObj.getParent().domNode);
                             if(qrs.length > 0){

@@ -5,10 +5,10 @@ define(["dojo/_base/declare","dojox/layout/ContentPane","base/Util",
     "dojox/grid/enhanced/plugins/DnD","dojo/json","dojox/grid/enhanced/plugins/Pagination",
     "dojox/grid/enhanced/plugins/NestedSorting", "./_detailDialog","./_config","./setup/_util",
     "./filter/Filter","dojox/grid/enhanced/plugins/IndirectSelection","dojox/grid/enhanced/plugins/Printer",
-    "./printer/_printerDialog", "./_header","./_footer"],
+    "./printer/_printerDialog", "./_header","./_footer","report/builder/preview/_paramDialog"],
     function (declare,ContentPane,Util,gridCSVWriter,gridSelector,gridMenu,MenusObject,ToolBarForReport,
               layoutDialog,ItemFileWriteStore,DataGrid,setupDialog,DnD,JSON,Pagination,NestedSorting,detailDialog,
-              Config,u,Filter,IndirectSelection,Printer,printerDialog,header,footer){
+              Config,u,Filter,IndirectSelection,Printer,printerDialog,header,footer,paramDialog){
         /*
          *   摘要:
          *                    报表查看器
@@ -17,6 +17,7 @@ define(["dojo/_base/declare","dojox/layout/ContentPane","base/Util",
             dataUrl : null,
             grid :null,
             program_id : null,
+            report_id : null,
             timestamp : null,
             //报表头
             header : null,
@@ -43,97 +44,108 @@ define(["dojo/_base/declare","dojox/layout/ContentPane","base/Util",
             },
             //刷新，重新获取数据
             refresh : function(){
-                var store = new ItemFileWriteStore({
-                    url : this.dataUrl
-                });
-                this.grid.refresh(store);
+                this._chooseParameters();
+            },
+            //根据data刷新view
+            refresh_data : function(data){
+                if(data){
+                    var store = new ItemFileWriteStore({
+                        data : data
+                    });
+                    this.grid.refresh(store);
+                }else{
+                    var store = new ItemFileWriteStore({
+                        url : this.dataUrl
+                    });
+                    this.grid.refresh(store);
+                }
+                //数据快照
+                this.grid.snapItems = this.grid.getALLItems();
             },
             //加载布局
             _loadDefaultLayout : function(type){
                 var o = this;
                 //获取数据
-                Util.get(o.dataUrl,function(data){
-
-                    o.toolBar = new ToolBarForReport({
-                        id : Util.id.wso_ToolBarForReport + this.timestamp,
-                        style : "",
-                        program_id : this.program_id
-                    });
-                    o.addChild(o.toolBar);
+                o.toolBar = new ToolBarForReport({
+                    id : Util.id.wso_ToolBarForReport + this.timestamp,
+                    style : "",
+                    program_id : this.program_id
+                });
+                o.addChild(o.toolBar);
 
 //                    console.info(Util.url.find_default_layout_for_rpt({program_id : o.program_id}));
-                    //先判断是否存在默认布局
-                    Util.get(Util.url.rpt_default_layout(o.program_id),function(layout){
+                //先判断是否存在默认布局
+                Util.get(Util.url.rpt_default_layout(o.program_id),function(layout){
+                    //初始化的时候为空，等待参数选择
+                    var data = {items:[]};
 //                        console.info(layout);
-                        var column = [];
-                        var store = new ItemFileWriteStore({
-                            data : data
-                        });
+                    var column = [];
+                    var store = new ItemFileWriteStore({
+                        data : data
+                    });
 
-                        if(layout){
-                            //默认布局
-                            column = o._constructStructure(layout.structure);
+                    if(layout){
+                        //默认布局
+                        column = o._constructStructure(layout.structure);
+                    }else{
+                        if(o.config && o.config.grid && o.config.column){
+                            column = o.config.column;
                         }else{
-                            if(o.config && o.config.grid && o.config.column){
-                                column = o.config.column;
-                            }else{
-                                //按原始顺序
-                                column = u.constructColumn(data.items);
-                            }
+                            //按原始顺序
+                            column = u.constructColumn(data.items);
                         }
+                    }
 //                        console.info(column);
-                        //配置右键菜单
-                        var menusObject = null;
-                        if(o.config && o.config.grid && o.config.grid.plugins && o.config.grid.plugins.menus){
-                            menusObject = o.config.grid.plugins.menus;
-                        }else{
-                            menusObject = new MenusObject();
-                            menusObject.startup();
-                        }
+                    //配置右键菜单
+                    var menusObject = null;
+                    if(o.config && o.config.grid && o.config.grid.plugins && o.config.grid.plugins.menus){
+                        menusObject = o.config.grid.plugins.menus;
+                    }else{
+                        menusObject = new MenusObject();
+                        menusObject.startup();
+                    }
 
-                        //gird配置获取
-                        var gridConfig = new Object;
-                        if(o.config && o.config.grid){
-                            gridConfig = o.config.grid;
-                        }
-                        gridConfig.store = store;
-                        gridConfig.plugins.menus = menusObject;
-                        gridConfig.structure = column;
+                    //gird配置获取
+                    var gridConfig = new Object;
+                    if(o.config && o.config.grid){
+                        gridConfig = o.config.grid;
+                    }
+                    gridConfig.store = store;
+                    gridConfig.plugins.menus = menusObject;
+                    gridConfig.structure = column;
 
-                        //排序配置
-                        if(o.config && o.config.tool.sort){
-                            gridConfig.plugins.nestedSorting = true;
-                        }else{
-                            gridConfig.canSort = function(){return false};
-                        }
+                    //排序配置
+                    if(o.config && o.config.tool.sort){
+                        gridConfig.plugins.nestedSorting = true;
+                    }else{
+                        gridConfig.canSort = function(){return false};
+                    }
 
-                        //导出配置
-                        if(o.config && o.config.tool.export){
-                            gridConfig.plugins.exporter = true;
-                        }
+                    //导出配置
+                    if(o.config && o.config.tool.export){
+                        gridConfig.plugins.exporter = true;
+                    }
 
-                        //打印设置
-                        if(o.config && o.config.tool.printer){
-                            gridConfig.plugins.printer = true;
-                        }
+                    //打印设置
+                    if(o.config && o.config.tool.printer){
+                        gridConfig.plugins.printer = true;
+                    }
 
-                        o.grid = new DataGrid(gridConfig);
+                    o.grid = new DataGrid(gridConfig);
 
-                        //设置源数据
-                        if(menusObject.isDefault){
-                            menusObject.setSrcGrid(o.grid,o);
-                        }
-                        o.toolBar.setSrcGrid(o.grid,o);
-                        o.addChild(o.grid);
+                    //设置源数据
+                    if(menusObject.isDefault){
+                        menusObject.setSrcGrid(o.grid,o);
+                    }
+                    o.toolBar.setSrcGrid(o.grid,o);
+                    o.addChild(o.grid);
 
-                        if(o.config && o.config.tool.filter){
-                            //数据快照
-                            o.grid.snapItems = o.grid.getALLItems();
-                            //设置过滤器
-                            o.filter = new Filter({
-                                srcGrid : o.grid
-                            });
-                        }
+                    if(o.config && o.config.tool.filter){
+                        //设置过滤器
+                        o.filter = new Filter({
+                            srcGrid : o.grid
+                        });
+                    }
 //                        //汇总
 //                        if(o.config && o.config.tool.summary){
 //                            //数据快照
@@ -141,8 +153,8 @@ define(["dojo/_base/declare","dojox/layout/ContentPane","base/Util",
 //                                o.grid.snapItems = o.grid.getALLItems();
 //                            }
 //                        }
-                        o._buildFooter();
-                    });
+                    o._buildFooter();
+                    o._chooseParameters();
                 });
             },
             //清除样式恢复到初始状态
@@ -214,6 +226,20 @@ define(["dojo/_base/declare","dojox/layout/ContentPane","base/Util",
                 if(this.grid){
                     this.grid.destroyRecursive();
                 }
+            },
+            _chooseParameters : function(){
+                var o = this;
+                Util.get(Util.url.report("parameter_list",{report_id : this.report_id}),function(data){
+                    if(Util.hasChildren(data)){
+                        //有参数先用参数获取数据
+                        var pcDialog = new paramDialog({
+                            report_id : o.report_id
+                        });
+                        pcDialog.show();
+                    }else{
+                        o.refresh_data();
+                    }
+                });
             }
 
        });

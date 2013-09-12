@@ -21,7 +21,7 @@ define(["dojo/_base/declare","dijit/layout/ContentPane","base/Util","form/Textar
 
                     this.source_type = new Select({name : "source_type",disabled : !this.isEdit},"source_type");
                     this.source_type.startup();
-                    console.info(this.source_type);
+//                    console.info(this.source_type);
 
                     this.source_text = new Textarea({
                         name : "source_text",

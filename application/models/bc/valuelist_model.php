@@ -17,8 +17,17 @@ class Valuelist_model extends CI_Model{
         }
     }
 
-    function selectOptions($id){
-        $header = $this->db->get_where('bc_valuelists_tl',array('valuelist_id'=>$id))->result_array()[0];
+    function select_options($id){
+        $header = firstRow($this->db->get_where('bc_valuelists_tl',array('valuelist_id'=>$id)));
+        return $this->get_options($header);
+    }
+
+    function select_options_by_name($name){
+        $header = firstRow($this->db->get_where('bc_valuelists_tl',array('valuelist_name'=>$name)));
+        return $this->get_options($header);
+    }
+    //重构函数
+    function get_options($header){
         $rs = null;
         if($header){
 

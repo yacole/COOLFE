@@ -27,9 +27,6 @@ function(declare,Button,Util,Dialog,Env){
 
         //显示状态栏消息，并设置显示效果：高亮？动画？
         setMessage : function(message,length){
-            if(!length){
-                length = Util.config.message_max_length;
-            }
 
             switch(message.type){
                 case Util.id.messageTYPE_WARNNING :
@@ -37,6 +34,7 @@ function(declare,Button,Util,Dialog,Env){
                     this.set({
                         style : "background-color:yellow;"
                     });
+                    this._setLabel(message,length);
                     break;
                 case  Util.id.messageTYPE_ERROR :
                     this.isError = true;
@@ -44,27 +42,39 @@ function(declare,Button,Util,Dialog,Env){
                     this.set({
                         style : "background-color:red;"
                     });
+                    this._setLabel(message,length);
                     break;
                 case  Util.id.messageTYPE_INFO :
                     //常规信息效果
                     this.set({
                         style : "background-color:#F0F0F0;"
                     });
+                    this._setLabel(message,length);
+                    break;
+                case Util.id.messageTYPE_ALERT :
+                    //弹出框
+                    Util.confirm(message.content);
                     break;
                 default:
                     this.set({
                         style : "background-color:#F0F0F0;"
                     });
+                    this._setLabel(message,length);
             } //switch
 
+            //获取当前工作区
+            this.timestamp = Env.currentWso().timestamp;
+        },
+        _setLabel : function(message,length){
+            if(length == undefined){
+                length = Util.config.message_max_length;
+            }
             //判断是否需要截取
             if(message.content.length > length){
                 this.set("label",message.content.substring(0,length) + "...");
             }else{
                 this.set("label",message.content);
             }
-            //获取当前工作区
-            this.timestamp = Env.currentWso().timestamp;
         },
         //弹框显示消息具体内容
         onClick : function(){

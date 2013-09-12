@@ -65,8 +65,8 @@ define(["dojo/topic","cmd/History","baf/config/IdList","baf/wso/RightMenu"],
         },
         isError : function(){
             var o = this.currentMessageBar();
-            if(o && o.isError){
-                return o.isError;
+            if((o && o.isError) || dijit.byId(IdList.confirmDialog)){
+                return true;
             }else{
                 return false;
             }

@@ -46,7 +46,12 @@ class Valuelist extends CI_Controller {
      * 获取数据接口：给外部提供数据
      */
     function select_options(){
-        $rs = $this->vl->selectOptions(get_parameter('valuelist_id'));
+        $rs = $this->vl->select_options(get_parameter('valuelist_id'));
+        echo rs_to_itemStore($rs);
+    }
+
+    function select_options_by_name(){
+        $rs = $this->vl->select_options_by_name(get_parameter('valuelist_name'));
         echo rs_to_itemStore($rs);
     }
 

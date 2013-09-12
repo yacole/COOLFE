@@ -83,6 +83,9 @@ define([],function(){
         options : function(valuelist_id){
             return this.valuelist("select_options",{valuelist_id : valuelist_id});
         },
+        optionsByName : function(valuelist_name){
+            return this.valuelist("select_options_by_name",{valuelist_name : valuelist_name});
+        },
         //根据值集id查找值列表
         find_valuelist : function(valuelist_id){
             return this.valuelist("find",{valuelist_id : valuelist_id});
@@ -125,6 +128,9 @@ define([],function(){
         },
         report_builder_setup_template : function(filename){
             return this.localUrl("report/builder/setup/"+filename+".html");
+        },
+        report_builder_preview_template : function(filename){
+            return this.localUrl("report/builder/preview/_"+filename+".html");
         },
 
         //报表打印路径

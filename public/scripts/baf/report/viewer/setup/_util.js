@@ -83,6 +83,7 @@ define(["baf/base/Util","../filter/_action"],function(Util,action){
                     for(var y=0;y < nowData.length ;y++){
                         if(nowData[y].field == allData[i].field){
                             q = true;
+                            break;
                         }
                     }
                     if(!q){

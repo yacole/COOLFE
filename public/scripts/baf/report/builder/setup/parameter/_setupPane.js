@@ -47,79 +47,91 @@ define(["dojo/_base/declare","base/Util","base/Env","grid/DataGrid",
 
                                 //右边grid，现有参数列表
                                 var ops = o._actionOptions();
-                                var rcolumn = [
-                                    { name : "字段", field : "field",width : 12},
-                                    { name : Util.label.grid_setup_formula, field : "action",width : 6,
-                                        editable: true, cellType: dojox.grid.cells.Select, options: ops
-                                    },
-                                    { name : "值集", field : "valuelist_name",width : 12,
-                                        editable: true
-                                    },
-                                    { name : "默认值", field : "default_value",width : 12,
-                                        editable: true
-                                    },
-                                    { name : "必输", field : "required_flag",width : 2.5,
-                                        editable: true,type: dojox.grid.cells.Bool, styles: 'text-align: center;'
-                                    }
-                                ];
-                                var gridRight = o.rightGrid = new DataGrid({
-                                    store: rstore,
-                                    structure : rcolumn,
-                                    //直接显示含HTML标签字段
-                                    escapeHTMLInData: false,
-                                    singleClickEdit : true,
-                                    onRowDblClick : function(e){
-                                        o._moveLeft(rstore,lstore,this.getItem(e.rowIndex));
-                                    },
-                                    onApplyCellEdit : function(inValue, inRowIndex, inFieldIndex){
-                                        var rgrid = this;
-                                        //验证数据的合法性，比如，值集输入
-                                        if(inFieldIndex == "valuelist_name" && inValue != ""){
-                                            Util.get(Util.url.valuelist("find_by_name",{valuelist_name : inValue}),function(data){
-                                                if(!data){
-                                                    Util.confirm("输入的值集无效",function(){
+                                var inputOps = [];
+                                Util.get(Util.url.optionsByName("BC_RPT_INPUT_TYPE"),function(options){
+                                    if(Util.hasChildren(options)){
+                                        options.items.forEach(function(e){
+                                            inputOps.push(e.label)
+                                        });
+                                        var rcolumn = [
+                                            { name : "字段", field : "field",width : 12},
+                                            { name : Util.label.grid_setup_formula, field : "action",width : 6,
+                                                editable: true, cellType: dojox.grid.cells.Select, options: ops
+                                            },
+                                            { name : "输入", field : "input_type",width : 6,
+                                                editable: true, cellType: dojox.grid.cells.Select, options: inputOps
+                                            },
+                                            { name : "必输", field : "required_flag",width : 2.5,
+                                                editable: true,type: dojox.grid.cells.Bool, styles: 'text-align: center;'
+                                            } ,
+                                            { name : "值集", field : "valuelist_name",width : 12,
+                                                editable: true
+                                            },
+                                            { name : "默认值", field : "default_value",width : 12,
+                                                editable: true
+                                            }
+                                        ];
+                                        var gridRight = o.rightGrid = new DataGrid({
+                                            store: rstore,
+                                            structure : rcolumn,
+                                            //直接显示含HTML标签字段
+                                            escapeHTMLInData: false,
+                                            singleClickEdit : true,
+//                                            onRowDblClick : function(e){
+//                                                o._moveLeft(rstore,lstore,this.getItem(e.rowIndex));
+//                                            },
+                                            onApplyCellEdit : function(inValue, inRowIndex, inFieldIndex){
+                                                var rgrid = this;
+                                                //验证数据的合法性，比如，值集输入
+                                                if(inFieldIndex == "valuelist_name" && inValue != ""){
+                                                    Util.get(Util.url.valuelist("find_by_name",{valuelist_name : inValue}),function(data){
+                                                        if(!data){
+                                                            Util.confirm("输入的值集无效",function(){
 //                                                rgrid.doCancelEdit(inRowIndex);
+                                                            });
+                                                        }
                                                     });
                                                 }
-                                            });
-                                        }
 //                                console.info(inValue + "|"+inRowIndex+"|"+inFieldIndex)
-                                    }
-                                });
-                                dojo.byId("paramSetup").appendChild(gridRight.domNode);
-                                gridRight.startup();
+                                            }
+                                        });
+                                        dojo.byId("paramSetup").appendChild(gridRight.domNode);
+                                        gridRight.startup();
 
-                                var btToleft = new Button({
-                                    label : "<<",
-                                    onClick : function(){
-                                        var items = gridRight.selection.getSelected();
-                                        if(items.length > 0){
-                                            items.forEach(function(item){
-                                                o._moveLeft(rstore,lstore,item);
-                                            });
-                                        }
+                                        var btToleft = new Button({
+                                            label : "<<",
+                                            onClick : function(){
+                                                var items = gridRight.selection.getSelected();
+                                                if(items.length > 0){
+                                                    items.forEach(function(item){
+                                                        o._moveLeft(rstore,lstore,item);
+                                                    });
+                                                }
+                                            }
+                                        });
+                                        dojo.byId("btToLeft").appendChild(btToleft.domNode);
+                                        btToleft.startup();
                                     }
-                                });
-                                dojo.byId("btToLeft").appendChild(btToleft.domNode);
-                                btToleft.startup();
 
-                                //按钮
-                                var btToright = new Button({
-                                    label : ">>",
-                                    onClick : function(){
-                                        var items = gridLeft.selection.getSelected();
-                                        if(items.length > 0){
-                                            items.forEach(function(item){
-                                                o._moveRight(lstore,rstore,item);
-                                            });
+                                    //按钮
+                                    var btToright = new Button({
+                                        label : ">>",
+                                        onClick : function(){
+                                            var items = gridLeft.selection.getSelected();
+                                            if(items.length > 0){
+                                                items.forEach(function(item){
+                                                    o._moveRight(lstore,rstore,item);
+                                                });
+                                            }
+                                        },
+                                        canSort : function(){
+                                            return false;
                                         }
-                                    },
-                                    canSort : function(){
-                                        return false;
-                                    }
+                                    });
+                                    dojo.byId("btToright").appendChild(btToright.domNode);
+                                    btToright.startup();
                                 });
-                                dojo.byId("btToright").appendChild(btToright.domNode);
-                                btToright.startup();
+
                             });
 
                         });
@@ -146,6 +158,7 @@ define(["dojo/_base/declare","base/Util","base/Env","grid/DataGrid",
                 newItem.valuelist_name = "";
                 newItem.default_value = "";
                 newItem.required_flag = false;
+                newItem.input_type = "文本框";
                 rstore.newItem(newItem);
                 lstore.deleteItem(item);
             },

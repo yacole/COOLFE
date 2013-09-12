@@ -122,11 +122,14 @@ function cftrim( $str )
 
 //获取ui字段信息 from resault array
 function field($rs,$field_name){
+    $rt = null;
     foreach($rs->result_array() as $r){
         if($r['field_name'] == $field_name){
-            return $r;
+            $rt = $r;
+            break;
         }
     }
+    return $rt;
 }
 
 //处理checkbox的勾选返回结果
@@ -248,6 +251,7 @@ function get_parameter($index){
             foreach ($_GET as $key => $value) {
                 if($key == $index){
                     $return = $value;
+                    break;
                 }
             }
         }
@@ -291,4 +295,39 @@ function custz_message($type,$content){
     $messages = _sess('message');
     array_push($messages,$message);
     set_sess('message',$messages);
+}
+
+//获取值集对应的值
+function get_value($valuelist_name,$label){
+    $options = get_options($valuelist_name);
+    $value = null;
+    if(count($options) > 0){
+        for($i=0;$i<count($options);$i++){
+            if($options[$i]["label"] == $label){
+                $value = $options[$i]["label"];
+                break;
+            }
+        }
+    }
+    return $value;
+}
+
+function get_label($valuelist_name,$value){
+    $options = get_options($valuelist_name);
+    $label = null;
+    if(count($options) > 0){
+        for($i=0;$i<count($options);$i++){
+            if($options[$i]["value"] == $value){
+                $label = $options[$i]["label"];
+                break;
+            }
+        }
+    }
+    return $label;
+}
+
+function get_options($valuelist_name){
+    global $CI;
+    $CI->load->model('bc/valuelist_model','valuelist');
+    return $CI->valuelist->select_options_by_name($valuelist_name)->result_array();
 }

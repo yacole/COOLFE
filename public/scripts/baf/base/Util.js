@@ -83,13 +83,13 @@ define(["baf/config/Url", "baf/language/"+language+"/Label", "baf/language/"+lan
                 var o = this;
                 console.info("url:"+url);
                 console.info(data);
-                request.post(url,{data : data,timeout : config.remote_timeout,handleAs : "json"}).then(
-                    function(response){
-                      console.info(response);
-                      Command.handleExport(response);
-                      if(successFunc){
-                          successFunc();
-                      }
+                request.post(url,{data : data,timeout : config.remote_timeout,handleAs : "json"}).then(function(response){
+                    if("handle" in response){
+                        Command.handleExport(response);
+                    }
+                    if(successFunc){
+                      successFunc(response);
+                    }
                 },function(){
                         o.publish_error_xhr_notreach(failureFunc);
                 });
@@ -271,16 +271,24 @@ define(["baf/config/Url", "baf/language/"+language+"/Label", "baf/language/"+lan
         */
             //效果同js原先的confirm
             //content ：弹出框内容 ； callback ： 确认后要执行的内容
-            confirm : function(content,callback,noback){
+            confirm : function(content,callback,noback,type){
                 var util = this;
                 //检查如果存在则销毁
                 var di = dijit.byId(util.id.confirmDialog);
                 if(di){
+                    di.hide()
                     di.destroyRecursive();
                 }
-
+                switch(type){
+                    case "E" :
+                        //此处可以再渲染
+                        content = "<p>" + "ERROR : " + content + "</p>";
+                        break;
+                    default :
+                        content = "<p>" + content + "</p>";
+                }
                 var confirmDialog = new Dialog({
-                    content : "<p>" + content + "</p>",
+                    content : content,
                     id : util.id.confirmDialog,
                     title : util.label.dialog_default_title
                 });
@@ -291,8 +299,8 @@ define(["baf/config/Url", "baf/language/"+language+"/Label", "baf/language/"+lan
                         if(callback){
                             callback();
                         }
-                        var di =  dijit.byId(util.id.confirmDialog);
-                        di.hide();
+                        confirmDialog.hide();
+//                        confirmDialog.destroyRecursive();
                     }
                 });
                 okbotton.placeAt(util.id.confirmDialog);
@@ -303,14 +311,18 @@ define(["baf/config/Url", "baf/language/"+language+"/Label", "baf/language/"+lan
                         if(noback){
                             noback();
                         }
-                        var di =  dijit.byId(util.id.confirmDialog);
-                        di.hide();
+                        confirmDialog.hide();
+//                        confirmDialog.destroyRecursive();
                     }
                 });
                 cancelbotton.placeAt(util.id.confirmDialog);
 
                 confirmDialog.show();
             }, //confirm
+            //错误类型的弹出框
+            confirm_error : function(content,callback,noback){
+                this.confirm(content,callback,noback,"E");
+            },
             //遍历树，获取路径
             recursiveHunt:function(key,value, model, buildme, item){
                 var id = model.getIdentity(item);//得到item的id
