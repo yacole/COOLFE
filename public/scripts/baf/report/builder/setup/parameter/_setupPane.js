@@ -27,11 +27,16 @@ define(["dojo/_base/declare","base/Util","base/Env","grid/DataGrid",
                                 var lstore = new ItemFileWriteStore({
                                     data : colists
                                 });
+                                if(Util.hasChildren(params)){
+                                    params.items.forEach(function(e){
+                                        e.action_desc = u.descAction(e.action)
+                                    });
+                                }
                                 var  rstore = new ItemFileWriteStore({
                                     data : params
                                 });
 
-                                var lcolumn = [{ name : "字段", field : "field",width : 12}];
+                                var lcolumn = [{ name : Util.fieldLabel("field"), field : "field",width : Util.fieldSize("field")}];
                                 var gridLeft = o.leftGrid = new DataGrid({
                                     store: lstore,
                                     structure : lcolumn,
@@ -54,21 +59,24 @@ define(["dojo/_base/declare","base/Util","base/Env","grid/DataGrid",
                                             inputOps.push(e.label)
                                         });
                                         var rcolumn = [
-                                            { name : "字段", field : "field",width : 12},
-                                            { name : Util.label.grid_setup_formula, field : "action",width : 6,
+                                            { name : Util.fieldLabel("field"), field : "field",width : Util.fieldSize("field")},
+                                            { name : Util.fieldLabel("action_desc"), field : "action_desc",
+                                                width : Util.fieldSize("action_desc"),
                                                 editable: true, cellType: dojox.grid.cells.Select, options: ops
                                             },
-                                            { name : "输入", field : "input_type",width : 6,
+                                            { name : Util.fieldLabel("input_type_desc"), field : "input_type_desc",
+                                                width : Util.fieldSize("input_type_desc"),
                                                 editable: true, cellType: dojox.grid.cells.Select, options: inputOps
                                             },
-                                            { name : "必输", field : "required_flag",width : 2.5,
+                                            { name : Util.fieldLabel("required_flag"), field : "required_flag",
+                                                width : Util.fieldSize("required_flag"),
                                                 editable: true,type: dojox.grid.cells.Bool, styles: 'text-align: center;'
                                             } ,
-                                            { name : "值集", field : "valuelist_name",width : 12,
-                                                editable: true
+                                            { name : Util.fieldLabel("valuelist_name"), field : "valuelist_name",
+                                                width : Util.fieldSize("valuelist_name"),editable: true
                                             },
-                                            { name : "默认值", field : "default_value",width : 12,
-                                                editable: true
+                                            { name : Util.fieldLabel("default_value"), field : "default_value",
+                                                width : Util.fieldSize("default_value"),editable: true
                                             }
                                         ];
                                         var gridRight = o.rightGrid = new DataGrid({
@@ -86,7 +94,7 @@ define(["dojo/_base/declare","base/Util","base/Env","grid/DataGrid",
                                                 if(inFieldIndex == "valuelist_name" && inValue != ""){
                                                     Util.get(Util.url.valuelist("find_by_name",{valuelist_name : inValue}),function(data){
                                                         if(!data){
-                                                            Util.confirm("输入的值集无效",function(){
+                                                            Util.confirm(Util.message.error_valuelist_name,function(){
 //                                                rgrid.doCancelEdit(inRowIndex);
                                                             });
                                                         }
@@ -147,18 +155,18 @@ define(["dojo/_base/declare","base/Util","base/Env","grid/DataGrid",
                 var rto = [];
                 var options = u.actionOptions();
                 options.forEach(function(op){
-                    rto.push(op.action.name.toString());
+                    rto.push(op.label);
                 });
                 return rto;
             },
             _moveRight : function(lstore,rstore,item){
                 var newItem = new Object ;
                 newItem.field = item.field;
-                newItem.action = "IN";
+                newItem.action_desc = u.descAction("IN");
                 newItem.valuelist_name = "";
                 newItem.default_value = "";
                 newItem.required_flag = false;
-                newItem.input_type = "文本框";
+                newItem.input_type_desc = "文本框";
                 rstore.newItem(newItem);
                 lstore.deleteItem(item);
             },

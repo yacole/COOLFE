@@ -64,7 +64,6 @@ define(function(){
         grid_layout : "布局",
         grid_layout_description : "布局描述",
         grid_layout_default_flag : "默认标识",
-        grid_layout_select : "选择布局",
         grid_layout_type : "布局类型",
         grid_layout_type_ALL : "全部",
         grid_layout_type_01 : "全局",
@@ -92,6 +91,8 @@ define(function(){
         //报表设置界面
         grid_setup_currentParameter : "现有参数",
         grid_setup_formula : "公式",
+        grid_setup_input : "输入",
+        grid_setup_required : "必输",
         grid_setup_canplus : "可添加",
         grid_setup_sort : "排序设置",
         grid_setup_sortColumn : "排序列",
@@ -133,6 +134,8 @@ define(function(){
         report_group_create : "新建报表组",
         report_group_show : "报表组属性",
         report_group_rename : "重命名报表组",
-        report_group_destroy : "删除报表组"
+        report_group_destroy : "删除报表组",
+
+        report_select_parameter : "参数选择"
     }
 });

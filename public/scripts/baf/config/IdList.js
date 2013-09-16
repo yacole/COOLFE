@@ -66,7 +66,12 @@ define(function(){
         formType_normalForm : "normalForm",
 
         //报表工具
-        rpt_setupDialog : "bafReporterViewerSetupDialog"
+        rpt_setupDialog : "bafReporterViewerSetupDialog",
+
+        rpt_builder_basePane : "rptBuilderBasePane",
+        rpt_builder_sourcePane : "rptBuilderSourcePane",
+        rpt_builder_paramPane : "rptBuilderParamPane",
+        rpt_builder_structurePane : "rptBuilderStructurePane"
 
     }
 });

@@ -290,7 +290,10 @@ define(["baf/config/Url", "baf/language/"+language+"/Label", "baf/language/"+lan
                 var confirmDialog = new Dialog({
                     content : content,
                     id : util.id.confirmDialog,
-                    title : util.label.dialog_default_title
+                    title : util.label.dialog_default_title,
+                    onHide : function(){
+                        this.destroyRecursive();
+                    }
                 });
                 //确认按钮
                 var okbotton = new Button({
@@ -300,7 +303,6 @@ define(["baf/config/Url", "baf/language/"+language+"/Label", "baf/language/"+lan
                             callback();
                         }
                         confirmDialog.hide();
-//                        confirmDialog.destroyRecursive();
                     }
                 });
                 okbotton.placeAt(util.id.confirmDialog);
@@ -312,7 +314,6 @@ define(["baf/config/Url", "baf/language/"+language+"/Label", "baf/language/"+lan
                             noback();
                         }
                         confirmDialog.hide();
-//                        confirmDialog.destroyRecursive();
                     }
                 });
                 cancelbotton.placeAt(util.id.confirmDialog);

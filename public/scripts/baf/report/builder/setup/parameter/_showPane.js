@@ -9,11 +9,11 @@ define(["dojo/_base/declare","base/Util","grid/DataGrid","dojo/data/ItemFileRead
                 });
                 //右边grid，现有参数列表
                 var column = [
-                    { name : "字段", field : "field",width : 12},
-                    { name : Util.label.grid_setup_formula, field : "action",width : 6},
-                    { name : "值集", field : "valuelist_name",width : 12},
-                    { name : "默认值", field : "default_value",width : 12},
-                    { name : "必输", field : "required_flag",width : 2.5,styles: 'text-align: center;'}
+                    { name : Util.fieldLabel("field"), field : "field",width : Util.fieldSize("field")},
+                    { name : Util.fieldLabel("action_desc"), field : "action",width : Util.fieldSize("action_desc")},
+                    { name : Util.fieldLabel("default_value"), field : "default_value",width : Util.fieldSize("default_value")},
+                    { name : Util.fieldLabel("required_flag"), field : "required_flag",
+                        width : Util.fieldSize("required_flag"),styles: 'text-align: center;'}
                 ];
                 var grid = new DataGrid({
                     store: store,

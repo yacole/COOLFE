@@ -14,7 +14,7 @@ class Main extends CI_Controller {
     //首页设置
     function index()
     {
-        $data['theme'] = 'claro';
+        $data['theme'] = 'claro'; //claro,nihilo,soria,tundra
         $data['username'] = 'yacole';
         set_sess("uid",1);
         //设置标题

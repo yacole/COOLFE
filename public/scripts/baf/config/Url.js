@@ -129,8 +129,8 @@ define([],function(){
         report_builder_setup_template : function(filename){
             return this.localUrl("report/builder/setup/"+filename+".html");
         },
-        report_builder_preview_template : function(filename){
-            return this.localUrl("report/builder/preview/_"+filename+".html");
+        report_viewer_parameter_template : function(filename){
+            return this.localUrl("report/viewer/parameter/_"+filename+".html");
         },
 
         //报表打印路径

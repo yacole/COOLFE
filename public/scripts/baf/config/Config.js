@@ -5,7 +5,7 @@ define([],function(){
         //框架根目录
 //        bafBaseUrl : "/public/scripts/baf/",
         //工作区标签位置
-        wsoTabPosition : "bottom",
+        wsoTabPosition : "bottom", //top,bottom
 
         //命令历史堆栈最大值
         cmdHistoryMaxindex : 10,

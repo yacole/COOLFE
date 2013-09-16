@@ -106,3 +106,24 @@ hr.spacer {
     width:  6em;
     height: 2em;
 }
+.rptBuilderBasePane{
+    width:32em;
+    height:16em
+}
+/*报表创建*/
+.rptBuilderBasePane{
+    width:32em;
+    height:16em
+}
+.rptBuilderSourcePane{
+    width:32em;
+    height:16em
+}
+.rptBuilderParamPane{
+    width:70em;
+    height:30em
+}
+.rptBuilderStructurePane{
+    width:70em;
+    height:30em
+}

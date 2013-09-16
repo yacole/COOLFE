@@ -14,7 +14,7 @@
     <link rel="stylesheet" type="text/css" href="/public/scripts/baf/obe.css"/>
     <!-- 设置渲染主题:tundra -->
     <link rel="stylesheet" type="text/css" href="/dojo1.9.0/dijit/themes/<?= $theme ?>/<?= $theme ?>.css" />
-    <link rel="stylesheet" type="text/css" href="/dojo1.9.0/dijit/themes/<?= $theme ?>/document.css" />
+<!--    <link rel="stylesheet" type="text/css" href="/dojo1.9.0/dijit/themes/claro/document.css" />-->
     <link rel="stylesheet" type="text/css" href="/dojo1.9.0/dojox/grid/enhanced/resources/claro/EnhancedGrid.css" />
     <link rel="stylesheet" type="text/css" href="/dojo1.9.0/dojox/grid/enhanced/resources/EnhancedGrid_rtl.css" />
 <!--    <link rel="stylesheet" type="text/css" href="/dojo/dojox/grid/enhanced/resources/--><?//= $theme ?><!--/EnhancedGrid.css" />-->

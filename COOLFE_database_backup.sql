@@ -657,7 +657,7 @@ CREATE TABLE `bc_report_parameters_tl` (
   PRIMARY KEY (`id`),
   KEY `bc_report_parameters_n01` (`report_id`) USING BTREE,
   KEY `bc_report_parameters_u01` (`report_id`,`field`,`action`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8 COMMENT='报表参数列表';
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8 COMMENT='报表参数列表';
 
 --
 -- Dumping data for table `bc_report_parameters_tl`
@@ -665,8 +665,7 @@ CREATE TABLE `bc_report_parameters_tl` (
 
 /*!40000 ALTER TABLE `bc_report_parameters_tl` DISABLE KEYS */;
 INSERT INTO `bc_report_parameters_tl` (`id`,`report_id`,`field`,`action`,`default_value`,`creation_date`,`created_by`,`last_updated_by`,`last_update_date`,`valuelist_id`,`required_flag`,`input_type`) VALUES 
- (38,22,'program_name','IN','',1378872422,1,1,1378872422,2,1,'文本框'),
- (39,1,'field_name','IN','',1378949312,1,1,1378949312,NULL,1,'文本框');
+ (32,1,'field_size','NOT_LIKE','',1379310752,1,1,1379310752,NULL,1,'01');
 /*!40000 ALTER TABLE `bc_report_parameters_tl` ENABLE KEYS */;
 
 
@@ -721,7 +720,7 @@ CREATE TABLE `bc_reports_tl` (
   PRIMARY KEY (`report_id`),
   UNIQUE KEY `bc_reports_u01` (`name`),
   KEY `bc_reports_n01` (`name`,`description`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8 COMMENT='报表信息表';
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8 COMMENT='报表信息表';
 
 --
 -- Dumping data for table `bc_reports_tl`
@@ -732,7 +731,7 @@ INSERT INTO `bc_reports_tl` (`report_id`,`name`,`description`,`report_group_id`,
  (1,'BC_FIELD_LIST','字段清单',1,NULL,NULL,1376638392,1,'','02'),
  (14,'new','新建',0,1376025966,1,1376025966,1,'',''),
  (22,'rpt_good','好报表',7,1376639071,1,1376639071,1,'',''),
- (23,'asdf','asdf12',7,1377738539,1,1377738585,1,'','');
+ (26,'asdf','asdf',1,1379313995,1,1379313995,1,'','');
 /*!40000 ALTER TABLE `bc_reports_tl` ENABLE KEYS */;
 
 
@@ -903,7 +902,7 @@ CREATE TABLE `bc_ui_fields_tl` (
   `last_updated_by` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`ui_field_id`),
   UNIQUE KEY `BC_ui_fields_U01` (`program_id`,`field_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8 COMMENT='界面字段信息表';
+) ENGINE=InnoDB AUTO_INCREMENT=67 DEFAULT CHARSET=utf8 COMMENT='界面字段信息表';
 
 --
 -- Dumping data for table `bc_ui_fields_tl`
@@ -934,7 +933,17 @@ INSERT INTO `bc_ui_fields_tl` (`ui_field_id`,`program_id`,`field_name`,`field_si
  (52,2,'a','10',0,'a','',0,0,0,'',NULL,NULL,1375689663,1,1375691858,1),
  (54,2,'c','1',0,'dd','',0,0,0,'',NULL,NULL,1375689996,1,1375691662,1),
  (55,2,'d','1',0,'e','',0,0,0,'',NULL,NULL,1375690039,1,1375691365,1),
- (56,6,'source_type','6',0,'来源类型','',1,0,0,'',7,NULL,1376629422,1,1376629422,1);
+ (56,6,'source_type','6',0,'来源类型','',1,0,0,'',7,NULL,1376629422,1,1376629422,1),
+ (57,6,'field','12',0,'字段','',0,0,0,'',NULL,NULL,1379313006,1,1379313006,1),
+ (58,6,'action_desc','8',0,'公式','',0,0,0,'',NULL,NULL,1379313037,1,1379313037,1),
+ (59,6,'input_type_desc','6',0,'输入','',0,0,0,'',NULL,NULL,1379313080,1,1379313080,1),
+ (60,6,'required_flag','2.5',0,'必输','',0,0,0,'',NULL,NULL,1379313107,1,1379313107,1),
+ (61,6,'valuelist_name','12',0,'值集','',0,0,0,'',NULL,NULL,1379313121,1,1379313319,1),
+ (62,6,'default_value','8',0,'默认值','',0,0,0,'',NULL,NULL,1379313135,1,1379313135,1),
+ (63,6,'created_by','10',0,'创建者','',0,0,0,'',NULL,NULL,1379313378,1,1379313378,1),
+ (64,6,'creation_date','',0,'创建时间','',0,0,0,'',NULL,NULL,1379313387,1,1379313387,1),
+ (65,6,'last_updated_by','10',0,'最后更新者','',0,0,0,'',NULL,NULL,1379313398,1,1379313398,1),
+ (66,6,'last_update_date','',0,'最后更新时间','',0,0,0,'',NULL,NULL,1379313409,1,1379313409,1);
 /*!40000 ALTER TABLE `bc_ui_fields_tl` ENABLE KEYS */;
 
 
@@ -1188,7 +1197,7 @@ INSERT INTO `bc_valuelist_lines_tl` (`line_id`,`valuelist_id`,`segment`,`descrip
  (26,7,'02','URL接口',0,NULL,NULL,NULL,NULL,''),
  (27,10,'01','文本框',0,NULL,NULL,NULL,NULL,''),
  (28,10,'02','日期框',0,NULL,NULL,NULL,NULL,''),
- (29,10,'03','复选框',0,NULL,NULL,NULL,NULL,'');
+ (29,10,'03','下拉框',0,NULL,NULL,NULL,NULL,'');
 /*!40000 ALTER TABLE `bc_valuelist_lines_tl` ENABLE KEYS */;
 
 

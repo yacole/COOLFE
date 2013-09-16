@@ -33,7 +33,7 @@ define(["dojo/_base/declare","base/Util","dijit/layout/TabContainer","./_basePan
                     this.addChild(this.sourcePane);
 
                     this.paramPane = new pp({
-                        title : "参数",
+                        title : Util.label.report_parameter,
                         disabled : !this.parameterDataReady,
                         report_id : this.report_id
                     });

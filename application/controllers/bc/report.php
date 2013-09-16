@@ -77,8 +77,14 @@ class Report extends CI_Controller {
                                 $this->db->from("(".$r['source_text'].") as v");
                                 for($i = 0;$i < count($rows) ; $i++){
                                     $row = $rows[$i];
+                                    $value = "";
                                     if(isset($_POST[$row['field']])){
-                                        $this->_build_condition($row,$_POST[$row['field']]);
+                                        if($row['input_type'] == '03' && $_POST[$row['field']] == 'ALL'){
+                                            $value = "*";
+                                        }else{
+                                            $value = $_POST[$row['field']];
+                                        }
+                                        $this->_build_condition($row,$value);
                                     }
                                 }
                                 export_to_itemStore($this->db->get());
@@ -300,7 +306,7 @@ class Report extends CI_Controller {
                 $rows[$i] = _format_row($rows[$i]);
                 for($y=0;$y<count($options);$y++){
                     if($options[$y]["value"] == $rows[$i]["input_type"]){
-                        $rows[$i]["input_type"] = $options[$y]["label"];
+                        $rows[$i]["input_type_desc"] = $options[$y]["label"];
                         break;
                     }
                 }
@@ -322,7 +328,7 @@ class Report extends CI_Controller {
                 for($i=0;$i<count($rows) && count($options) > 0;$i++){
                     //获取输入框value
                     for($y=0;$y<count($options);$y++){
-                        if($options[$y]["label"] == $rows[$i]["input_type"]){
+                        if($options[$y]["label"] == $rows[$i]["input_type_desc"]){
                             $value = $options[$y]["value"];
                             break;
                         }
@@ -330,6 +336,8 @@ class Report extends CI_Controller {
                     //如果找不到就用默认值：输入框
                     if(is_null($value)){
                         $rows[$i]["input_type"] = '01';
+                    }else{
+                        $rows[$i]["input_type"] = $value;
                     }
 
                     if($rows[$i]['valuelist_name'] != ""){
@@ -405,16 +413,76 @@ class Report extends CI_Controller {
         $data['hasStructure'] = $this->report->has_data(get_parameter('report_id'),'structure');
         echo json_encode($data);
     }
-    
+
     //转义封装conditions
     protected function _build_condition($row,$value){
-        switch($row['action']){
-            case 'IN':
-                if($value != ""){
-                    $this->db->where_in($row['field'],explode(",",$_POST[$row['field']]));
-                }
-                break;
+        if($row['input_type'] == '02'){
+            //日期转换
+            $value = strtotime($value);
         }
-
+        //*表示所有
+        if($value !== '*'){
+            switch($row['action']){
+                case 'IN':
+                    $this->db->where_in($row['field'],explode(",",$value));
+                    break;
+                case 'NOT_IN':
+                    $this->db->where_not_in($row['field'],explode(",",$value));
+                    break;
+                case 'EQ' :
+                    $this->db->where($row['field'],$value);
+                    break;
+                case 'NE' :
+                    $this->db->where($row['field'].' != ',$value);
+                    break;
+                case 'GT' :
+                    //判断是否为数字
+                    if(is_numeric($value)){
+                        $this->db->where($row['field'].' > '.$value);
+                    }else{
+                        $this->db->where($row['field'].' > ',$value);
+                    }
+                    break;
+                case 'GE' :
+                    if(is_numeric($value)){
+                        $this->db->where($row['field'].' >= '.$value);
+                    }else{
+                        $this->db->where($row['field'].' >= ',$value);
+                    }
+                    break;
+                case 'LT' :
+                    if(is_numeric($value)){
+                        $this->db->where($row['field'].' < '.$value);
+                    }else{
+                        $this->db->where($row['field'].' < ',$value);
+                    }
+                    break;
+                case 'LE' :
+                    if(is_numeric($value)){
+                        $this->db->where($row['field'].' <= '.$value);
+                    }else{
+                        $this->db->where($row['field'].' <= ',$value);
+                    }
+                    break;
+                case 'LIKE' :
+                    $this->db->like($row['field'],$value);
+                    break;
+                case 'NOT_LIKE' :
+                    $this->db->not_like($row['field'],$value);
+                    break;
+                case 'HE' :
+                    $this->db->like($row['field'],$value,'after');
+                    break;
+                case 'HNE' :
+                    $this->db->not_like($row['field'],$value,'after');
+                    break;
+                case 'TE' :
+                    $this->db->like($row['field'],$value, 'before');
+                    break;
+                case 'TNE' :
+                    $this->db->not_like($row['field'],$value, 'before');
+                    break;
+            }
+        }
     }
 }

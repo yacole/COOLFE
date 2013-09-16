@@ -94,15 +94,16 @@ define(["base/Util","./setup/_setupDialog","base/Env","./preview/_paramDialog"],
         },
         //删除报表
         destroyReport : function(item,tree){
-            if(confirm(Util.message.info_sureDelete)){
+            Util.confirm(Util.message.info_sureDelete,function(){
                 var data = new Object();
                 data.report_id = item.report_id.toString();
                 Util.post(Util.url.report("destroy_report"),data,function(){
                     if(!Env.isError()){
-                        tree.model.store.deleteItem(item);
+//                        tree.model.store.deleteItem(item);
+                        Env.currentWso().refresh();
                     }
                 });
-            }
+            });
         },
         //获取状态
         _status : function(report_id,actionFunc){

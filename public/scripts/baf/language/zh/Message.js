@@ -16,6 +16,7 @@ define(function(){
         error_cannot_destroy_report_group : "请先清空报表组下的报表，再尝试删除！",
         error_notexists_report_base_data : "请先维护报表基础数据！",
         error_notexists_report_source_data : "请先维护报表数据源",
-        error_notexists_report_parameters : "报表未维护参数,是否先创建参数？"
+        error_notexists_report_parameters : "报表未维护参数,是否先创建参数？",
+        error_valuelist_name: "输入的值集无效"
     }
 });

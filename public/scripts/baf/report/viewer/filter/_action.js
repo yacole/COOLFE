@@ -7,7 +7,7 @@ define(["base/Util"],function(Util){
 
             //动作：= ; != ; > ; < ; LIKE ; NOT LIKE ;IN ; NOT IN ;
             IN : {name : "IN",description : Util.label.filter_action_IN},
-            NOT_IN : {name : "NOT IN",description : Util.label.filter_action_NOT_IN},
+            NOT_IN : {name : "NOT_IN",description : Util.label.filter_action_NOT_IN},
             EQ : {name : "EQ",description : Util.label.filter_action_EQ},
             NE : {name : "NE",description : Util.label.filter_action_NE},
             GT : {name : "GT",description : Util.label.filter_action_GT},
@@ -19,7 +19,7 @@ define(["base/Util"],function(Util){
             TE : {name : "TE",description : Util.label.filter_action_TE},
             TNE : {name : "TNE",description : Util.label.filter_action_TNE},
             LIKE : {name : "LIKE",description : Util.label.filter_action_LIKE},
-            NOT_LIKE : {name : "NOT LIKE",description : Util.label.filter_action_NOT_LIKE}
+            NOT_LIKE : {name : "NOT_LIKE",description : Util.label.filter_action_NOT_LIKE}
 
     }
 });

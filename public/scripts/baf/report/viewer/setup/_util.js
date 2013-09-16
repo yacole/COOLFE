@@ -133,6 +133,29 @@ define(["baf/base/Util","../filter/_action"],function(Util,action){
                 { value: action.LIKE.description, label: action.LIKE.description,action :action.LIKE},
                 { value: action.NOT_LIKE.description, label: action.NOT_LIKE.description,action :action.NOT_LIKE}
             ];
+        },
+        //中文解释action
+        descAction : function(name){
+            var options = this.actionOptions();
+            var desc = name;
+            for(var i = 0 ; i < options.length ; i ++){
+                if(options[i].action.name == name){
+                    desc = options[i].label;
+                    break;
+                }
+            }
+            return desc;
+       },
+        nameAction : function(desc){
+            var options = this.actionOptions();
+            var name = desc;
+            for(var i = 0 ; i < options.length ; i ++){
+                if(options[i].label == desc){
+                    name = options[i].action.name;
+                    break;
+                }
+            }
+            return name;
         }
     }
 });

@@ -1,6 +1,6 @@
 define(["dojo/_base/declare","base/Util","base/Env","./_setupTabPane",
     "baf/dijit/Dialog","./_basePane","./_sourcePane","form/Button",
-    "./parameter/_setupPane","./_structurePane","dojo/json","../_util"],
+    "./parameter/_setupPane","./_structurePane","dojo/json","report/viewer/setup/_util"],
     function(declare,Util,Env,setupTabPane,Dialog,basePane,sourcePane,Button,paramPane,structurePane,json,u){
         /**
          * 摘要:
@@ -50,7 +50,7 @@ define(["dojo/_base/declare","base/Util","base/Env","./_setupTabPane",
                 var bp = new basePane({
                     isEdit : true,
                     report_id : this.report_id,
-                    style : "width:32em;height:16em",
+                    class : Util.id.rpt_builder_basePane,
                     report_group_name : this.report_group_name
                 });
                 this.addChild(bp);
@@ -63,7 +63,7 @@ define(["dojo/_base/declare","base/Util","base/Env","./_setupTabPane",
                         data.description = bp.description.value;
                         data.report_group = bp.report_group.value;
                         var url = "";
-                        if("report_id" in o){
+                        if(o.report_id){
                             //修改动作
                             data.report_id = o.report_id;
                             url = Util.url.report("update_base_data");
@@ -89,7 +89,7 @@ define(["dojo/_base/declare","base/Util","base/Env","./_setupTabPane",
                 var sp = new sourcePane({
                     isEdit : true,
                     report_id : this.report_id,
-                    style : "width:32em;height:16em",
+                    class : Util.id.rpt_builder_sourcePane,
                     report_group_name : this.report_group_name
                 });
                 this.addChild(sp);
@@ -117,7 +117,7 @@ define(["dojo/_base/declare","base/Util","base/Env","./_setupTabPane",
                 var pp = new paramPane({
                     isEdit : true,
                     report_id : this.report_id,
-                    style : "width:70em;height:30em"
+                    class : Util.id.rpt_builder_paramPane
                 });
                 this.addChild(pp);
                 var confirmButton = new Button({
@@ -149,7 +149,7 @@ define(["dojo/_base/declare","base/Util","base/Env","./_setupTabPane",
                 var pp = new structurePane({
                     isEdit : true,
                     report_id : this.report_id,
-                    style : "width:70em;height:30em"
+                    class : Util.id.rpt_builder_structurePane
                 });
                 this.addChild(pp);
                 var confirmButton = new Button({
@@ -179,7 +179,7 @@ define(["dojo/_base/declare","base/Util","base/Env","./_setupTabPane",
             _postItem : function(item){
                 var newItem = new Object();
                 newItem.field = item.field.toString();
-                newItem.action = item.action.toString();
+//                newItem.action = item.action.toString();
                 if(item.valuelist_name){
                     newItem.valuelist_name = item.valuelist_name.toString();
                 }else{
@@ -195,11 +195,17 @@ define(["dojo/_base/declare","base/Util","base/Env","./_setupTabPane",
                 }else{
                     newItem.required_flag = "0";
                 }
-                if(item.input_type){
-                    newItem.input_type = item.input_type.toString();
+                if(item.input_type_desc){
+                    newItem.input_type_desc = item.input_type_desc.toString();
                 }else{
-                    newItem.input_type = "文本框";
+                    newItem.input_type_desc = "文本框";
                 }
+                if(item.action_desc){
+                    newItem.action = u.nameAction(item.action_desc.toString());
+                }else{
+                    newItem.action = 'IN';
+                }
+                console.info(newItem.action);
                 return newItem;
             }
         });

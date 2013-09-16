@@ -5,10 +5,10 @@ define(["dojo/_base/declare","dojox/layout/ContentPane","base/Util",
     "dojox/grid/enhanced/plugins/DnD","dojo/json","dojox/grid/enhanced/plugins/Pagination",
     "dojox/grid/enhanced/plugins/NestedSorting", "./_detailDialog","./_config","./setup/_util",
     "./filter/Filter","dojox/grid/enhanced/plugins/IndirectSelection","dojox/grid/enhanced/plugins/Printer",
-    "./printer/_printerDialog", "./_header","./_footer","report/builder/preview/_paramDialog"],
+    "./printer/_printerDialog", "./_header","./_footer","./parameter/_selectDialog"],
     function (declare,ContentPane,Util,gridCSVWriter,gridSelector,gridMenu,MenusObject,ToolBarForReport,
               layoutDialog,ItemFileWriteStore,DataGrid,setupDialog,DnD,JSON,Pagination,NestedSorting,detailDialog,
-              Config,u,Filter,IndirectSelection,Printer,printerDialog,header,footer,paramDialog){
+              Config,u,Filter,IndirectSelection,Printer,printerDialog,header,footer,selectDialog){
         /*
          *   摘要:
          *                    报表查看器
@@ -31,16 +31,26 @@ define(["dojo/_base/declare","dojox/layout/ContentPane","base/Util",
             filter : null,
 
             startup : function(){
-
+                this._chooseParameters();
+                this.inherited(arguments);
+            },
+            build : function(data){
+                if(this.grid){
+                    //刷新
+                    this.refresh_data(data);
+                }else{
+                    //新建
+                    this._build(data);
+                }
+            },
+            _build : function(data){
                 this.header = new header({
                     content : "报表头"
                 });
                 this.addChild(this.header);
 
                 //加载布局
-                this._loadDefaultLayout();
-
-                this.inherited(arguments);
+                this._loadDefaultLayout(data);
             },
             //刷新，重新获取数据
             refresh : function(){
@@ -61,9 +71,13 @@ define(["dojo/_base/declare","dojox/layout/ContentPane","base/Util",
                 }
                 //数据快照
                 this.grid.snapItems = this.grid.getALLItems();
+                //刷新表头
+                this._refreshHeader();
+                //刷新表尾
+                this._refreshFooter();
             },
             //加载布局
-            _loadDefaultLayout : function(type){
+            _loadDefaultLayout : function(mdata){
                 var o = this;
                 //获取数据
                 o.toolBar = new ToolBarForReport({
@@ -154,7 +168,7 @@ define(["dojo/_base/declare","dojox/layout/ContentPane","base/Util",
 //                            }
 //                        }
                     o._buildFooter();
-                    o._chooseParameters();
+                    o.refresh_data(mdata);
                 });
             },
             //清除样式恢复到初始状态
@@ -232,14 +246,20 @@ define(["dojo/_base/declare","dojox/layout/ContentPane","base/Util",
                 Util.get(Util.url.report("parameter_list",{report_id : this.report_id}),function(data){
                     if(Util.hasChildren(data)){
                         //有参数先用参数获取数据
-                        var pcDialog = new paramDialog({
+                        var pcDialog = new selectDialog({
                             report_id : o.report_id
                         });
                         pcDialog.show();
                     }else{
-                        o.refresh_data();
+                        o.build();
                     }
                 });
+            },
+            _refreshHeader : function(){
+
+            },
+            _refreshFooter : function(){
+
             }
 
        });
