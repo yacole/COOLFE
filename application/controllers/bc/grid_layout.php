@@ -12,7 +12,6 @@ class Grid_layout extends CI_Controller {
     }
     //保持
     function save(){
-        $messages = [];
         //判断是否为POST
         if($_POST){
             $data['program_id'] = $_POST['program_id'];
@@ -28,57 +27,46 @@ class Grid_layout extends CI_Controller {
             if($row){
                 $data['layout_id'] = $row['layout_id'];
                 if($this->layout->update($data)){
-                    array_push($messages,message('I','DATABASE','01'));
+                    message('I','DATABASE','01');
                 }else{
-                    array_push($messages,message('E','DATABASE','02'));
+                    message('E','DATABASE','02');
                 }
 
             }else{
                 //不存在则新建
                 //存在则更新
                 if($this->layout->create($data)){
-                    array_push($messages,message('I','DATABASE','01'));
+                    message('I','DATABASE','01');
                 }else{
-                    array_push($messages,message('E','DATABASE','02'));
+                    message('E','DATABASE','02');
                 }
             }
 
         }
-        $response['messages'] = $messages;
-        //输出消息
-        echo json_encode($response);
     }
 
     //删除
     function destroy(){
-        $messages = [];
         //判断是否为POST
         if($_POST){
             if($this->layout->destroy($_POST['layout_id'])){
-                array_push($messages,message('I','DATABASE','01'));
+                message('I','DATABASE','01');
             }else{
-                array_push($messages,message('E','DATABASE','02'));
+                message('E','DATABASE','02');
             }
         }
-        $response['messages'] = $messages;
-        //输出消息
-        echo json_encode($response);
     }
 
     //设置默认
     function set_default(){
-        $messages = [];
         //判断是否为POST
         if($_POST){
             if($this->layout->set_default($_POST['layout_id'])){
-                array_push($messages,message('I','DATABASE','01'));
+                message('I','DATABASE','01');
             }else{
-                array_push($messages,message('E','DATABASE','02'));
+                message('E','DATABASE','02');
             }
         }
-        $response['messages'] = $messages;
-        //输出消息
-        echo json_encode($response);
     }
 
 }

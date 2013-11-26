@@ -57,7 +57,7 @@ define(["dojo/_base/declare","dojox/layout/ContentPane","base/Util",
                 this._chooseParameters();
             },
             //根据data刷新view
-            refresh_data : function(data){
+            refresh_data : function(data,column){
                 if(data){
                     var store = new ItemFileWriteStore({
                         data : data
@@ -69,15 +69,21 @@ define(["dojo/_base/declare","dojox/layout/ContentPane","base/Util",
                     });
                     this.grid.refresh(store);
                 }
+
                 //数据快照
                 this.grid.snapItems = this.grid.getALLItems();
                 //刷新表头
                 this._refreshHeader();
                 //刷新表尾
                 this._refreshFooter();
+                //当前结构为空时，清空布局
+                if(column && column.length == 0){
+                    this.clearLayout();
+                }
             },
             //加载布局
             _loadDefaultLayout : function(mdata){
+                console.info(mdata);
                 var o = this;
                 //获取数据
                 o.toolBar = new ToolBarForReport({
@@ -87,7 +93,7 @@ define(["dojo/_base/declare","dojox/layout/ContentPane","base/Util",
                 });
                 o.addChild(o.toolBar);
 
-//                    console.info(Util.url.find_default_layout_for_rpt({program_id : o.program_id}));
+//                    console.info(Util.url.rpt_default_layout(o.program_id));
                 //先判断是否存在默认布局
                 Util.get(Util.url.rpt_default_layout(o.program_id),function(layout){
                     //初始化的时候为空，等待参数选择
@@ -103,13 +109,14 @@ define(["dojo/_base/declare","dojox/layout/ContentPane","base/Util",
                         column = o._constructStructure(layout.structure);
                     }else{
                         if(o.config && o.config.grid && o.config.column){
+//                            console.info("11");
                             column = o.config.column;
                         }else{
                             //按原始顺序
                             column = u.constructColumn(data.items);
                         }
                     }
-//                        console.info(column);
+                        console.info(column);
                     //配置右键菜单
                     var menusObject = null;
                     if(o.config && o.config.grid && o.config.grid.plugins && o.config.grid.plugins.menus){
@@ -168,7 +175,7 @@ define(["dojo/_base/declare","dojox/layout/ContentPane","base/Util",
 //                            }
 //                        }
                     o._buildFooter();
-                    o.refresh_data(mdata);
+                    o.refresh_data(mdata,column);
                 });
             },
             //清除样式恢复到初始状态
